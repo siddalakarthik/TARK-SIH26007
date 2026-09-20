@@ -145,7 +145,7 @@ def test_configured_esp32_stays_identity_gated_until_explicit_mock_verification(
     assert serial.closed
 
 
-def test_configured_ld2450_retains_raw_bytes_without_normalized_decoding(monkeypatch, tmp_path):
+def test_configured_ld2450_retains_raw_bytes_without_false_simulation(monkeypatch, tmp_path):
     clear_adapter_environment(monkeypatch, tmp_path)
     monkeypatch.setenv("TARK_RADAR_PORT", "FAKE-LD2450")
     monkeypatch.setenv("TARK_RADAR_RECONNECT_INTERVAL_S", "10")
@@ -161,7 +161,7 @@ def test_configured_ld2450_retains_raw_bytes_without_normalized_decoding(monkeyp
             return 1_000_000_000 + self.reads, b"unverified-vendor-frame"
         def close(self): self.closed = True
         def diagnostics(self):
-            return {"state": "RAW_CAPTURE_ONLY", "protocol": "VENDOR_FRAME_SPEC_REQUIRED", "last_timestamp_ns": None, "last_byte_count": 23, "last_error": None}
+            return {"state": "NOT_CONNECTED", "protocol": "HLK_LD2450_TARGET_REPORT_V1_03", "last_timestamp_ns": None, "last_byte_count": 23, "last_error": None}
 
     captured = []
     def factory(*args):
@@ -180,10 +180,10 @@ def test_configured_ld2450_retains_raw_bytes_without_normalized_decoding(monkeyp
         sensors = system.sensor_snapshot(1)
         radar = next(item for item in sensors if item["device_id"] == "ld2450")
         raw_capture = next(item for item in sensors if item["device_id"] == "ld2450_raw_capture")
-        assert radar["source_mode"] == "SIMULATION"
-        assert raw_capture["source_mode"] == "REAL_LD2450_RAW"
-        assert raw_capture["reason"].endswith("VENDOR DECODER NOT VERIFIED")
-        assert system.tick(1_000_000_000)["tracks"]  # still the separate SIM1 simulator path
+        assert radar["source_mode"] == "NOT_CONNECTED"
+        assert raw_capture["source_mode"] == "NOT_CONNECTED"
+        assert "LD2450" in raw_capture["reason"]
+        assert system.tick(1_000_000_000)["tracks"] == []
     finally:
         system.close()
     assert captured[0].closed

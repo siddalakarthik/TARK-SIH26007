@@ -2,7 +2,7 @@
 
 This repository implements the Phase 1 Raspberry Pi software chain for the TARK SIH26007 research prototype. Phase 1 uses a real or simulated HLK-LD2450 source, deterministic decision processing, USB command framing, logging, replay and an observation-only FastAPI service. It deliberately does not energize traction or expose a motor-control API.
 
-The real LD2450 serial adapter captures raw bytes and handles open/timeout/disconnect. Its vendor binary frame decoder is intentionally not claimed implemented because the exact vendor frame specification was not supplied in the project authority. The simulation/replay decoder is fully deterministic and uses the explicit `SIM1` fixture format. Add a vendor-reviewed decoder before enabling real normalized detections.
+The real LD2450 serial adapter retains bounded raw evidence, handles open/timeout/disconnect, and decodes only the manufacturer-published 30-byte target-report frame (`AA FF 03 00`, three target slots, `55 CC`). Normalized reports enter the existing perception pipeline only in explicitly configured `real_radar` mode. `SIM1` remains a deterministic test fixture; it is never used by the physical adapter. This is software-verified decoding, not proof of physical receiver communication or calibration.
 
 Prompt 3.1 adds simulation-first interfaces for radar, ESP32, MDD10A, encoders, camera, thermal sensor and IMU, plus the React/TypeScript operations UI source. Every Phase 2 interface reports simulation or not-connected status until hardware verification. See `docs/HARDWARE_ARRIVAL_CHECKLIST.md` before connecting devices.
 

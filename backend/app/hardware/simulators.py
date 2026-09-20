@@ -2,6 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from app.domain.models import RadarDetection
 from app.hardware.interfaces import *
+from app.hardware.encoder_contract import EncoderContract
 
 @dataclass
 class RadarSimulator(RadarInterface):
@@ -39,8 +40,18 @@ class MDD10AAdapter(MotorDriverInterface):
     """Phase 2 interface reservation: GPIO9/10/11/12 mapping is hardware authority; no physical output here."""
     def status(self,now_ns:int)->DeviceHealth:return DeviceHealth("mdd10a","NOT_CONNECTED_PHASE_2","NOT_CONNECTED",None,None,None,"PHASE_2_HARDWARE_NOT_CONNECTED")
 class ESP32EncoderAdapter(EncoderInterface):
-    """Phase 2 encoder acquisition boundary; never labels wheel response as ground speed."""
-    def read_wheel_response(self,now_ns:int)->WheelResponse:return WheelResponse(None,None,now_ns,"NOT_CONNECTED_PHASE_2","ENCODER_VCC_TBD_VERIFY")
+    """Phase-2 count boundary; it never derives unverified physical speed."""
+    def __init__(self, contract: EncoderContract | None = None):
+        self.contract = contract or EncoderContract()
+
+    def ingest_counts(self, left_count: int, right_count: int, timestamp_ns: int, source_mode: str = "REAL"):
+        """Future ESP32 feedback calls this after transport validation only."""
+        return self.contract.accept(left_count, right_count, timestamp_ns, source_mode)  # type: ignore[arg-type]
+
+    def read_wheel_response(self,now_ns:int)->WheelResponse:
+        sample = self.contract.health(now_ns, freshness_ns=500_000_000)
+        source = sample.source_mode if sample.source_mode in {"SIMULATION", "REAL"} else "NOT_CONNECTED_PHASE_2"
+        return WheelResponse(None, None, sample.timestamp_ns or now_ns, source, sample.reason, sample.left_count, sample.right_count, sample.state)
 class USBCameraAdapter(CameraInterface):
     """Future Pi/UVC source: frame transport is intentionally not JSON or browser-camera upload."""
     def read_frame(self,now_ns:int)->CameraFrame:return CameraFrame(CameraFrameMetadata("vehicle_rgb_camera","NOT_CONNECTED_PHASE_2","NOT_CONNECTED",None,None,None,None,"PI_UVC_CAMERA_NOT_CONNECTED"),None,None)

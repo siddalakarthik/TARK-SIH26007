@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Literal
 from app.domain.models import RadarDetection
 
-SourceMode = Literal["SIMULATION", "REPLAY", "REAL_HARDWARE", "NOT_CONNECTED_PHASE_2", "PI_UVC", "PI_I2C", "BROWSER_PREVIEW", "UNKNOWN"]
+SourceMode = Literal["SIMULATION", "REPLAY", "REAL", "REAL_HARDWARE", "NOT_CONNECTED", "NOT_CONNECTED_PHASE_2", "FAULT", "PI_UVC", "PI_I2C", "BROWSER_PREVIEW", "UNKNOWN"]
 
 @dataclass(frozen=True)
 class DeviceHealth:
@@ -13,6 +13,7 @@ class DeviceHealth:
 @dataclass(frozen=True)
 class WheelResponse:
     left_mps: float | None; right_mps: float | None; timestamp_ns: int; source_mode: SourceMode; reason: str
+    left_count: int | None = None; right_count: int | None = None; state: str = "NO_DATA"
 
 @dataclass(frozen=True)
 class CameraFrameMetadata:

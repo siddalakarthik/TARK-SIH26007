@@ -65,6 +65,16 @@ Unknown protocol versions and unknown message types are rejected without
 best-effort decoding. A sequence response correlates only with the identical
 pending Pi command sequence.
 
+## Source semantics
+
+`SIMULATION` identifies only an in-process deterministic endpoint or generated
+sensor data. `REAL` identifies a decoded report or feedback accepted through a
+configured real transport; it is not physical commissioning proof.
+`NOT_CONNECTED` means no accepted device stream is available, and `FAULT`
+identifies a transport/parser failure. `DISABLED_PHASE_1` is an actuation
+policy, not a source mode: it remains the output state for every command and
+ACK/NACK in this release. Browser location is not a vehicle source.
+
 ## Golden vectors
 
 `protocol_vectors.json` is the canonical source. It fixes logical payload,

@@ -2,6 +2,20 @@
 
 Last final-master audit run: 2026-09-15.
 
+## Software and communication closure update — 2026-09-20
+
+- Backend regression: **97 passed**. This includes documented LD2450 binary
+  decoding, physical-vs-simulation source gating, decoder recovery, encoder
+  count-contract and existing API/WebSocket/protocol/replay coverage.
+- Frontend regression: **23 passed**; TypeScript check and Vite production
+  build passed using the already-installed local tools. The MapView bundle-size
+  advisory remains non-blocking.
+- Firmware: strict GCC `-std=c11 -Wall -Wextra -Werror -fsyntax-only` passed
+  for the protocol, response, service, supervisor and safe hardware-boundary
+  sources. Fresh host executables compiled successfully, but this workstation's
+  application-control policy prevented execution; no pass claim is made for
+  those newly compiled executables.
+
 | Check | Result | Status |
 |---|---|---|
 | Backend configuration, safety pipeline, API, WebSocket, map safety and deployment tests | 30 passed | VERIFIED |
@@ -22,4 +36,4 @@ Last final-master audit run: 2026-09-15.
 
 The final-polish backend run completed with **30 passed** and three non-failing warnings: two upstream TestClient deprecation warnings and one sandbox-denied pytest-cache write. The frontend completed with **17 passed** and a production build. They are not TARK test failures. The MapLibre lazy-loaded bundle remains approximately 808 kB before gzip; it is loaded only when the Map view opens. This is documented as a non-blocking performance observation, not a Raspberry Pi measurement. OpenFreeMap Liberty India-overview checks passed at 320, 360, 390, 412, 768, 1024, 1280, 1440 and 1920 px with no document-level horizontal overflow. No geographic vehicle data is fabricated and radar remains in a separate local-coordinate scope.
 
-Simulation-only truth remains intact: no test run validates real LD2450 parsing, ESP32 USB operation, physical actuator response, encoder response, motor operation, physical E-stop, timing, stopping distance, or mine safety behavior.
+Simulation-only truth remains intact: no test run validates real LD2450 serial communication, ESP32 USB operation, physical actuator response, encoder response, motor operation, physical E-stop, timing, stopping distance, or mine safety behavior.

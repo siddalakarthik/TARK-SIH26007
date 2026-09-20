@@ -1,5 +1,11 @@
 # V9 Final Control-Stack Software Freeze
 
+> Superseded test evidence: the 2026-09-20 closure pass adds the documented
+> LD2450 target-report decoder, real-source gating and an explicit encoder
+> count contract. See `FINAL_SOFTWARE_COMMUNICATION_CLOSURE_REPORT.md` for the
+> current 97-backend-test, 23-frontend-test evidence and the remaining
+> hardware-only verification boundary.
+
 ## Determination
 
 **SOFTWARE ARCHITECTURE FROZEN** for the pre-hardware research-prototype

@@ -9,6 +9,9 @@ single `protocol_vectors.json` source. It validates required fields, types,
 ranges, matching header sequence/timestamp, configuration hash and expiry
 before the command supervisor can accept it.
 
-Firmware-side ACK/NACK/STATUS CBOR generation and physical USB RX/TX remain
-Task 7B. No physical ESP32, USB, watchdog, motor, encoder or E-stop operation
-is claimed by this implementation.
+Firmware-side ACK/NACK/STATUS CBOR generation and the injected bounded RX/TX
+service are implemented and shared-vector tested. Firmware responses identify
+the production endpoint as `REAL`; the separate Python simulator is the only
+endpoint labelled `SIMULATION`. Board-specific USB RX/TX binding, device
+identity evidence and physical ESP32, watchdog, motor, encoder or E-stop
+operation remain unverified.

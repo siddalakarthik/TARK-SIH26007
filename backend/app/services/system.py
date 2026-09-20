@@ -19,6 +19,8 @@ from app.communication.esp32.usb import Esp32UsbConfig, IdentityGatedESP32UsbTra
 from app.logging.store import EventStore
 from app.replay.store import RecordingStore, RecordingError
 from app.sensors.ld2450.adapter import LD2450Adapter, LD2450RawCaptureConfig, LD2450RawCaptureWorker
+from app.sensors.ld2450.parser import LD2450Parser
+from app.domain.models import RadarDetection
 
 
 def _configured_esp32() -> Esp32UsbConfig:
@@ -62,6 +64,8 @@ class TarkSystem:
     ld2450_capture: LD2450RawCaptureWorker | None = field(default=None, init=False)
     _location_step: int = field(default=0, init=False)
     _location_lock: Lock = field(default_factory=Lock, init=False, repr=False)
+    _real_radar_reports: list[tuple[int, list[RadarDetection]]] = field(default_factory=list, init=False, repr=False)
+    _real_radar_lock: Lock = field(default_factory=Lock, init=False, repr=False)
 
     @property
     def hardware_runtime_requested(self) -> bool:
@@ -185,8 +189,26 @@ class TarkSystem:
         if not config.port:
             return
         adapter = self.ld2450_factory(config.port, config.baudrate, self.record_ld2450_raw)
-        self.ld2450_capture = LD2450RawCaptureWorker(adapter, config.reconnect_s)
+        self.ld2450_capture = LD2450RawCaptureWorker(
+            adapter, config.reconnect_s, LD2450Parser(), self.ingest_ld2450_report,
+        )
         self.ld2450_capture.start()
+
+    def ingest_ld2450_report(self, timestamp_ns: int, detections: list[RadarDetection]) -> None:
+        """Accept one decoded physical-radar report at the existing pipeline boundary.
+
+        The worker is the only caller.  The queue is bounded so an unavailable
+        API consumer cannot turn serial input into unbounded memory growth.
+        """
+        with self._real_radar_lock:
+            self._real_radar_reports.append((timestamp_ns, detections))
+            del self._real_radar_reports[:-16]
+
+    def _consume_real_radar_reports(self) -> list[tuple[int, list[RadarDetection]]]:
+        with self._real_radar_lock:
+            reports = self._real_radar_reports[:]
+            self._real_radar_reports.clear()
+        return reports
     def ingest_gnss_fix(self, fix: GnssFix, now_ns: int | None = None) -> bool:
         """Future reader callback boundary; it remains observational only."""
         return self.gnss.accept(fix, now_ns)
@@ -208,8 +230,22 @@ class TarkSystem:
                 self.gnss.accept(self.gnss_simulator.fix(self._location_step, now_ns), now_ns)
             return self.gnss.response(now_ns)
     def tick(self,now_ns:int|None=None)->dict:
-        now_ns=now_ns or time.monotonic_ns(); observations=self.radar.read_detections(now_ns)
-        decision=self.pipeline.ingest(observations,now_ns) if observations else self.pipeline.decision(now_ns)
+        now_ns=now_ns or time.monotonic_ns()
+        observations: list[RadarDetection] = []
+        if self.settings.mode == "simulation":
+            observations = self.radar.read_detections(now_ns)
+            decision = self.pipeline.ingest(observations, now_ns) if observations else self.pipeline.decision(now_ns)
+        elif self.ld2450_capture is not None:
+            reports = self._consume_real_radar_reports()
+            for report_timestamp_ns, report in reports:
+                decision = self.pipeline.ingest(report, report_timestamp_ns)
+                observations = report
+            if not reports:
+                decision = self.pipeline.decision(now_ns)
+        else:
+            # A non-simulation runtime without a configured real receiver is
+            # intentionally not backfilled by radar simulation.
+            decision = self.pipeline.decision(now_ns)
         event=self.pipeline.events[-1]; self.event_store.append(event)
         command=self.pipeline.command(decision,now_ns)
         self.recording_store.append_observation_tick(
@@ -244,8 +280,8 @@ class TarkSystem:
     def recording_records(self, session_id:str, limit:int=1_000)->list[dict]:
         return self.recording_store.records(session_id,limit=limit)
     def record_ld2450_raw(self, timestamp_ns:int, raw:bytes)->bool:
-        """Optional real-adapter sink; raw bytes remain undecoded until verified."""
-        return self.recording_store.append_raw_frame(timestamp_ns=timestamp_ns,source_mode="REAL_LD2450_RAW",raw=raw,metadata={"decoder":"NOT_VERIFIED"})
+        """Retain bounded raw evidence alongside decoded reports for diagnosis."""
+        return self.recording_store.append_raw_frame(timestamp_ns=timestamp_ns,source_mode="REAL_LD2450_RAW",raw=raw,metadata={"decoder":"HLK_LD2450_TARGET_REPORT_V1_03"})
     def close(self)->None:
         if self.gnss_reader:self.gnss_reader.close()
         if self.ld2450_capture:self.ld2450_capture.close()
@@ -254,17 +290,22 @@ class TarkSystem:
         self.camera.stop(); self.thermal.stop(); self.imu.stop()
         self.event_store.close(); self.recording_store.close()
     def sensor_snapshot(self,now_ns:int)->list[dict]:
-        radar=self.pipeline.health(now_ns).model_dump(); radar["device_id"]=radar.pop("sensor_id"); radar["source_mode"]="SIMULATION"
+        radar=self.pipeline.health(now_ns).model_dump(); radar["device_id"]=radar.pop("sensor_id")
+        radar["source_mode"]="SIMULATION" if self.settings.mode == "simulation" else "NOT_CONNECTED"
         raw_capture=None
         if self.ld2450_capture:
             diagnostic=self.ld2450_capture.diagnostics()
-            # Raw bytes and normalized simulator detections are different
-            # sources. Never relabel simulated tracks as a real radar result.
-            raw_capture={"device_id":"ld2450_raw_capture","source_mode":"REAL_LD2450_RAW","state":diagnostic["state"],"reason":diagnostic["reason"],"timestamp_ns":diagnostic["last_timestamp_ns"],"age_ms":None,"quality":None}
+            if diagnostic["decoded_report_count"]:
+                radar["source_mode"] = "REAL"
+            elif diagnostic["state"] == "ERROR" or diagnostic["rejected_frame_count"]:
+                radar["source_mode"] = "FAULT"
+            else:
+                radar["source_mode"] = "NOT_CONNECTED"
+            raw_capture={"device_id":"ld2450_raw_capture","source_mode":radar["source_mode"],"state":diagnostic["state"],"reason":diagnostic["reason"],"timestamp_ns":diagnostic["last_timestamp_ns"],"age_ms":None,"quality":None}
         if self.esp32_transport:
-            esp32={"device_id":"esp32","source_mode":"CONFIGURED_SERIAL","state":"ONLINE" if self.esp32_transport.running else "CONNECTING","timestamp_ns":now_ns,"age_ms":0.0,"quality":None,"reason":"PHASE_1 OUTPUTS DISABLED"}
+            esp32={"device_id":"esp32","source_mode":"REAL","state":"ONLINE" if self.esp32_transport.running else "FAULT","timestamp_ns":now_ns,"age_ms":0.0,"quality":None,"reason":"PHASE_1 OUTPUTS DISABLED"}
         elif self.esp32_usb:
-            esp32={"device_id":"esp32","source_mode":"NOT_CONNECTED_PHASE_2","state":"NOT_CONNECTED","timestamp_ns":None,"age_ms":None,"quality":None,"reason":"ESP32 IDENTITY EVIDENCE REQUIRED BEFORE SERIAL OPEN"}
+            esp32={"device_id":"esp32","source_mode":"NOT_CONNECTED","state":"NOT_CONNECTED","timestamp_ns":None,"age_ms":None,"quality":None,"reason":"ESP32 IDENTITY EVIDENCE REQUIRED BEFORE SERIAL OPEN"}
         else: esp32=self.esp32.status(now_ns).__dict__
         result=[radar,esp32,self.motor.status(now_ns).__dict__,self.camera.health(now_ns).__dict__,self.thermal.health(now_ns).__dict__,self.imu.health(now_ns).__dict__,{"device_id":"encoders","source_mode":"SIMULATION","state":"DISABLED_PHASE_1","timestamp_ns":now_ns,"age_ms":0.0,"quality":None,"reason":"SOFTWARE_INTERFACE_READY_WHEEL_RESPONSE_NOT_GROUND_SPEED"}]
         if raw_capture: result.append(raw_capture)

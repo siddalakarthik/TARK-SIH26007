@@ -5,10 +5,13 @@ import time
 from dataclasses import dataclass
 from typing import Callable
 
+from app.domain.models import RadarDetection
+from app.sensors.ld2450.parser import LD2450Parser
+
 
 @dataclass(frozen=True)
 class LD2450RawCaptureConfig:
-    """Configuration for evidence retention only; this is not a decoder."""
+    """Configuration for the documented target-report reader boundary."""
     port: str = ""
     baudrate: int = 256000
     reconnect_s: float = 0.5
@@ -32,7 +35,7 @@ class LD2450RawCaptureConfig:
         )
 
 class LD2450Adapter:
-    """Raw serial capture adapter. Physical pin/voltage claims remain in V2/datasheet authority."""
+    """Bounded serial reader; physical pin and voltage claims remain external."""
     def __init__(self, port: str, baudrate: int=256000, raw_sink: Callable[[int, bytes], None] | None=None):
         self.port=port; self.baudrate=baudrate; self.raw_sink=raw_sink; self._serial=None
         self.last_timestamp_ns: int|None=None; self.last_byte_count=0; self.last_error: str|None=None
@@ -43,31 +46,39 @@ class LD2450Adapter:
         self._serial=serial.Serial(self.port, self.baudrate, timeout=0.2, bytesize=8, parity="N", stopbits=1)
     def read(self) -> tuple[int, bytes]:
         if self._serial is None: raise RuntimeError("adapter is not open")
-        timestamp_ns=time.monotonic_ns(); raw=self._serial.read_until(b"\n", 4096)
+        # Binary reports are neither newline-delimited nor text.  A bounded
+        # read permits partial/multiple frames for the incremental parser.
+        timestamp_ns=time.monotonic_ns(); raw=self._serial.read(256)
         self.last_timestamp_ns=timestamp_ns; self.last_byte_count=len(raw)
-        if self.raw_sink is not None:
+        if raw and self.raw_sink is not None:
             try: self.raw_sink(timestamp_ns,raw)
             except Exception as error: self.last_error=f"RAW_SINK_{type(error).__name__}"
         return timestamp_ns, raw
     def close(self) -> None:
         if self._serial is not None: self._serial.close(); self._serial=None
     def diagnostics(self) -> dict:
-        return {"state":"RAW_CAPTURE_ONLY","protocol":"VENDOR_FRAME_SPEC_REQUIRED","last_timestamp_ns":self.last_timestamp_ns,"last_byte_count":self.last_byte_count,"last_error":self.last_error}
+        return {"state":"NOT_CONNECTED","protocol":"HLK_LD2450_TARGET_REPORT_V1_03","last_timestamp_ns":self.last_timestamp_ns,"last_byte_count":self.last_byte_count,"last_error":self.last_error}
 
 
 class LD2450RawCaptureWorker:
-    """One bounded raw-byte reader with reconnect handling.
-
-    It deliberately never calls ``LD2450Parser``.  Retained bytes are evidence
-    for later vendor-protocol review, not normalized radar detections.
-    """
-    def __init__(self, adapter: LD2450Adapter, reconnect_s: float = 0.5):
+    """One bounded serial reader with raw evidence, decoder and reconnects."""
+    def __init__(
+        self,
+        adapter: LD2450Adapter,
+        reconnect_s: float = 0.5,
+        parser: LD2450Parser | None = None,
+        on_report: Callable[[int, list[RadarDetection]], None] | None = None,
+    ):
         self.adapter = adapter
         self.reconnect_s = max(0.1, reconnect_s)
+        self.parser = parser or LD2450Parser()
+        self.on_report = on_report
         self.state = "NOT_CONNECTED"
-        self.reason = "RAW CAPTURE NOT STARTED"
+        self.reason = "LD2450 READER NOT STARTED"
         self.reconnect_count = 0
         self.read_count = 0
+        self.decoded_report_count = 0
+        self.callback_error_count = 0
         self._stop = threading.Event()
         self._thread: threading.Thread | None = None
 
@@ -90,7 +101,7 @@ class LD2450RawCaptureWorker:
             self._thread.join(timeout=2)
         self._thread = None
         self.state = "NOT_CONNECTED"
-        self.reason = "RAW CAPTURE STOPPED"
+        self.reason = "LD2450 READER STOPPED"
 
     def diagnostics(self) -> dict:
         return {
@@ -99,22 +110,34 @@ class LD2450RawCaptureWorker:
             "reason": self.reason,
             "reconnect_count": self.reconnect_count,
             "read_count": self.read_count,
+            "decoded_report_count": self.decoded_report_count,
+            "rejected_frame_count": self.parser.rejected_frame_count,
+            "callback_error_count": self.callback_error_count,
         }
 
     def _run(self) -> None:
         while not self._stop.is_set():
             try:
                 self.state = "OPENING"
-                self.reason = "OPENING CONFIGURED RAW RADAR PORT"
+                self.reason = "OPENING CONFIGURED LD2450 PORT"
                 self.adapter.open()
-                self.state = "RAW_CAPTURE_ONLY"
-                self.reason = "RAW BYTES RETAINED; VENDOR DECODER NOT VERIFIED"
+                self.state = "ONLINE"
+                self.reason = "VERIFIED LD2450 TARGET-REPORT DECODER ACTIVE"
                 while not self._stop.is_set():
-                    self.adapter.read()
+                    timestamp_ns, raw = self.adapter.read()
                     self.read_count += 1
+                    for detections in self.parser.feed(raw, timestamp_ns):
+                        self.decoded_report_count += 1
+                        if self.on_report is not None:
+                            try:
+                                self.on_report(timestamp_ns, detections)
+                            except Exception:
+                                # Callback faults must not stop raw retention
+                                # or force a transport fault into authority.
+                                self.callback_error_count += 1
             except Exception as error:
                 self.state = "ERROR"
-                self.reason = f"RAW CAPTURE ERROR: {type(error).__name__}"
+                self.reason = f"LD2450 READER ERROR: {type(error).__name__}"
                 self.reconnect_count += 1
             finally:
                 self.adapter.close()
