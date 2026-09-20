@@ -1,0 +1,13 @@
+{
+  "mode": "simulation",
+  "configuration_hash": "UNRELEASED-PHASE1",
+  "fresh_age_ms": 250,
+  "stale_age_ms": 1000,
+  "track_timeout_ms": 1500,
+  "hard_cap_mps": 0.0,
+  "reaction_bound_s": {"value": 0.5, "unit": "s", "status": "PARAMETERIZED / NOT VALIDATED"},
+  "effective_deceleration_mps2": {"value": 0.5, "unit": "m/s2", "status": "PARAMETERIZED / NOT VALIDATED"},
+  "margin_m": {"value": 0.5, "unit": "m", "status": "PARAMETERIZED / NOT VALIDATED"},
+  "esp32_timeout_ms": 500
+}
+

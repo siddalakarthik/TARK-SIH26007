@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: tark-sih26007-demo
+    runtime: docker
+    plan: free
+    healthCheckPath: /ready
+    autoDeploy: false
+    envVars:
+      - key: TARK_ENV
+        value: public_demo
+      - key: TARK_AUTH_MODE
+        value: public_demo

@@ -1,0 +1,14 @@
+.git
+.venv
+.pytest_cache
+__pycache__
+*.py[cod]
+frontend/node_modules
+frontend/dist
+frontend/node-compile-cache
+data/database
+data/recordings
+outputs
+*.zip
+*.exe
+.env

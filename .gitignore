@@ -1,0 +1,25 @@
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+*.egg-info/
+frontend/node_modules/
+frontend/dist/
+frontend/node-compile-cache/
+frontend/tsconfig.tsbuildinfo
+firmware/esp32/tests/*.exe
+.env
+*.db
+*.log
+data/runtime-logs/
+data/recordings/*
+!data/recordings/.gitkeep
+
+# Generated and runtime artifacts
+**/__pycache__/
+.pytest_cache/
+*.egg-info/
+data/runtime-logs/
+*.db
+frontend/node-compile-cache/
+frontend/tsconfig.tsbuildinfo

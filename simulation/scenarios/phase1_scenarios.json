@@ -1,0 +1,1 @@
+{"source_mode":"SIMULATION","seed":26007,"scenarios":["NORMAL","WARN","RESTRICT","UNKNOWN","STOP","RADAR_LOSS","RADAR_STALE","COMMUNICATION_LOSS","HEARTBEAT_LOSS","MULTI_TARGET","TARGET_APPROACH","TARGET_RECEDING"],"note":"Scenario payloads are software fixtures, never live sensor readings."}

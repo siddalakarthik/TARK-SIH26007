@@ -1,0 +1,8 @@
+# EDGE PUBLIC ACCESS OPTION — do not commit tunnel credentials or tokens.
+# Replace the hostname only after an administrator owns/configures the domain.
+tunnel: REPLACE_WITH_TUNNEL_UUID
+credentials-file: /etc/cloudflared/REPLACE_WITH_TUNNEL_UUID.json
+ingress:
+  - hostname: tark-operations.REPLACE_WITH_YOUR_DOMAIN
+    service: http://localhost:8000
+  - service: http_status:404
