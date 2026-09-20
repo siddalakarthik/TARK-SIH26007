@@ -2,7 +2,7 @@ import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import {ApiError, calculateRoute, reverseGeocode, type AddressHierarchy, type GeographicPoint, type RouteResult, type VehicleLocationStatus} from './api';
-import {resolveMapProvider, resolveMapStyle} from './mapConfig';
+import {resolveMapFallbackStyle,resolveMapProvider, resolveMapStyle} from './mapConfig';
 import {radarLocalPoint,validAccuracy,validHeading,vehicleLocationLabel,vehicleLocationStatusLabel} from './mapUtils';
 import type {Snapshot} from './types';
 
@@ -34,11 +34,11 @@ function vehicleAccuracyRing(location:NonNullable<VehicleLocationStatus['locatio
 type MapConfiguration={longitude:number;latitude:number;zoom:number;location_configured:boolean;location_status:string};
 export default function MapView({snapshot,vehicleLocation,mapConfig}:{snapshot:Snapshot;vehicleLocation:VehicleLocationStatus|null;mapConfig?:MapConfiguration}){
   const container=useRef<HTMLDivElement>(null),map=useRef<maplibregl.Map|null>(null),marker=useRef<maplibregl.Marker|null>(null),vehicleMarker=useRef<maplibregl.Marker|null>(null),watch=useRef<number|null>(null),follow=useRef(false);
-  const [mapState,setMapState]=useState<'LOADING'|'AVAILABLE'|'OFFLINE'>('LOADING'); const [mapReady,setMapReady]=useState(0);
+  const [mapState,setMapState]=useState<'LOADING'|'AVAILABLE'|'OFFLINE'>('LOADING'); const [mapReady,setMapReady]=useState(0),[mapDetail,setMapDetail]=useState('');
   const [device,setDevice]=useState<DeviceLocation|null>(null),[deviceStatus,setDeviceStatus]=useState('DEVICE LOCATION NOT REQUESTED');
   const [address,setAddress]=useState<AddressHierarchy|null>(null),[addressStatus,setAddressStatus]=useState('ADDRESS NOT RESOLVED');
   const [routeStart,setRouteStart]=useState(''),[routeDestination,setRouteDestination]=useState(''),[route,setRoute]=useState<RouteResult|null>(null),[routeStatus,setRouteStatus]=useState('ROUTING SERVICE UNAVAILABLE');
-  const style=useMemo(()=>resolveMapStyle(),[]),provider=useMemo(()=>resolveMapProvider(),[]);
+  const style=useMemo(()=>resolveMapStyle(),[]),fallbackStyle=useMemo(()=>resolveMapFallbackStyle(),[]),provider=useMemo(()=>resolveMapProvider(),[]);
   const initialMap=mapConfig?.location_configured?mapConfig:INDIA;
 
   const stopFollowing=useCallback(()=>{if(watch.current!==null){navigator.geolocation.clearWatch(watch.current);watch.current=null;}follow.current=false;},[]);
@@ -46,16 +46,25 @@ export default function MapView({snapshot,vehicleLocation,mapConfig}:{snapshot:S
 
   useEffect(()=>{
     if(!container.current||map.current)return;
-    const instance=new maplibregl.Map({container:container.current,style,center:[initialMap.longitude,initialMap.latitude],zoom:initialMap.zoom});
+    let styleReady=false,fallbackAttempted=false,lastRequest=style;
+    const instance=new maplibregl.Map({container:container.current,style,center:[initialMap.longitude,initialMap.latitude],zoom:initialMap.zoom,transformRequest:(url)=>{lastRequest=url;return {url};}});
     const resizeObserver=new ResizeObserver(()=>instance.resize());
     resizeObserver.observe(container.current);
     map.current=instance;instance.addControl(new maplibregl.NavigationControl({visualizePitch:true}),'top-right');instance.addControl(new maplibregl.ScaleControl({maxWidth:110,unit:'metric'}),'bottom-left');
-    instance.once('style.load',()=>{setMapState('AVAILABLE');setMapReady(value=>value+1);});instance.on('error',()=>setMapState('OFFLINE'));
+    instance.once('style.load',()=>{styleReady=true;setMapState('AVAILABLE');setMapDetail(fallbackAttempted?'OPENFREEMAP FALLBACK STYLE ACTIVE':'');setMapReady(value=>value+1);});
+    const onMapError=(event:{error?:unknown})=>{
+      const error=event.error as {message?:unknown;url?:unknown}|undefined;
+      const failedUrl=typeof error?.url==='string'?error.url:lastRequest;
+      const detail=`MAP RESOURCE FAILED: ${failedUrl}`;
+      if(!styleReady&&!fallbackAttempted&&fallbackStyle){fallbackAttempted=true;setMapState('LOADING');setMapDetail(`${detail} — RECOVERING WITH OPENFREEMAP FALLBACK`);instance.setStyle(fallbackStyle);return;}
+      setMapState('OFFLINE');setMapDetail(detail);
+    };
+    instance.on('error',onMapError);
     const pauseFollow=()=>{if(follow.current){stopFollowing();setDeviceStatus('DEVICE FOLLOW PAUSED BY MAP PAN');}};
     instance.on('dragstart',pauseFollow);
     requestAnimationFrame(()=>instance.resize());
-    return()=>{resizeObserver.disconnect();instance.off('dragstart',pauseFollow);marker.current?.remove();marker.current=null;vehicleMarker.current?.remove();vehicleMarker.current=null;instance.remove();map.current=null;};
-  },[style,stopFollowing,initialMap.latitude,initialMap.longitude,initialMap.zoom]);
+    return()=>{resizeObserver.disconnect();instance.off('dragstart',pauseFollow);instance.off('error',onMapError);marker.current?.remove();marker.current=null;vehicleMarker.current?.remove();vehicleMarker.current=null;instance.remove();map.current=null;};
+  },[fallbackStyle,style,stopFollowing,initialMap.latitude,initialMap.longitude,initialMap.zoom]);
 
   const updateDeviceLayer=useCallback((location:DeviceLocation)=>{
     const instance=map.current;if(!instance||!instance.isStyleLoaded())return;
@@ -82,7 +91,7 @@ export default function MapView({snapshot,vehicleLocation,mapConfig}:{snapshot:S
   const tracks=snapshot.tracks.slice(0,12);
 
   return <section className="map-page" aria-label="Map and route monitoring">
-    <header className="page-heading"><div><p className="eyebrow">MAP / ROUTE / LOCAL RADAR</p><h1>Operational map</h1><p>Browser device location, future vehicle GNSS, route data and local radar are deliberately separate data layers.</p></div><span className={`pill ${mapState==='AVAILABLE'?'ok':'warn'}`}>MAP {mapState}</span></header>
+    <header className="page-heading"><div><p className="eyebrow">MAP / ROUTE / LOCAL RADAR</p><h1>Operational map</h1><p>Browser device location, future vehicle GNSS, route data and local radar are deliberately separate data layers.</p>{mapDetail&&<p className="map-resource-status" role="status">{mapDetail}</p>}</div><span className={`pill ${mapState==='AVAILABLE'?'ok':'warn'}`}>MAP {mapState}</span></header>
     <div className="map-toolbar"><button onClick={()=>map.current?.flyTo({center:[INDIA_VIEW.longitude,INDIA_VIEW.latitude],zoom:INDIA_VIEW.zoom,essential:true})}>INDIA OVERVIEW</button><button onClick={()=>map.current?.flyTo({center:[WORLD.longitude,WORLD.latitude],zoom:WORLD.zoom,essential:true})}>WORLD VIEW</button><button onClick={locate}>Locate me</button><button onClick={toggleFollow}>{follow.current?'STOP DEVICE FOLLOW':'FOLLOW DEVICE'}</button><span>{provider}</span></div>
     <div className="map-layout"><div className="map-canvas-wrap"><div ref={container} className="map-canvas"/><div className="map-overlay"><strong>RADAR LOCAL FRAME — VEHICLE RELATIVE</strong><small>Not geographic coordinates; not placed on the global map.</small>{tracks.map(track=>{const p=radarLocalPoint(track.x_m,track.y_m);const distance=Math.hypot(track.x_m,track.y_m);const label=`Track ${track.track_id}: ${distance.toFixed(1)} m`;return <span aria-label={label} className="radar-dot" style={p} key={track.track_id} title={label}><b aria-hidden="true">{track.track_id}</b></span>;})}</div></div>
       <aside className="map-sidebar"><section><h2>Device location</h2><p className="status-line">{deviceStatus}</p><p>{device?coordinateText(device):'No browser coordinates retained.'}</p><p>{device?`Accuracy: ±${Math.round(device.accuracy)} m`:'Browser location is only requested by the operator.'}</p><button disabled={!device} onClick={()=>void resolveAddress()}>RESOLVE ADDRESS</button><p>{addressStatus}</p><p>{addressText(address)}</p></section><section><h2>TARK vehicle location</h2><p className="status-line">{vehicleLocationStatusLabel(vehicleLocation?.state,vehicleLocation?.location?.source)}</p><p>{vehicleLocation?.location?`${vehicleLocation.location.latitude_deg.toFixed(6)}, ${vehicleLocation.location.longitude_deg.toFixed(6)}`:vehicleLocation?.reason||'VEHICLE LOCATION NOT AVAILABLE'}</p>{vehicleLocation?.location&&<><p>{vehicleLocationLabel(vehicleLocation.location.source)} · {vehicleLocation.location.fix_type} · ±{validAccuracy(vehicleLocation.location.horizontal_accuracy_m)?vehicleLocation.location.horizontal_accuracy_m:'UNKNOWN'} m</p><p>Heading: {validHeading(vehicleLocation.location.heading_deg)?vehicleLocation.location.heading_deg.toFixed(0):'UNKNOWN'}° · Freshness: {vehicleLocation.location.freshness_ms?.toFixed(0)??'UNKNOWN'} ms</p></>}<small>Vehicle GNSS is a separate hardware contract. Browser location never becomes vehicle telemetry.</small></section><section><h2>Route / navigation</h2><label>Route start coordinates<input aria-label="Route start coordinates" value={routeStart} onChange={event=>setRouteStart(event.target.value)} placeholder="latitude, longitude"/></label><label>Route destination coordinates<input aria-label="Route destination coordinates" value={routeDestination} onChange={event=>setRouteDestination(event.target.value)} placeholder="latitude, longitude"/></label><div className="button-row"><button onClick={()=>void requestRoute()}>CALCULATE ROUTE</button><button onClick={clearRoute}>CLEAR ROUTE</button></div><p className="status-line">{routeStatus}</p>{route&&<p>{(route.distance_m/1000).toFixed(2)} km · {(route.duration_s/60).toFixed(1)} min · provider: {route.provider}</p>}<small>Only provider-returned geometry is drawn. Navigation is not a safety input.</small></section></aside></div>

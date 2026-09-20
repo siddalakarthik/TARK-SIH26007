@@ -43,6 +43,14 @@ test('retains unavailable state without inventing a replay session',async()=>{
   expect(screen.getByRole('button',{name:'Step forward'})).toBeDisabled();
 });
 
+test('public demo exposes replay evidence without recording controls',async()=>{
+  render(<ReplayPanel recordingControlsAvailable={false}/>);
+  await screen.findByText(/Select a completed observation/i);
+  expect(screen.getByText(/PUBLIC DEMO: recording creation is unavailable/i)).toBeInTheDocument();
+  expect(screen.queryByRole('button',{name:'Start recording'})).not.toBeInTheDocument();
+  expect(screen.queryByRole('button',{name:'Stop recording'})).not.toBeInTheDocument();
+});
+
 test('plays, pauses, and stops at the end of the selected replay timeline',async()=>{
   render(<ReplayPanel/>);
   await screen.findByText(/Select a completed observation/i);

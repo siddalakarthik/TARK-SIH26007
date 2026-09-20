@@ -45,7 +45,7 @@ export function OperationsApp(){
     case 'Sensors': body=<><ErrorBoundary label="Sensor panel unavailable"><SensorMatrix snapshot={snapshot}/></ErrorBoundary><CameraPanels browserPreviewEnabled={diagnostics?.capabilities?.browser_camera_preview===true}/></>; break;
     case 'Safety': body=<SupervisorView snapshot={snapshot}/>; break;
     case 'Logs': body=<ErrorBoundary label="Event log unavailable"><EventTimeline snapshot={snapshot}/></ErrorBoundary>; break;
-    case 'Replay': body=<ErrorBoundary label="Replay unavailable"><ReplayPanel/></ErrorBoundary>; break;
+    case 'Replay': body=<ErrorBoundary label="Replay unavailable"><ReplayPanel recordingControlsAvailable={diagnostics!==null&&diagnostics.deployment_environment!=='public_demo'}/></ErrorBoundary>; break;
     case 'Diagnostics': body=<ErrorBoundary label="Diagnostics unavailable"><Diagnostics diagnostics={diagnostics}/></ErrorBoundary>; break;
     case 'Settings': body=<ErrorBoundary label="Settings unavailable"><SettingsView diagnostics={diagnostics} connection={connection} lastTelemetry={lastTelemetry}/></ErrorBoundary>; break;
   }
