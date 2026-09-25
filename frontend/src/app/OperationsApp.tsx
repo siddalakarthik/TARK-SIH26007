@@ -1,4 +1,4 @@
-import {lazy,Suspense,useEffect,useState,type FormEvent} from 'react';
+import {lazy,Suspense,useEffect,useRef,useState,type FormEvent} from 'react';
 import {ApiError,authenticate,connect,getSnapshot,getVehicleLocation,type ConnectionState,type VehicleLocationStatus} from '../api';
 import type {Snapshot} from '../types';
 import {ErrorBoundary} from '../components/ErrorBoundary';
@@ -31,9 +31,10 @@ export function OperationsApp(){
   const [lastTelemetry,setLastTelemetry]=useState<number|null>(null);
   const [diagnostics,setDiagnostics]=useState<DiagnosticsData|null>(null);
   const [vehicleLocation,setVehicleLocation]=useState<VehicleLocationStatus|null>(null);
+  const telemetryGeneration=useRef(0);
 
-  const load=async()=>{try{const next=await getSnapshot();setSnapshot(next);setLastTelemetry(Date.now());setIssue('');setAccessRequired(false);const location=await getVehicleLocation();setVehicleLocation(location);}catch(error){if(error instanceof ApiError&&error.status===401)setAccessRequired(true);else setIssue('SERVER STARTING or telemetry unavailable — dashboard has no authority.');}};
-  useEffect(()=>{void load();fetch('/api/v1/diagnostics',{credentials:'same-origin'}).then(response=>response.ok?response.json():null).then(setDiagnostics).catch(()=>undefined);return connect(next=>{setSnapshot(next);setLastTelemetry(Date.now());setIssue('');},(state,message)=>{setConnection(state);if(state==='DEGRADED'||state==='OFFLINE')setSnapshot(null);if(message)setIssue(message);},setVehicleLocation);},[sessionVersion]);
+  const load=async()=>{const generation=telemetryGeneration.current;try{const next=await getSnapshot();if(generation!==telemetryGeneration.current)return;setSnapshot(next);setLastTelemetry(Date.now());setIssue('');setAccessRequired(false);const location=await getVehicleLocation();if(generation===telemetryGeneration.current)setVehicleLocation(location);}catch(error){if(generation!==telemetryGeneration.current)return;setSnapshot(null);setVehicleLocation(null);if(error instanceof ApiError&&error.status===401)setAccessRequired(true);else setIssue('SERVER STARTING or telemetry unavailable — dashboard has no authority.');}};
+  useEffect(()=>{void load();fetch('/api/v1/diagnostics',{credentials:'same-origin'}).then(response=>response.ok?response.json():null).then(setDiagnostics).catch(()=>undefined);const stop=connect(next=>{telemetryGeneration.current+=1;setSnapshot(next);setLastTelemetry(Date.now());setIssue('');},(state,message)=>{setConnection(state);if(state==='DEGRADED'||state==='OFFLINE'||state==='RECONNECTING'){telemetryGeneration.current+=1;setSnapshot(null);setVehicleLocation(null);setIssue(message||'TELEMETRY UNAVAILABLE — previous values are not current.');}else if(message)setIssue(message);},setVehicleLocation);return()=>{telemetryGeneration.current+=1;stop();};},[sessionVersion]);
 
   if(accessRequired)return <AccessPrompt onSubmit={async token=>{await authenticate(token);setSessionVersion(value=>value+1);await load();}}/>;
   if(!snapshot)return <main className="loading"><ConnectionBadge state={connection}/><p>{issue}</p><p>Simulation/hardware status has not been received; no values are invented.</p></main>;

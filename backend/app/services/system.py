@@ -198,7 +198,7 @@ class TarkSystem:
         """Accept one decoded physical-radar report at the existing pipeline boundary.
 
         The worker is the only caller.  The queue is bounded so an unavailable
-        API consumer cannot turn serial input into unbounded memory growth.
+        decision consumer cannot turn serial input into unbounded memory growth.
         """
         with self._real_radar_lock:
             self._real_radar_reports.append((timestamp_ns, detections))
@@ -230,22 +230,20 @@ class TarkSystem:
                 self.gnss.accept(self.gnss_simulator.fix(self._location_step, now_ns), now_ns)
             return self.gnss.response(now_ns)
     def tick(self,now_ns:int|None=None)->dict:
-        now_ns=now_ns or time.monotonic_ns()
+        now_ns=time.monotonic_ns() if now_ns is None else now_ns
         observations: list[RadarDetection] = []
         if self.settings.mode == "simulation":
             observations = self.radar.read_detections(now_ns)
-            decision = self.pipeline.ingest(observations, now_ns) if observations else self.pipeline.decision(now_ns)
+            if observations:
+                self.pipeline.observe(observations, max(item.timestamp_ns for item in observations), now_ns)
         elif self.ld2450_capture is not None:
             reports = self._consume_real_radar_reports()
             for report_timestamp_ns, report in reports:
-                decision = self.pipeline.ingest(report, report_timestamp_ns)
+                self.pipeline.observe(report, report_timestamp_ns, now_ns)
                 observations = report
-            if not reports:
-                decision = self.pipeline.decision(now_ns)
-        else:
-            # A non-simulation runtime without a configured real receiver is
-            # intentionally not backfilled by radar simulation.
-            decision = self.pipeline.decision(now_ns)
+        # One decision/event per runtime step, evaluated at final controlled
+        # time even when the queue contains several old observation reports.
+        decision = self.pipeline.decision(now_ns)
         event=self.pipeline.events[-1]; self.event_store.append(event)
         command=self.pipeline.command(decision,now_ns)
         self.recording_store.append_observation_tick(
@@ -264,7 +262,7 @@ class TarkSystem:
             feedback=self.esp32_client.last_feedback.__dict__
         runtime_mode=self.settings.mode.upper()
         transport_mode="CONFIGURED_SERIAL" if self.esp32_transport else "SIMULATION"
-        return {"mode":runtime_mode,"traction":"DISABLED_PHASE_1","decision":decision.model_dump(),"command":command.model_dump(),"protocol":{"submission":submission.model_dump(),"feedback":feedback,"source_mode":runtime_mode,"transport_source_mode":transport_mode},"tracks":[t.model_dump() for t in self.pipeline.tracks.values()],"sensors":self.sensor_snapshot(now_ns),"vehicle_location":self.vehicle_location(now_ns),"events":[e.model_dump() for e in self.pipeline.events[-100:] ]}
+        return {"timestamp_ns":now_ns,"normal_evidence_valid_until_ns":self.pipeline.decision_evidence_valid_until_ns,"measurement_status":{"vehicle_speed":"UNAVAILABLE","ttc":"NOT_COMPUTED"},"mode":runtime_mode,"traction":"DISABLED_PHASE_1","decision":decision.model_dump(),"command":command.model_dump(),"protocol":{"submission":submission.model_dump(),"feedback":feedback,"source_mode":runtime_mode,"transport_source_mode":transport_mode},"tracks":[t.model_dump() for t in self.pipeline.tracks.values()],"sensors":self.sensor_snapshot(now_ns),"vehicle_location":self.vehicle_location(now_ns),"events":[e.model_dump() for e in self.pipeline.events[-100:] ]}
     def persisted_events(self,limit:int=100)->list[dict]:
         return self.event_store.recent(limit)
     def start_recording(self, now_ns:int|None=None)->dict:

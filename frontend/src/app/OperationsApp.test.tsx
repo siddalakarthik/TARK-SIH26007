@@ -1,11 +1,29 @@
 import '@testing-library/jest-dom/vitest';
-import {cleanup,fireEvent,render,screen,waitFor} from '@testing-library/react';
+import {act,cleanup,fireEvent,render,screen,waitFor} from '@testing-library/react';
 import {afterEach,expect,test,vi} from 'vitest';
 import {OperationsApp} from './OperationsApp';
+import {getSnapshot} from '../api';
 const {snapshot,connection}=vi.hoisted(()=>({snapshot:{mode:'SIMULATION',traction:'DISABLED_PHASE_1',decision:{state:'UNKNOWN' as const,permitted_speed_mps:0,stopping_requirement_m:.5,D_effective_m:2.8,reason_code:'UNKNOWN_STALE',active_constraints:['sensor_not_fresh']},command:{sequence:3,heartbeat:3,valid_until_ns:4},tracks:[{track_id:'ld2450:1',x_m:3,y_m:0,relative_velocity_mps:-1,quality:.9,uncertainty_m:.2}],sensors:[{device_id:'radar',source_mode:'SIMULATION',state:'ONLINE',age_ms:0,quality:.9,reason:'SIMULATION_TARGET_APPROACH'},{device_id:'thermal',source_mode:'NOT_CONNECTED_PHASE_2',state:'NOT_CONNECTED',age_ms:null,quality:null,reason:'NOT_CONNECTED_PHASE_2'}],events:[{event_id:'one',timestamp_ns:1_000_000_000,event_type:'PVSOE_DECISION',severity:'INFO',reason:'UNKNOWN_STALE'}]},connection:{onState:undefined as undefined|((state:string,message?:string)=>void)}}));
 vi.mock('../api',()=>({ApiError:class ApiError extends Error {status=0;},getSnapshot:vi.fn().mockResolvedValue(snapshot),getVehicleLocation:vi.fn().mockResolvedValue({state:'ONLINE',reason:'VALID SIMULATION FIX',breadcrumbs:[],location:{vehicle_id:'TARK-001',timestamp_ns:1,source:'SIMULATION',latitude_deg:17.385,longitude_deg:78.4867,fix_type:'3D_FIX',quality:'SIMULATION',status:'ONLINE'}}),getVehicleCameraStatus:vi.fn().mockResolvedValue({source_id:'camera',source_mode:'HARDWARE',state:'NOT_CONNECTED',timestamp_ns:null,age_ms:null,resolution:null,frame_rate_fps:null,reason:'NOT CONNECTED — PHASE 2',stream_url:null,stream_transport:'PENDING_PI_UVC_INTEGRATION',hardware_claim:'NOT_CONNECTED'}),getReplaySessions:vi.fn().mockResolvedValue([]),connect:vi.fn((_onSnapshot:unknown,onState:(state:string,message?:string)=>void)=>{connection.onState=onState;return()=>undefined;})}));
 vi.mock('../MapView',()=>({default:()=> <div>MAP AVAILABLE</div>}));
 afterEach(cleanup);
+test('SI-08 reconnect removes a current-looking snapshot',async()=>{render(<OperationsApp/>);await screen.findByText('UNKNOWN_STALE');connection.onState?.('RECONNECTING','Telemetry disconnected');await waitFor(()=>expect(screen.queryByText('UNKNOWN_STALE')).not.toBeInTheDocument());});
+test.each(['RECONNECTING','OFFLINE','DEGRADED'])('red team: %s does not retain NORMAL as current',async state=>{
+  vi.mocked(getSnapshot).mockResolvedValueOnce({...snapshot,decision:{...snapshot.decision,state:'NORMAL',reason_code:'NORMAL_EVIDENCE'}});
+  render(<OperationsApp/>);await screen.findByText('NORMAL_EVIDENCE');
+  act(()=>connection.onState?.(state,'TELEMETRY UNAVAILABLE'));
+  expect(screen.queryByText('NORMAL_EVIDENCE')).not.toBeInTheDocument();
+  expect(screen.getByText('TELEMETRY UNAVAILABLE')).toBeInTheDocument();
+});
+test('red team: late REST response cannot restore telemetry after disconnect',async()=>{
+  let resolve!:(value:typeof snapshot)=>void;
+  vi.mocked(getSnapshot).mockReturnValueOnce(new Promise(done=>{resolve=done;}));
+  render(<OperationsApp/>);
+  act(()=>connection.onState?.('RECONNECTING','TELEMETRY DISCONNECTED'));
+  await act(async()=>resolve(snapshot));
+  expect(screen.queryByText('UNKNOWN_STALE')).not.toBeInTheDocument();
+  expect(screen.getByText('TELEMETRY DISCONNECTED')).toBeInTheDocument();
+});
 test('driver view presents simulation and no browser motion authority',async()=>{render(<OperationsApp/>);await screen.findByText('UNKNOWN_STALE');expect(screen.getAllByText('SIMULATION').length).toBeGreaterThan(0);expect(screen.getByText(/No browser motion authority/i)).toBeInTheDocument();});
 test('role switching changes information architecture',async()=>{render(<OperationsApp/>);await screen.findByText('UNKNOWN_STALE');fireEvent.change(screen.getByLabelText('Role'),{target:{value:'SUPERVISOR'}});expect(await screen.findByText('Radar tracks')).toBeInTheDocument();fireEvent.change(screen.getByLabelText('Role'),{target:{value:'OWNER / FLEET'}});expect(await screen.findByText(/Fleet analytics/)).toBeInTheDocument();});
 test('sensors and default map remain truthful without fabricated hardware or route data',async()=>{render(<OperationsApp/>);await screen.findByText('UNKNOWN_STALE');fireEvent.click(screen.getByText('Sensors'));await screen.findByText('VEHICLE RGB CAMERA');expect(screen.getByText(/SOFTWARE INTERFACE READY/)).toBeInTheDocument();expect(screen.getByText('DEVELOPMENT BROWSER CAMERA')).toBeInTheDocument();fireEvent.click(screen.getByText('Map'));expect(await screen.findByText('MAP AVAILABLE')).toBeInTheDocument();});

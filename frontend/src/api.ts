@@ -51,7 +51,41 @@ export function isVehicleLocationStatus(value:unknown):value is VehicleLocationS
 export function connect(onSnapshot:(s:Snapshot)=>void,onState:(state:ConnectionState,message?:string)=>void,onLocation?:(location:VehicleLocationStatus)=>void){
   let socket:WebSocket|undefined,stopped=false,retry:number|undefined,stale:number|undefined,attempt=0,lastStatus=0;
   const clearTimers=()=>{if(retry!==undefined)window.clearTimeout(retry);if(stale!==undefined)window.clearInterval(stale);};
-  const scheduleStaleCheck=()=>{if(stale!==undefined)window.clearInterval(stale);stale=window.setInterval(()=>{if(Date.now()-lastStatus>3_000)onState('DEGRADED','Telemetry stale — retaining no new authority in browser.');},1_000);};
-  const open=()=>{if(stopped)return;onState(attempt?'RECONNECTING':'CONNECTING');socket=new WebSocket(websocketUrl());socket.onopen=()=>{attempt=0;scheduleStaleCheck();};socket.onmessage=event=>{try{const message:unknown=JSON.parse(event.data);if(!isRecord(message)){onState('DEGRADED','Malformed WebSocket payload rejected');return;}if(message.type==='status'){if(!isSnapshot(message.payload)){onState('DEGRADED','Invalid WebSocket payload rejected');return;}lastStatus=Date.now();onSnapshot(message.payload);onState('CONNECTED');return;}if(message.type==='location_update'){if(isVehicleLocationStatus(message.payload))onLocation?.(message.payload);return;}onState('DEGRADED','Invalid WebSocket payload rejected');}catch{onState('DEGRADED','Malformed WebSocket payload rejected');}};socket.onerror=()=>onState('DEGRADED','WebSocket unavailable — dashboard is observation only');socket.onclose=event=>{if(stopped)return;clearTimers();if(event.code===1008){onState('OFFLINE','Authentication required for telemetry.');return;}attempt+=1;const delay=Math.min(15_000,1_000*2**Math.min(attempt-1,4));onState('RECONNECTING',`Reconnecting telemetry in ${Math.ceil(delay/1000)} s`);retry=window.setTimeout(open,delay);};};
+  const scheduleStaleCheck=()=>{if(stale!==undefined)window.clearInterval(stale);stale=window.setInterval(()=>{if(Date.now()-lastStatus>3_000)onState('DEGRADED','TELEMETRY STALE — previous values are not current.');},1_000);};
+  const open=()=>{
+    if(stopped)return;
+    onState(attempt?'RECONNECTING':'CONNECTING');
+    const current=new WebSocket(websocketUrl());socket=current;
+    let closed=false;
+    const active=()=>!stopped&&!closed&&socket===current;
+    current.onopen=()=>{if(!active())return;attempt=0;lastStatus=0;scheduleStaleCheck();};
+    current.onmessage=event=>{
+      if(!active())return;
+      try{
+        const message:unknown=JSON.parse(event.data);
+        if(!isRecord(message)){onState('DEGRADED','Malformed WebSocket payload rejected');return;}
+        if(message.type==='status'){
+          if(!isSnapshot(message.payload)){onState('DEGRADED','Invalid WebSocket payload rejected');return;}
+          lastStatus=Date.now();onSnapshot(message.payload);onState('CONNECTED');return;
+        }
+        if(message.type==='location_update'){
+          if(isVehicleLocationStatus(message.payload))onLocation?.(message.payload);
+          else onLocation?.({state:'UNKNOWN',reason:'INVALID LOCATION UPDATE',location:null,breadcrumbs:[]});
+          return;
+        }
+        onState('DEGRADED','Invalid WebSocket payload rejected');
+      }catch{onState('DEGRADED','Malformed WebSocket payload rejected');}
+    };
+    current.onerror=()=>{if(active())onState('DEGRADED','WebSocket unavailable — dashboard is observation only');};
+    current.onclose=event=>{
+      if(!active())return;
+      closed=true;clearTimers();
+      if(event.code===1008){onState('OFFLINE','Authentication required for telemetry.');return;}
+      attempt+=1;
+      const delay=Math.min(15_000,1_000*2**Math.min(attempt-1,4));
+      onState('RECONNECTING',`Telemetry disconnected — reconnecting in ${Math.ceil(delay/1000)} s. Previous values are not current.`);
+      retry=window.setTimeout(open,delay);
+    };
+  };
   open();return()=>{stopped=true;clearTimers();socket?.close();};
 }

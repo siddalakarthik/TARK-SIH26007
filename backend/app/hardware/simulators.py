@@ -7,10 +7,17 @@ from app.hardware.encoder_contract import EncoderContract
 @dataclass
 class RadarSimulator(RadarInterface):
     scenario: str="TARGET_APPROACH"; active: bool=True
+    SCENARIOS = frozenset({"TARGET_APPROACH", "FAST_TARGET_APPROACH", "TARGET_RECEDING", "MULTI_TARGET", "RADAR_LOSS", "RADAR_STALE"})
+    def __post_init__(self):
+        self._validate_scenario()
+    def _validate_scenario(self)->None:
+        if self.scenario not in self.SCENARIOS:
+            raise ValueError(f"Unsupported radar input scenario: {self.scenario}; use a descriptive input scenario, not a safety-state name")
     def read_detections(self, now_ns:int)->list[RadarDetection]:
+        self._validate_scenario()
         if not self.active or self.scenario in {"RADAR_LOSS","RADAR_STALE"}: return []
         if self.scenario=="TARGET_RECEDING": velocity=1.0
-        elif self.scenario=="STOP": velocity=-3.0
+        elif self.scenario=="FAST_TARGET_APPROACH": velocity=-3.0
         else: velocity=-1.0
         items=[RadarDetection(candidate_id=1,x_m=3.0,y_m=.25,velocity_mps=velocity,quality=.9,uncertainty_m=.2,timestamp_ns=now_ns)]
         if self.scenario=="MULTI_TARGET": items.append(RadarDetection(candidate_id=2,x_m=5.0,y_m=-.5,velocity_mps=-.5,quality=.7,uncertainty_m=.5,timestamp_ns=now_ns))

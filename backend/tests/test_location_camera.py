@@ -15,7 +15,8 @@ class FakeRouter:
 
 
 def test_vehicle_location_contract_is_distinct_and_uses_labelled_software_simulation():
-    response = TestClient(create_app()).get("/api/v1/vehicle-location")
+    with TestClient(create_app()) as client:
+        response = client.get("/api/v1/vehicle-location")
     assert response.status_code == 200
     payload = response.json()
     assert payload["state"] == "ONLINE"

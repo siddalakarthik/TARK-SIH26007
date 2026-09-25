@@ -19,7 +19,7 @@ class RadarDetection(BaseModel):
     y_m: float
     velocity_mps: float
     quality: float = Field(ge=0, le=1)
-    timestamp_ns: int
+    timestamp_ns: int = Field(ge=0, strict=True)
     uncertainty_m: float = Field(ge=0)
     @field_validator("x_m", "y_m", "velocity_mps", "uncertainty_m")
     @classmethod
@@ -40,4 +40,3 @@ class PVSOEResult(BaseModel): D_env_m: float; D_base_m: float; D_effective_m: fl
 class BoundedCommand(BaseModel): protocol_version:int=1; sequence:int=Field(ge=0); timestamp_ns:int; valid_until_ns:int; state:SafetyState; permitted_speed_mps:float=Field(ge=0); left_command:float=0; right_command:float=0; heartbeat:int; reason_code:ReasonCode; configuration_hash:str; checksum:int|None=None
 class CommandResult(BaseModel): accepted:bool; reason:str; sequence:int; applied_left:float=0; applied_right:float=0
 class SystemEvent(BaseModel): event_id:str; timestamp_ns:int; event_type:str; severity:str; reason:str; payload:dict
-
