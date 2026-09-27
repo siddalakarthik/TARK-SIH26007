@@ -1,0 +1,2 @@
+# Keep hash-inventoried evidence bytes unchanged across Git line-ending conversion.
+evidence/prompt3/** text eol=lf

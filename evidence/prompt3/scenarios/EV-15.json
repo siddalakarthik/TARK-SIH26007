@@ -1,0 +1,58 @@
+{
+  "configuration": "config/phase1.json",
+  "expected_final_state": "NORMAL",
+  "expected_invariants": "PHASE1_ZERO_NO_HARDWARE_NO_REPLAY_AUTHORITY",
+  "initial_receiver_time": 1000000000,
+  "initial_reports": [
+    {
+      "age_ns": 0,
+      "candidate_id": 1,
+      "distance_m": 3.0,
+      "empty": false
+    }
+  ],
+  "initial_runtime_time": 10000000000,
+  "observer_profile": "none",
+  "purpose": "Production byte transport flushes partial RX and queued TX on reconnect",
+  "record_from_start": true,
+  "repeat_count": 5,
+  "response_policy": "deliver",
+  "scenario_id": "EV-15",
+  "steps": [
+    {
+      "action": "TRANSPORT_RECONNECT",
+      "args": {},
+      "expect": {
+        "session_active": false,
+        "transport_flushed": true
+      }
+    },
+    {
+      "action": "ADVANCE_TIME",
+      "args": {
+        "pi_ns": 100000000,
+        "receiver_ns": 100000000,
+        "tick": true
+      },
+      "expect": {
+        "communication": "ONLINE"
+      }
+    },
+    {
+      "action": "STOP_RECORDING",
+      "args": {},
+      "expect": {
+        "state": "NORMAL"
+      }
+    },
+    {
+      "action": "VERIFY_REPLAY",
+      "args": {},
+      "expect": {
+        "replay": "MATCH",
+        "state": "NORMAL"
+      }
+    }
+  ],
+  "title": "Production byte transport flushes partial RX and queued TX on reconnect"
+}

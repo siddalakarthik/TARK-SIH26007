@@ -1,0 +1,202 @@
+[
+  {
+    "counts": {
+      "command_submissions": 2,
+      "events": 2,
+      "location_steps": 0,
+      "session_generation": 1,
+      "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+      "ticks": 2,
+      "wire_commands": 2,
+      "wire_writes": 3
+    },
+    "digest": "81f8848b7dbbeb5fe3a0a7c3068fa93bd9c8afb6c0662a041f64b1c50bf3a2b6",
+    "hardware_opener_calls": 0,
+    "host_duration_s": 0.041622,
+    "result": "PASS",
+    "run_id": "EV-06-01",
+    "scenario_id": "EV-06",
+    "seed": 42,
+    "shutdown_complete": true
+  },
+  {
+    "counts": {
+      "command_submissions": 2,
+      "events": 2,
+      "location_steps": 0,
+      "session_generation": 1,
+      "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+      "ticks": 2,
+      "wire_commands": 2,
+      "wire_writes": 3
+    },
+    "digest": "81f8848b7dbbeb5fe3a0a7c3068fa93bd9c8afb6c0662a041f64b1c50bf3a2b6",
+    "hardware_opener_calls": 0,
+    "host_duration_s": 0.041264,
+    "result": "PASS",
+    "run_id": "EV-06-02",
+    "scenario_id": "EV-06",
+    "seed": 42,
+    "shutdown_complete": true
+  },
+  {
+    "counts": {
+      "command_submissions": 2,
+      "events": 2,
+      "location_steps": 0,
+      "session_generation": 1,
+      "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+      "ticks": 2,
+      "wire_commands": 2,
+      "wire_writes": 3
+    },
+    "digest": "81f8848b7dbbeb5fe3a0a7c3068fa93bd9c8afb6c0662a041f64b1c50bf3a2b6",
+    "hardware_opener_calls": 0,
+    "host_duration_s": 0.040002,
+    "result": "PASS",
+    "run_id": "EV-06-03",
+    "scenario_id": "EV-06",
+    "seed": 42,
+    "shutdown_complete": true
+  },
+  {
+    "counts": {
+      "command_submissions": 2,
+      "events": 2,
+      "location_steps": 0,
+      "session_generation": 1,
+      "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+      "ticks": 2,
+      "wire_commands": 2,
+      "wire_writes": 3
+    },
+    "digest": "81f8848b7dbbeb5fe3a0a7c3068fa93bd9c8afb6c0662a041f64b1c50bf3a2b6",
+    "hardware_opener_calls": 0,
+    "host_duration_s": 0.042281,
+    "result": "PASS",
+    "run_id": "EV-06-04",
+    "scenario_id": "EV-06",
+    "seed": 42,
+    "shutdown_complete": true
+  },
+  {
+    "counts": {
+      "command_submissions": 2,
+      "events": 2,
+      "location_steps": 0,
+      "session_generation": 1,
+      "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+      "ticks": 2,
+      "wire_commands": 2,
+      "wire_writes": 3
+    },
+    "digest": "81f8848b7dbbeb5fe3a0a7c3068fa93bd9c8afb6c0662a041f64b1c50bf3a2b6",
+    "hardware_opener_calls": 0,
+    "host_duration_s": 0.042927,
+    "result": "PASS",
+    "run_id": "EV-06-05",
+    "scenario_id": "EV-06",
+    "seed": 42,
+    "shutdown_complete": true
+  },
+  {
+    "counts": {
+      "command_submissions": 2,
+      "events": 2,
+      "location_steps": 0,
+      "session_generation": 1,
+      "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+      "ticks": 2,
+      "wire_commands": 2,
+      "wire_writes": 3
+    },
+    "digest": "81f8848b7dbbeb5fe3a0a7c3068fa93bd9c8afb6c0662a041f64b1c50bf3a2b6",
+    "hardware_opener_calls": 0,
+    "host_duration_s": 0.040666,
+    "result": "PASS",
+    "run_id": "EV-06-06",
+    "scenario_id": "EV-06",
+    "seed": 42,
+    "shutdown_complete": true
+  },
+  {
+    "counts": {
+      "command_submissions": 2,
+      "events": 2,
+      "location_steps": 0,
+      "session_generation": 1,
+      "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+      "ticks": 2,
+      "wire_commands": 2,
+      "wire_writes": 3
+    },
+    "digest": "81f8848b7dbbeb5fe3a0a7c3068fa93bd9c8afb6c0662a041f64b1c50bf3a2b6",
+    "hardware_opener_calls": 0,
+    "host_duration_s": 0.044618,
+    "result": "PASS",
+    "run_id": "EV-06-07",
+    "scenario_id": "EV-06",
+    "seed": 42,
+    "shutdown_complete": true
+  },
+  {
+    "counts": {
+      "command_submissions": 2,
+      "events": 2,
+      "location_steps": 0,
+      "session_generation": 1,
+      "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+      "ticks": 2,
+      "wire_commands": 2,
+      "wire_writes": 3
+    },
+    "digest": "81f8848b7dbbeb5fe3a0a7c3068fa93bd9c8afb6c0662a041f64b1c50bf3a2b6",
+    "hardware_opener_calls": 0,
+    "host_duration_s": 0.043664,
+    "result": "PASS",
+    "run_id": "EV-06-08",
+    "scenario_id": "EV-06",
+    "seed": 42,
+    "shutdown_complete": true
+  },
+  {
+    "counts": {
+      "command_submissions": 2,
+      "events": 2,
+      "location_steps": 0,
+      "session_generation": 1,
+      "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+      "ticks": 2,
+      "wire_commands": 2,
+      "wire_writes": 3
+    },
+    "digest": "81f8848b7dbbeb5fe3a0a7c3068fa93bd9c8afb6c0662a041f64b1c50bf3a2b6",
+    "hardware_opener_calls": 0,
+    "host_duration_s": 0.0547,
+    "result": "PASS",
+    "run_id": "EV-06-09",
+    "scenario_id": "EV-06",
+    "seed": 42,
+    "shutdown_complete": true
+  },
+  {
+    "counts": {
+      "command_submissions": 2,
+      "events": 2,
+      "location_steps": 0,
+      "session_generation": 1,
+      "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+      "ticks": 2,
+      "wire_commands": 2,
+      "wire_writes": 3
+    },
+    "digest": "81f8848b7dbbeb5fe3a0a7c3068fa93bd9c8afb6c0662a041f64b1c50bf3a2b6",
+    "hardware_opener_calls": 0,
+    "host_duration_s": 0.045573,
+    "result": "PASS",
+    "run_id": "EV-06-10",
+    "scenario_id": "EV-06",
+    "seed": 42,
+    "shutdown_complete": true
+  }
+]

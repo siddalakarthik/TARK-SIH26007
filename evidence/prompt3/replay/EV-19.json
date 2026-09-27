@@ -1,0 +1,213 @@
+{
+  "records": [
+    {
+      "kind": "OBSERVATION_TICK_V2",
+      "payload": {
+        "command": {
+          "checksum": null,
+          "configuration_hash": "UNRELEASED-PHASE1",
+          "heartbeat": 3,
+          "left_command": 0.0,
+          "permitted_speed_mps": 0.0,
+          "protocol_version": 2,
+          "reason_code": "NORMAL_EVIDENCE",
+          "right_command": 0.0,
+          "sequence": 3,
+          "state": "NORMAL",
+          "timestamp_ns": 10200000000,
+          "valid_until_ns": 10700000000
+        },
+        "decision": {
+          "D_base_m": 2.8,
+          "D_effective_m": 2.8,
+          "D_env_m": 2.8,
+          "T_bound_s": 0.5,
+          "active_constraints": [],
+          "hard_cap_mps": 0.0,
+          "permitted_speed_mps": 0.0,
+          "reason_code": "NORMAL_EVIDENCE",
+          "state": "NORMAL",
+          "stopping_requirement_m": 0.5
+        },
+        "event": {
+          "event_id": "04b51ec6-ee97-4b6a-8978-db3402dbd99e",
+          "event_type": "PVSOE_DECISION",
+          "payload": {
+            "D_base_m": 2.8,
+            "D_effective_m": 2.8,
+            "D_env_m": 2.8,
+            "T_bound_s": 0.5,
+            "active_constraints": [],
+            "hard_cap_mps": 0.0,
+            "permitted_speed_mps": 0.0,
+            "reason_code": "NORMAL_EVIDENCE",
+            "state": "NORMAL",
+            "stopping_requirement_m": 0.5
+          },
+          "reason": "NORMAL_EVIDENCE",
+          "severity": "INFO",
+          "timestamp_ns": 10200000000
+        },
+        "observations": [],
+        "radar_health": {
+          "age_ms": 200.0,
+          "freshness": "FRESH",
+          "last_seen_ns": 10000000000,
+          "quality": null,
+          "reason": "freshness_FRESH",
+          "sensor_id": "ld2450",
+          "state": "ONLINE"
+        },
+        "schema_version": 2
+      },
+      "sequence": 1,
+      "source_mode": "REPLAY",
+      "timestamp_ns": 10200000000
+    },
+    {
+      "kind": "OBSERVATION_TICK_V2",
+      "payload": {
+        "command": {
+          "checksum": null,
+          "configuration_hash": "UNRELEASED-PHASE1",
+          "heartbeat": 4,
+          "left_command": 0.0,
+          "permitted_speed_mps": 0.0,
+          "protocol_version": 2,
+          "reason_code": "UNKNOWN_STALE",
+          "right_command": 0.0,
+          "sequence": 4,
+          "state": "UNKNOWN",
+          "timestamp_ns": 11100000000,
+          "valid_until_ns": 11600000000
+        },
+        "decision": {
+          "D_base_m": 0.0,
+          "D_effective_m": 0.0,
+          "D_env_m": 0.0,
+          "T_bound_s": 0.5,
+          "active_constraints": [
+            "sensor_not_fresh"
+          ],
+          "hard_cap_mps": 0.0,
+          "permitted_speed_mps": 0.0,
+          "reason_code": "UNKNOWN_STALE",
+          "state": "UNKNOWN",
+          "stopping_requirement_m": 0.5
+        },
+        "event": {
+          "event_id": "04a1802c-1189-44ee-90f9-22f8df66baae",
+          "event_type": "PVSOE_DECISION",
+          "payload": {
+            "D_base_m": 0.0,
+            "D_effective_m": 0.0,
+            "D_env_m": 0.0,
+            "T_bound_s": 0.5,
+            "active_constraints": [
+              "sensor_not_fresh"
+            ],
+            "hard_cap_mps": 0.0,
+            "permitted_speed_mps": 0.0,
+            "reason_code": "UNKNOWN_STALE",
+            "state": "UNKNOWN",
+            "stopping_requirement_m": 0.5
+          },
+          "reason": "UNKNOWN_STALE",
+          "severity": "INFO",
+          "timestamp_ns": 11100000000
+        },
+        "observations": [],
+        "radar_health": {
+          "age_ms": 1100.0,
+          "freshness": "STALE",
+          "last_seen_ns": 10000000000,
+          "quality": null,
+          "reason": "freshness_STALE",
+          "sensor_id": "ld2450",
+          "state": "STALE"
+        },
+        "schema_version": 2
+      },
+      "sequence": 2,
+      "source_mode": "REPLAY",
+      "timestamp_ns": 11100000000
+    }
+  ],
+  "result": {
+    "decisions": [
+      {
+        "D_base_m": 2.8,
+        "D_effective_m": 2.8,
+        "D_env_m": 2.8,
+        "T_bound_s": 0.5,
+        "active_constraints": [],
+        "hard_cap_mps": 0.0,
+        "permitted_speed_mps": 0.0,
+        "reason_code": "NORMAL_EVIDENCE",
+        "state": "NORMAL",
+        "stopping_requirement_m": 0.5
+      },
+      {
+        "D_base_m": 0.0,
+        "D_effective_m": 0.0,
+        "D_env_m": 0.0,
+        "T_bound_s": 0.5,
+        "active_constraints": [
+          "sensor_not_fresh"
+        ],
+        "hard_cap_mps": 0.0,
+        "permitted_speed_mps": 0.0,
+        "reason_code": "UNKNOWN_STALE",
+        "state": "UNKNOWN",
+        "stopping_requirement_m": 0.5
+      }
+    ],
+    "first_divergence": null,
+    "first_sequence": 1,
+    "last_sequence": 2,
+    "result": "MATCH",
+    "verified_decisions": 2,
+    "verified_records": 2
+  },
+  "session": {
+    "configuration_hash": "UNRELEASED-PHASE1",
+    "format_status": "VERSIONED",
+    "max_records": 10000,
+    "metadata": {
+      "checkpoint": {
+        "last_seen_ns": 10000000000,
+        "sequence": 2,
+        "timestamp_fault": false,
+        "tracks": [
+          {
+            "first_seen_ns": 10000000000,
+            "last_update_ns": 10000000000,
+            "quality": 0.9,
+            "relative_velocity_mps": -1.0,
+            "source_id": "ld2450",
+            "state": "NEW",
+            "track_id": "ld2450:1",
+            "uncertainty_m": 0.2,
+            "x_m": 3.0,
+            "y_m": 0.0
+          }
+        ],
+        "version": 1
+      },
+      "configuration_fingerprint": "f6e8471fae3618d38f7892e67f2d41eb37e155d5848bf51195e4dc06b373696e",
+      "configuration_identifier": "UNRELEASED-PHASE1",
+      "format_version": 2,
+      "input_schema": "ORDERED_RADAR_REPORTS_V2",
+      "software_fingerprint": "5efb1a29a118467e1ba8ca362457d677e01156969bf50e438910e4df8e844da5",
+      "software_id": "TARK_PROMPT2_REPLAY_V2",
+      "source_mode": "REPLAY"
+    },
+    "record_count": 2,
+    "session_id": "1ec1e132-27a0-47fb-94b2-59bbf8a8d39e",
+    "source_mode": "REPLAY",
+    "started_ns": 10100000000,
+    "status": "COMPLETE",
+    "stopped_ns": 11100000000
+  },
+  "source": "TEST_FIXTURE"
+}

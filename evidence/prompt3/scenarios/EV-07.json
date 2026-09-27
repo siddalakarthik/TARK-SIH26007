@@ -1,0 +1,52 @@
+{
+  "configuration": "config/phase1.json",
+  "expected_final_state": "UNKNOWN",
+  "expected_invariants": "PHASE1_ZERO_NO_HARDWARE_NO_REPLAY_AUTHORITY",
+  "initial_receiver_time": 1000000000,
+  "initial_reports": [],
+  "initial_runtime_time": 10000000000,
+  "observer_profile": "none",
+  "purpose": "No report remains missing rather than valid-empty",
+  "record_from_start": true,
+  "repeat_count": 5,
+  "response_policy": "deliver",
+  "scenario_id": "EV-07",
+  "steps": [
+    {
+      "action": "NO_REPORT",
+      "args": {},
+      "expect": {
+        "freshness": "MISSING"
+      }
+    },
+    {
+      "action": "ADVANCE_TIME",
+      "args": {
+        "pi_ns": 1100000000,
+        "receiver_ns": 1100000000,
+        "tick": true
+      },
+      "expect": {
+        "freshness": "MISSING",
+        "reports_consumed": 0,
+        "state": "UNKNOWN"
+      }
+    },
+    {
+      "action": "STOP_RECORDING",
+      "args": {},
+      "expect": {
+        "state": "UNKNOWN"
+      }
+    },
+    {
+      "action": "VERIFY_REPLAY",
+      "args": {},
+      "expect": {
+        "replay": "MATCH",
+        "state": "UNKNOWN"
+      }
+    }
+  ],
+  "title": "No report remains missing rather than valid-empty"
+}

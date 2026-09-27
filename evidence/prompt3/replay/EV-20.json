@@ -1,0 +1,556 @@
+{
+  "records": [
+    {
+      "kind": "OBSERVATION_TICK_V2",
+      "payload": {
+        "command": {
+          "checksum": null,
+          "configuration_hash": "UNRELEASED-PHASE1",
+          "heartbeat": 1,
+          "left_command": 0.0,
+          "permitted_speed_mps": 0.0,
+          "protocol_version": 2,
+          "reason_code": "NORMAL_EVIDENCE",
+          "right_command": 0.0,
+          "sequence": 1,
+          "state": "NORMAL",
+          "timestamp_ns": 10000000000,
+          "valid_until_ns": 10500000000
+        },
+        "decision": {
+          "D_base_m": 2.8,
+          "D_effective_m": 2.8,
+          "D_env_m": 2.8,
+          "T_bound_s": 0.5,
+          "active_constraints": [],
+          "hard_cap_mps": 0.0,
+          "permitted_speed_mps": 0.0,
+          "reason_code": "NORMAL_EVIDENCE",
+          "state": "NORMAL",
+          "stopping_requirement_m": 0.5
+        },
+        "event": {
+          "event_id": "9d5dbb4a-67fe-48ea-bdb4-1e267146e87d",
+          "event_type": "PVSOE_DECISION",
+          "payload": {
+            "D_base_m": 2.8,
+            "D_effective_m": 2.8,
+            "D_env_m": 2.8,
+            "T_bound_s": 0.5,
+            "active_constraints": [],
+            "hard_cap_mps": 0.0,
+            "permitted_speed_mps": 0.0,
+            "reason_code": "NORMAL_EVIDENCE",
+            "state": "NORMAL",
+            "stopping_requirement_m": 0.5
+          },
+          "reason": "NORMAL_EVIDENCE",
+          "severity": "INFO",
+          "timestamp_ns": 10000000000
+        },
+        "observations": [
+          {
+            "detections": [
+              {
+                "candidate_id": 1,
+                "quality": 0.9,
+                "source_id": "ld2450",
+                "timestamp_ns": 10000000000,
+                "uncertainty_m": 0.2,
+                "velocity_mps": -1.0,
+                "x_m": 3.0,
+                "y_m": 0.0
+              }
+            ],
+            "kind": "RADAR_REPORT",
+            "order": 0,
+            "source_mode": "REAL",
+            "timestamp_ns": 10000000000
+          }
+        ],
+        "radar_health": {
+          "age_ms": 0.0,
+          "freshness": "FRESH",
+          "last_seen_ns": 10000000000,
+          "quality": null,
+          "reason": "freshness_FRESH",
+          "sensor_id": "ld2450",
+          "state": "ONLINE"
+        },
+        "schema_version": 2
+      },
+      "sequence": 1,
+      "source_mode": "REPLAY",
+      "timestamp_ns": 10000000000
+    },
+    {
+      "kind": "OBSERVATION_TICK_V2",
+      "payload": {
+        "command": {
+          "checksum": null,
+          "configuration_hash": "UNRELEASED-PHASE1",
+          "heartbeat": 2,
+          "left_command": 0.0,
+          "permitted_speed_mps": 0.0,
+          "protocol_version": 2,
+          "reason_code": "NORMAL_EVIDENCE",
+          "right_command": 0.0,
+          "sequence": 2,
+          "state": "NORMAL",
+          "timestamp_ns": 10500000000,
+          "valid_until_ns": 11000000000
+        },
+        "decision": {
+          "D_base_m": 2.8,
+          "D_effective_m": 2.8,
+          "D_env_m": 2.8,
+          "T_bound_s": 0.5,
+          "active_constraints": [],
+          "hard_cap_mps": 0.0,
+          "permitted_speed_mps": 0.0,
+          "reason_code": "NORMAL_EVIDENCE",
+          "state": "NORMAL",
+          "stopping_requirement_m": 0.5
+        },
+        "event": {
+          "event_id": "6412cc8a-e83d-40e7-b793-7aa41c88c33c",
+          "event_type": "PVSOE_DECISION",
+          "payload": {
+            "D_base_m": 2.8,
+            "D_effective_m": 2.8,
+            "D_env_m": 2.8,
+            "T_bound_s": 0.5,
+            "active_constraints": [],
+            "hard_cap_mps": 0.0,
+            "permitted_speed_mps": 0.0,
+            "reason_code": "NORMAL_EVIDENCE",
+            "state": "NORMAL",
+            "stopping_requirement_m": 0.5
+          },
+          "reason": "NORMAL_EVIDENCE",
+          "severity": "INFO",
+          "timestamp_ns": 10500000000
+        },
+        "observations": [],
+        "radar_health": {
+          "age_ms": 500.0,
+          "freshness": "AGING",
+          "last_seen_ns": 10000000000,
+          "quality": null,
+          "reason": "freshness_AGING",
+          "sensor_id": "ld2450",
+          "state": "DEGRADED"
+        },
+        "schema_version": 2
+      },
+      "sequence": 2,
+      "source_mode": "REPLAY",
+      "timestamp_ns": 10500000000
+    },
+    {
+      "kind": "OBSERVATION_TICK_V2",
+      "payload": {
+        "command": {
+          "checksum": null,
+          "configuration_hash": "UNRELEASED-PHASE1",
+          "heartbeat": 3,
+          "left_command": 0.0,
+          "permitted_speed_mps": 0.0,
+          "protocol_version": 2,
+          "reason_code": "NORMAL_EVIDENCE",
+          "right_command": 0.0,
+          "sequence": 3,
+          "state": "NORMAL",
+          "timestamp_ns": 10500000000,
+          "valid_until_ns": 11000000000
+        },
+        "decision": {
+          "D_base_m": 2.8,
+          "D_effective_m": 2.8,
+          "D_env_m": 2.8,
+          "T_bound_s": 0.5,
+          "active_constraints": [],
+          "hard_cap_mps": 0.0,
+          "permitted_speed_mps": 0.0,
+          "reason_code": "NORMAL_EVIDENCE",
+          "state": "NORMAL",
+          "stopping_requirement_m": 0.5
+        },
+        "event": {
+          "event_id": "a2d95250-d24f-4ed2-857c-e4389bb962a8",
+          "event_type": "PVSOE_DECISION",
+          "payload": {
+            "D_base_m": 2.8,
+            "D_effective_m": 2.8,
+            "D_env_m": 2.8,
+            "T_bound_s": 0.5,
+            "active_constraints": [],
+            "hard_cap_mps": 0.0,
+            "permitted_speed_mps": 0.0,
+            "reason_code": "NORMAL_EVIDENCE",
+            "state": "NORMAL",
+            "stopping_requirement_m": 0.5
+          },
+          "reason": "NORMAL_EVIDENCE",
+          "severity": "INFO",
+          "timestamp_ns": 10500000000
+        },
+        "observations": [
+          {
+            "detections": [],
+            "kind": "RADAR_REPORT",
+            "order": 0,
+            "source_mode": "REAL",
+            "timestamp_ns": 10500000000
+          }
+        ],
+        "radar_health": {
+          "age_ms": 0.0,
+          "freshness": "FRESH",
+          "last_seen_ns": 10500000000,
+          "quality": null,
+          "reason": "freshness_FRESH",
+          "sensor_id": "ld2450",
+          "state": "ONLINE"
+        },
+        "schema_version": 2
+      },
+      "sequence": 3,
+      "source_mode": "REPLAY",
+      "timestamp_ns": 10500000000
+    },
+    {
+      "kind": "OBSERVATION_TICK_V2",
+      "payload": {
+        "command": {
+          "checksum": null,
+          "configuration_hash": "UNRELEASED-PHASE1",
+          "heartbeat": 4,
+          "left_command": 0.0,
+          "permitted_speed_mps": 0.0,
+          "protocol_version": 2,
+          "reason_code": "UNKNOWN_STALE",
+          "right_command": 0.0,
+          "sequence": 4,
+          "state": "UNKNOWN",
+          "timestamp_ns": 11600000000,
+          "valid_until_ns": 12100000000
+        },
+        "decision": {
+          "D_base_m": 0.0,
+          "D_effective_m": 0.0,
+          "D_env_m": 0.0,
+          "T_bound_s": 0.5,
+          "active_constraints": [
+            "sensor_not_fresh"
+          ],
+          "hard_cap_mps": 0.0,
+          "permitted_speed_mps": 0.0,
+          "reason_code": "UNKNOWN_STALE",
+          "state": "UNKNOWN",
+          "stopping_requirement_m": 0.5
+        },
+        "event": {
+          "event_id": "ee570eb7-d0c5-4000-b4d7-b3dedb7e9887",
+          "event_type": "PVSOE_DECISION",
+          "payload": {
+            "D_base_m": 0.0,
+            "D_effective_m": 0.0,
+            "D_env_m": 0.0,
+            "T_bound_s": 0.5,
+            "active_constraints": [
+              "sensor_not_fresh"
+            ],
+            "hard_cap_mps": 0.0,
+            "permitted_speed_mps": 0.0,
+            "reason_code": "UNKNOWN_STALE",
+            "state": "UNKNOWN",
+            "stopping_requirement_m": 0.5
+          },
+          "reason": "UNKNOWN_STALE",
+          "severity": "INFO",
+          "timestamp_ns": 11600000000
+        },
+        "observations": [],
+        "radar_health": {
+          "age_ms": 1100.0,
+          "freshness": "STALE",
+          "last_seen_ns": 10500000000,
+          "quality": null,
+          "reason": "freshness_STALE",
+          "sensor_id": "ld2450",
+          "state": "STALE"
+        },
+        "schema_version": 2
+      },
+      "sequence": 4,
+      "source_mode": "REPLAY",
+      "timestamp_ns": 11600000000
+    },
+    {
+      "kind": "OBSERVATION_TICK_V2",
+      "payload": {
+        "command": {
+          "checksum": null,
+          "configuration_hash": "UNRELEASED-PHASE1",
+          "heartbeat": 5,
+          "left_command": 0.0,
+          "permitted_speed_mps": 0.0,
+          "protocol_version": 2,
+          "reason_code": "UNKNOWN_STALE",
+          "right_command": 0.0,
+          "sequence": 5,
+          "state": "UNKNOWN",
+          "timestamp_ns": 11700000000,
+          "valid_until_ns": 12200000000
+        },
+        "decision": {
+          "D_base_m": 0.0,
+          "D_effective_m": 0.0,
+          "D_env_m": 0.0,
+          "T_bound_s": 0.5,
+          "active_constraints": [
+            "sensor_not_fresh"
+          ],
+          "hard_cap_mps": 0.0,
+          "permitted_speed_mps": 0.0,
+          "reason_code": "UNKNOWN_STALE",
+          "state": "UNKNOWN",
+          "stopping_requirement_m": 0.5
+        },
+        "event": {
+          "event_id": "1be2686f-0dc9-4766-b2f8-7ee262b2f490",
+          "event_type": "PVSOE_DECISION",
+          "payload": {
+            "D_base_m": 0.0,
+            "D_effective_m": 0.0,
+            "D_env_m": 0.0,
+            "T_bound_s": 0.5,
+            "active_constraints": [
+              "sensor_not_fresh"
+            ],
+            "hard_cap_mps": 0.0,
+            "permitted_speed_mps": 0.0,
+            "reason_code": "UNKNOWN_STALE",
+            "state": "UNKNOWN",
+            "stopping_requirement_m": 0.5
+          },
+          "reason": "UNKNOWN_STALE",
+          "severity": "INFO",
+          "timestamp_ns": 11700000000
+        },
+        "observations": [],
+        "radar_health": {
+          "age_ms": 1200.0,
+          "freshness": "STALE",
+          "last_seen_ns": 10500000000,
+          "quality": null,
+          "reason": "freshness_STALE",
+          "sensor_id": "ld2450",
+          "state": "STALE"
+        },
+        "schema_version": 2
+      },
+      "sequence": 5,
+      "source_mode": "REPLAY",
+      "timestamp_ns": 11700000000
+    },
+    {
+      "kind": "OBSERVATION_TICK_V2",
+      "payload": {
+        "command": {
+          "checksum": null,
+          "configuration_hash": "UNRELEASED-PHASE1",
+          "heartbeat": 6,
+          "left_command": 0.0,
+          "permitted_speed_mps": 0.0,
+          "protocol_version": 2,
+          "reason_code": "NORMAL_EVIDENCE",
+          "right_command": 0.0,
+          "sequence": 6,
+          "state": "NORMAL",
+          "timestamp_ns": 12300000000,
+          "valid_until_ns": 12800000000
+        },
+        "decision": {
+          "D_base_m": 2.8,
+          "D_effective_m": 2.8,
+          "D_env_m": 2.8,
+          "T_bound_s": 0.5,
+          "active_constraints": [],
+          "hard_cap_mps": 0.0,
+          "permitted_speed_mps": 0.0,
+          "reason_code": "NORMAL_EVIDENCE",
+          "state": "NORMAL",
+          "stopping_requirement_m": 0.5
+        },
+        "event": {
+          "event_id": "98adf88b-c9d3-4110-8ef1-b79a5d362997",
+          "event_type": "PVSOE_DECISION",
+          "payload": {
+            "D_base_m": 2.8,
+            "D_effective_m": 2.8,
+            "D_env_m": 2.8,
+            "T_bound_s": 0.5,
+            "active_constraints": [],
+            "hard_cap_mps": 0.0,
+            "permitted_speed_mps": 0.0,
+            "reason_code": "NORMAL_EVIDENCE",
+            "state": "NORMAL",
+            "stopping_requirement_m": 0.5
+          },
+          "reason": "NORMAL_EVIDENCE",
+          "severity": "INFO",
+          "timestamp_ns": 12300000000
+        },
+        "observations": [
+          {
+            "detections": [
+              {
+                "candidate_id": 1,
+                "quality": 0.9,
+                "source_id": "ld2450",
+                "timestamp_ns": 12300000000,
+                "uncertainty_m": 0.2,
+                "velocity_mps": -1.0,
+                "x_m": 3.0,
+                "y_m": 0.0
+              }
+            ],
+            "kind": "RADAR_REPORT",
+            "order": 0,
+            "source_mode": "REAL",
+            "timestamp_ns": 12300000000
+          }
+        ],
+        "radar_health": {
+          "age_ms": 0.0,
+          "freshness": "FRESH",
+          "last_seen_ns": 12300000000,
+          "quality": null,
+          "reason": "freshness_FRESH",
+          "sensor_id": "ld2450",
+          "state": "ONLINE"
+        },
+        "schema_version": 2
+      },
+      "sequence": 6,
+      "source_mode": "REPLAY",
+      "timestamp_ns": 12300000000
+    }
+  ],
+  "result": {
+    "decisions": [
+      {
+        "D_base_m": 2.8,
+        "D_effective_m": 2.8,
+        "D_env_m": 2.8,
+        "T_bound_s": 0.5,
+        "active_constraints": [],
+        "hard_cap_mps": 0.0,
+        "permitted_speed_mps": 0.0,
+        "reason_code": "NORMAL_EVIDENCE",
+        "state": "NORMAL",
+        "stopping_requirement_m": 0.5
+      },
+      {
+        "D_base_m": 2.8,
+        "D_effective_m": 2.8,
+        "D_env_m": 2.8,
+        "T_bound_s": 0.5,
+        "active_constraints": [],
+        "hard_cap_mps": 0.0,
+        "permitted_speed_mps": 0.0,
+        "reason_code": "NORMAL_EVIDENCE",
+        "state": "NORMAL",
+        "stopping_requirement_m": 0.5
+      },
+      {
+        "D_base_m": 2.8,
+        "D_effective_m": 2.8,
+        "D_env_m": 2.8,
+        "T_bound_s": 0.5,
+        "active_constraints": [],
+        "hard_cap_mps": 0.0,
+        "permitted_speed_mps": 0.0,
+        "reason_code": "NORMAL_EVIDENCE",
+        "state": "NORMAL",
+        "stopping_requirement_m": 0.5
+      },
+      {
+        "D_base_m": 0.0,
+        "D_effective_m": 0.0,
+        "D_env_m": 0.0,
+        "T_bound_s": 0.5,
+        "active_constraints": [
+          "sensor_not_fresh"
+        ],
+        "hard_cap_mps": 0.0,
+        "permitted_speed_mps": 0.0,
+        "reason_code": "UNKNOWN_STALE",
+        "state": "UNKNOWN",
+        "stopping_requirement_m": 0.5
+      },
+      {
+        "D_base_m": 0.0,
+        "D_effective_m": 0.0,
+        "D_env_m": 0.0,
+        "T_bound_s": 0.5,
+        "active_constraints": [
+          "sensor_not_fresh"
+        ],
+        "hard_cap_mps": 0.0,
+        "permitted_speed_mps": 0.0,
+        "reason_code": "UNKNOWN_STALE",
+        "state": "UNKNOWN",
+        "stopping_requirement_m": 0.5
+      },
+      {
+        "D_base_m": 2.8,
+        "D_effective_m": 2.8,
+        "D_env_m": 2.8,
+        "T_bound_s": 0.5,
+        "active_constraints": [],
+        "hard_cap_mps": 0.0,
+        "permitted_speed_mps": 0.0,
+        "reason_code": "NORMAL_EVIDENCE",
+        "state": "NORMAL",
+        "stopping_requirement_m": 0.5
+      }
+    ],
+    "first_divergence": null,
+    "first_sequence": 1,
+    "last_sequence": 6,
+    "result": "MATCH",
+    "verified_decisions": 6,
+    "verified_records": 6
+  },
+  "session": {
+    "configuration_hash": "UNRELEASED-PHASE1",
+    "format_status": "VERSIONED",
+    "max_records": 10000,
+    "metadata": {
+      "checkpoint": {
+        "last_seen_ns": null,
+        "sequence": 0,
+        "timestamp_fault": false,
+        "tracks": [],
+        "version": 1
+      },
+      "configuration_fingerprint": "f6e8471fae3618d38f7892e67f2d41eb37e155d5848bf51195e4dc06b373696e",
+      "configuration_identifier": "UNRELEASED-PHASE1",
+      "format_version": 2,
+      "input_schema": "ORDERED_RADAR_REPORTS_V2",
+      "software_fingerprint": "5efb1a29a118467e1ba8ca362457d677e01156969bf50e438910e4df8e844da5",
+      "software_id": "TARK_PROMPT2_REPLAY_V2",
+      "source_mode": "REPLAY"
+    },
+    "record_count": 6,
+    "session_id": "3e5fec6c-f6ac-4d22-b46e-0be6cb394ff2",
+    "source_mode": "REPLAY",
+    "started_ns": 10000000000,
+    "status": "COMPLETE",
+    "stopped_ns": 12300000000
+  },
+  "source": "TEST_FIXTURE"
+}
