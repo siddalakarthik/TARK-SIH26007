@@ -1,5 +1,23 @@
-# Protocol Implementation
+# Protocol implementation
 
-Implemented Protocol V1 software contract: identity-gated serial transport boundary, `0x00` COBS delimiters, big-endian fixed header, canonical CBOR payload and CRC-32C. The implementation encodes the required Phase 1 command fields and rejects malformed framing, CRC failure, expired sequence, non-increasing sequence and negative permitted speed. Python and firmware host tests share canonical command, ACK, NACK, STATUS and heartbeat vectors. Firmware ACK/NACK vectors identify the production endpoint as `REAL`; the deterministic Python endpoint remains explicitly `SIMULATION`.
+The current, explicitly approved **V2** contract is in
+[the retained protocol specification](ESP32_PROTOCOL_V1.md). V1 frames are
+rejected. There is one Python codec/client and one firmware codec/service;
+shared vectors cover both. Envelope framing remains COBS + CRC32C + canonical
+CBOR. Sessions, strict response correlation, finite numeric compatibility and
+bounded receiver-local lifetime replace the earlier incomplete V1 semantics.
 
-This is a **SOFTWARE IMPLEMENTATION DETAIL — PHYSICAL VERIFICATION REQUIRED**. The physical documents freeze the USB link and required fields, not this encoding. Firmware source implements bounded command decoding and ACK/NACK/STATUS encoding with Phase-1 zero outputs; physical USB enumeration, flash/boot identity evidence, clock behavior and watchdog behavior remain hardware verification items. Device identity must be obtained from actual board evidence, never inferred from a configured serial path. Retransmission/clock-offset policy remains intentionally outside the present Phase-1 transport contract.
+The Pi transport has bounded TX/RX state, partial-write handling, per-command
+deadlines and reconnect-generation flushing. Communication health depends on
+validated current-session exchanges, not a worker thread. The default endpoint
+is explicitly SIMULATION. Firmware response source REAL denotes the endpoint
+contract, not proven physical operation. Applied outputs remain permanently zero.
+
+The board-neutral C service supports receive, disconnect and independent
+periodic supervision/status hooks. Physical USB choice, fresh boot-identity
+binding, scheduler integration, firmware flashing and physical watchdog behavior
+remain pending reviewed board documentation/bring-up. No clock synchronization
+is assumed. CRC/session handling is not cryptographic peer authentication.
+
+See [Prompt-2 correction evidence](PROTOCOL_FIRMWARE_REPLAY_CORRECTION_REPORT.md)
+for test gates and the exact hardware/software distinction.

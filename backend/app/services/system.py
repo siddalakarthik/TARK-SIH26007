@@ -2,7 +2,7 @@ from __future__ import annotations
 import os
 import time
 from pathlib import Path
-from threading import Lock
+from threading import Lock, RLock
 from typing import Callable
 from dataclasses import dataclass, field
 from app.config import Settings
@@ -18,6 +18,7 @@ from app.communication.esp32.serial_transport import BidirectionalSerialTranspor
 from app.communication.esp32.usb import Esp32UsbConfig, IdentityGatedESP32UsbTransport
 from app.logging.store import EventStore
 from app.replay.store import RecordingStore, RecordingError
+from app.replay.engine import recording_metadata
 from app.sensors.ld2450.adapter import LD2450Adapter, LD2450RawCaptureConfig, LD2450RawCaptureWorker
 from app.sensors.ld2450.parser import LD2450Parser
 from app.domain.models import RadarDetection
@@ -66,6 +67,7 @@ class TarkSystem:
     _location_lock: Lock = field(default_factory=Lock, init=False, repr=False)
     _real_radar_reports: list[tuple[int, list[RadarDetection]]] = field(default_factory=list, init=False, repr=False)
     _real_radar_lock: Lock = field(default_factory=Lock, init=False, repr=False)
+    _tick_lock: RLock = field(default_factory=RLock, init=False, repr=False)
 
     @property
     def hardware_runtime_requested(self) -> bool:
@@ -73,8 +75,8 @@ class TarkSystem:
         return self.settings.mode == "real_radar"
     def __post_init__(self):
         self.pipeline=Pipeline(self.settings)
-        # This deterministic in-process endpoint is the only current runtime
-        # transport. It exists to exercise Protocol V1—not to represent USB,
+        # This deterministic in-process endpoint is the default transport.
+        # It exercises the protocol—not USB,
         # ESP32 hardware, PWM, motor motion, or a physical acknowledgement.
         self.esp32_endpoint=ESP32ProtocolSimulator(self.settings.configuration_hash)
         self.esp32_client=ESP32Client(self.esp32_endpoint)
@@ -170,7 +172,8 @@ class TarkSystem:
         if self.esp32_transport is not None and self.esp32_transport.running:
             return False
         self.esp32_transport = BidirectionalSerialTransport(
-            self.esp32_usb.open, self._receive_esp32_frame, SerialTransportConfig()
+            self.esp32_usb.open, self._receive_esp32_frame, SerialTransportConfig(),
+            on_reset=lambda:self.esp32_client.reset_session(),
         )
         self.esp32_client = ESP32Client(self.esp32_transport)
         # Install the client before its reader thread can dispatch feedback.
@@ -178,11 +181,9 @@ class TarkSystem:
         return True
 
     def _receive_esp32_frame(self, frame: bytes) -> None:
-        try:
-            self.esp32_client.receive(frame)
-        except Exception:
-            # Corrupt feedback is intentionally transport diagnostics only.
-            return
+        # The transport catches rejection, counts it and keeps reading. Do not
+        # hide invalid response schemas as successful protocol exchanges.
+        self.esp32_client.receive(frame)
 
     def _start_configured_ld2450_raw_capture(self) -> None:
         config = LD2450RawCaptureConfig.from_environment()
@@ -230,17 +231,22 @@ class TarkSystem:
                 self.gnss.accept(self.gnss_simulator.fix(self._location_step, now_ns), now_ns)
             return self.gnss.response(now_ns)
     def tick(self,now_ns:int|None=None)->dict:
+        # Serialize a recording checkpoint against the lifespan-owned tick.
+        # This does not introduce a second decision owner.
+        with self._tick_lock:
+            return self._tick(now_ns)
+    def _tick(self,now_ns:int|None=None)->dict:
         now_ns=time.monotonic_ns() if now_ns is None else now_ns
         observations: list[RadarDetection] = []
+        reports: list[tuple[int, list[RadarDetection]]] = []
         if self.settings.mode == "simulation":
             observations = self.radar.read_detections(now_ns)
             if observations:
-                self.pipeline.observe(observations, max(item.timestamp_ns for item in observations), now_ns)
+                reports = [(max(item.timestamp_ns for item in observations), observations)]
         elif self.ld2450_capture is not None:
             reports = self._consume_real_radar_reports()
-            for report_timestamp_ns, report in reports:
-                self.pipeline.observe(report, report_timestamp_ns, now_ns)
-                observations = report
+        for report_timestamp_ns, report in reports:
+            self.pipeline.observe(report, report_timestamp_ns, now_ns)
         # One decision/event per runtime step, evaluated at final controlled
         # time even when the queue contains several old observation reports.
         decision = self.pipeline.decision(now_ns)
@@ -248,18 +254,23 @@ class TarkSystem:
         command=self.pipeline.command(decision,now_ns)
         self.recording_store.append_observation_tick(
             timestamp_ns=now_ns, source_mode=self.settings.mode.upper(), payload={
-                "schema_version":1,
-                "radar_detections":[item.model_dump(mode="json") for item in observations],
+                "schema_version":2,
+                "observations":[{"kind":"RADAR_REPORT", "order":order,
+                    "source_mode":"SIMULATION" if self.settings.mode == "simulation" else "REAL",
+                    "timestamp_ns":stamp,"detections":[item.model_dump(mode="json") for item in report]}
+                    for order,(stamp,report) in enumerate(reports)],
                 "decision":decision.model_dump(mode="json"),
+                "radar_health":self.pipeline.health(now_ns).model_dump(mode="json"),
                 "event":event.model_dump(mode="json"),
                 "command":command.model_dump(mode="json"),
             },
         )
         submission=self.esp32_client.submit(command,now_ns); feedback=None
         if self.esp32_transport is None and submission.accepted and self.esp32_endpoint.last_response is not None:
-            feedback=self.esp32_client.receive(self.esp32_endpoint.last_response).__dict__
-        elif self.esp32_client.last_feedback is not None:
-            feedback=self.esp32_client.last_feedback.__dict__
+            response=self.esp32_client.receive(self.esp32_endpoint.last_response,now_ns)
+            feedback=response.__dict__ if response is not None else None
+        else:
+            feedback=self.esp32_client.feedback_snapshot(now_ns)
         runtime_mode=self.settings.mode.upper()
         transport_mode="CONFIGURED_SERIAL" if self.esp32_transport else "SIMULATION"
         return {"timestamp_ns":now_ns,"normal_evidence_valid_until_ns":self.pipeline.decision_evidence_valid_until_ns,"measurement_status":{"vehicle_speed":"UNAVAILABLE","ttc":"NOT_COMPUTED"},"mode":runtime_mode,"traction":"DISABLED_PHASE_1","decision":decision.model_dump(),"command":command.model_dump(),"protocol":{"submission":submission.model_dump(),"feedback":feedback,"source_mode":runtime_mode,"transport_source_mode":transport_mode},"tracks":[t.model_dump() for t in self.pipeline.tracks.values()],"sensors":self.sensor_snapshot(now_ns),"vehicle_location":self.vehicle_location(now_ns),"events":[e.model_dump() for e in self.pipeline.events[-100:] ]}
@@ -268,9 +279,11 @@ class TarkSystem:
     def start_recording(self, now_ns:int|None=None)->dict:
         now_ns=now_ns or time.monotonic_ns()
         max_records=int(os.getenv("TARK_RECORDING_MAX_RECORDS","10000"))
-        return self.recording_store.start(timestamp_ns=now_ns,source_mode=self.settings.mode.upper(),configuration_hash=self.settings.configuration_hash,max_records=max_records)
+        with self._tick_lock:
+            return self.recording_store.start(timestamp_ns=now_ns,source_mode=self.settings.mode.upper(),configuration_hash=self.settings.configuration_hash,max_records=max_records,metadata=recording_metadata(self.pipeline))
     def stop_recording(self, now_ns:int|None=None)->dict:
-        return self.recording_store.stop(timestamp_ns=now_ns or time.monotonic_ns())
+        with self._tick_lock:
+            return self.recording_store.stop(timestamp_ns=now_ns or time.monotonic_ns())
     def recording_sessions(self)->list[dict]:
         return self.recording_store.list()
     def recording_session(self, session_id:str)->dict:
@@ -301,10 +314,12 @@ class TarkSystem:
                 radar["source_mode"] = "NOT_CONNECTED"
             raw_capture={"device_id":"ld2450_raw_capture","source_mode":radar["source_mode"],"state":diagnostic["state"],"reason":diagnostic["reason"],"timestamp_ns":diagnostic["last_timestamp_ns"],"age_ms":None,"quality":None}
         if self.esp32_transport:
-            esp32={"device_id":"esp32","source_mode":"REAL","state":"ONLINE" if self.esp32_transport.running else "FAULT","timestamp_ns":now_ns,"age_ms":0.0,"quality":None,"reason":"PHASE_1 OUTPUTS DISABLED"}
+            link=self.esp32_client.health(now_ns)
+            esp32={"device_id":"esp32","source_mode":"REAL" if link["timestamp_ns"] is not None else "NOT_CONNECTED","quality":None,
+                   **link,"worker_running":self.esp32_transport.running}
         elif self.esp32_usb:
             esp32={"device_id":"esp32","source_mode":"NOT_CONNECTED","state":"NOT_CONNECTED","timestamp_ns":None,"age_ms":None,"quality":None,"reason":"ESP32 IDENTITY EVIDENCE REQUIRED BEFORE SERIAL OPEN"}
-        else: esp32=self.esp32.status(now_ns).__dict__
+        else: esp32={"device_id":"esp32","source_mode":"SIMULATION","quality":None,**self.esp32_client.health(now_ns)}
         result=[radar,esp32,self.motor.status(now_ns).__dict__,self.camera.health(now_ns).__dict__,self.thermal.health(now_ns).__dict__,self.imu.health(now_ns).__dict__,{"device_id":"encoders","source_mode":"SIMULATION","state":"DISABLED_PHASE_1","timestamp_ns":now_ns,"age_ms":0.0,"quality":None,"reason":"SOFTWARE_INTERFACE_READY_WHEEL_RESPONSE_NOT_GROUND_SPEED"}]
         if raw_capture: result.append(raw_capture)
         return result

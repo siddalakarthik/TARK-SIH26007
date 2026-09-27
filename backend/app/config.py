@@ -22,7 +22,7 @@ class Settings(BaseModel):
     reaction_bound_s: Parameter
     effective_deceleration_mps2: Parameter
     margin_m: Parameter
-    esp32_timeout_ms: int = Field(gt=0)
+    esp32_timeout_ms: int = Field(gt=0, le=500)
 
     @model_validator(mode="after")
     def sensible_ages(self) -> "Settings":

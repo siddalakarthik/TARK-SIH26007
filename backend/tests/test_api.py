@@ -140,7 +140,7 @@ def test_events_and_recording_sessions_are_persisted_without_fabrication(tmp_pat
         stopped=client.post("/api/v1/recordings/stop").json()
         assert stopped["status"]=="COMPLETE" and stopped["record_count"]==1
         assert client.get("/api/v1/replay/sessions").json()[0]["session_id"]==session["session_id"]
-        assert client.get(f"/api/v1/replay/sessions/{session['session_id']}/records").json()[0]["kind"]=="OBSERVATION_TICK_V1"
+        assert client.get(f"/api/v1/replay/sessions/{session['session_id']}/records").json()[0]["kind"]=="OBSERVATION_TICK_V2"
         timeline=client.get(f"/api/v1/replay/sessions/{session['session_id']}/timeline")
         assert timeline.status_code==200 and timeline.json()["source_mode"]=="REPLAY" and timeline.json()["state"]=="READY"
         assert client.post(f"/api/v1/replay/sessions/{session['session_id']}/verify").json()["result"]=="MATCH"

@@ -198,7 +198,7 @@ def create_app(settings: Settings | None = None, deployment: DeploymentConfig | 
 
     @app.get("/api/v1/diagnostics", dependencies=[Depends(require_access)])
     def diagnostics() -> dict:
-        return {"software_version": "0.3.0", "firmware_version": "0.1.0", "protocol_version": 1, "configuration_hash": settings.configuration_hash, "mode": settings.mode.upper(), "phase_2_hardware": "NOT_CONNECTED", "deployment_environment": deployment.environment, "auth_mode": deployment.auth_mode, "map": map_display_config(), "capabilities": {"browser_device_location": True, "browser_camera_preview": browser_camera_enabled, "reverse_geocoding": bool(reverse_url), "routing": bool(route_url)}}
+        return {"software_version": "0.3.0", "firmware_version": "0.1.0", "protocol_version": 2, "configuration_hash": settings.configuration_hash, "mode": settings.mode.upper(), "phase_2_hardware": "NOT_CONNECTED", "deployment_environment": deployment.environment, "auth_mode": deployment.auth_mode, "map": map_display_config(), "capabilities": {"browser_device_location": True, "browser_camera_preview": browser_camera_enabled, "reverse_geocoding": bool(reverse_url), "routing": bool(route_url)}}
 
     @app.get("/api/v1/vehicle-location", dependencies=[Depends(require_access)])
     def vehicle_location() -> dict:
@@ -262,7 +262,8 @@ def create_app(settings: Settings | None = None, deployment: DeploymentConfig | 
     @app.get("/api/v1/runs", dependencies=[Depends(require_access)])
     def runs() -> list[dict]:
         """Observation recordings only; an empty array means no recording exists."""
-        return system.recording_sessions()
+        try: return system.recording_sessions()
+        except RecordingError as error: raise recording_error(error) from error
 
     @app.post("/api/v1/recordings/start", dependencies=[Depends(require_recording_write)])
     def start_recording() -> dict:
@@ -275,7 +276,9 @@ def create_app(settings: Settings | None = None, deployment: DeploymentConfig | 
         except RecordingError as error: raise recording_error(error) from error
 
     @app.get("/api/v1/replay/sessions", dependencies=[Depends(require_access)])
-    def replay_sessions() -> list[dict]: return system.recording_sessions()
+    def replay_sessions() -> list[dict]:
+        try: return system.recording_sessions()
+        except RecordingError as error: raise recording_error(error) from error
 
     @app.get("/api/v1/replay/sessions/{session_id}", dependencies=[Depends(require_access)])
     def replay_session(session_id: str) -> dict:
@@ -291,7 +294,7 @@ def create_app(settings: Settings | None = None, deployment: DeploymentConfig | 
     def replay_timeline_endpoint(session_id: str) -> dict:
         try:
             session=system.recording_session(session_id)
-            return replay_timeline(system.recording_records(session_id,10_000),session,settings.configuration_hash)
+            return replay_timeline(system.recording_store.iter_records(session_id),session,settings)
         except RecordingError as error: raise recording_error(error) from error
         except ReplayConfigurationError as error: raise HTTPException(status.HTTP_409_CONFLICT,str(error)) from error
         except ReplayFormatError as error: raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY,str(error)) from error
@@ -302,8 +305,13 @@ def create_app(settings: Settings | None = None, deployment: DeploymentConfig | 
             session=system.recording_session(session_id)
             if session["configuration_hash"] != settings.configuration_hash:
                 raise ReplayConfigurationError("recording configuration hash is incompatible with active configuration")
-            result=replay_recording(system.recording_records(session_id,10_000),settings)
-            return {"session_id":session_id,"result":result.result,"first_divergence":result.first_divergence,"replayed_decisions":result.decisions}
+            result=replay_recording(system.recording_store.iter_records(session_id),settings,session)
+            return {"session_id":session_id,"result":result.result,"first_divergence":result.first_divergence,
+                    "replayed_decisions":result.decisions,"decisions_preview_limit":100,
+                    "verified_records":result.verified_records,"verified_decisions":result.verified_decisions,
+                    "first_sequence":result.first_sequence,"last_sequence":result.last_sequence,
+                    "total_records":session["record_count"],"complete":True,
+                    "comparison_fields":["decision","radar_health","command","event_without_uuid"]}
         except RecordingError as error: raise recording_error(error) from error
         except ReplayConfigurationError as error: raise HTTPException(status.HTTP_409_CONFLICT,str(error)) from error
         except ReplayFormatError as error: raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY,str(error)) from error

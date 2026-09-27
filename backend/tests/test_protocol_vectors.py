@@ -2,7 +2,8 @@ import json
 import importlib.util
 from pathlib import Path
 import cbor2
-from app.communication.esp32.protocol import cobs_decode, crc32c, decode_frame, encode_message
+import pytest
+from app.communication.esp32.protocol import cobs_decode, crc32c, decode_frame, encode_message, ProtocolError, validate_command_payload
 
 ROOT=Path(__file__).parents[2]
 VECTORS=json.loads((ROOT/"protocol_vectors.json").read_text())
@@ -10,12 +11,22 @@ VECTORS=json.loads((ROOT/"protocol_vectors.json").read_text())
 def test_canonical_vectors_are_independent_expected_values():
     for vector in VECTORS:
         frame=bytes.fromhex(vector["frame_hex"]); payload=cbor2.dumps(vector["payload"],canonical=True)
-        assert payload.hex().upper()==vector["cbor_hex"]
+        if not vector.get('expect_frame_valid',True):
+            with pytest.raises(ProtocolError):decode_frame(frame)
+            continue
         raw=cobs_decode(frame[1:-1])
         assert crc32c(raw[:-4])==int(vector["crc32c"],16)
+        if not vector.get('expect_canonical',True):
+            with pytest.raises(ProtocolError):decode_frame(frame)
+            continue
+        assert payload.hex().upper()==vector["cbor_hex"]
         assert encode_message(vector["message_type"],vector["sequence"],vector["timestamp_ns"],vector["payload"])==frame
         message,envelope=decode_frame(frame)
         assert message==vector["message_type"] and envelope["sequence"]==vector["sequence"] and envelope["timestamp_ns"]==vector["timestamp_ns"] and envelope["payload"]==vector["payload"]
+        if message==1:
+            reason=validate_command_payload(envelope['payload'],envelope['sequence'],envelope['timestamp_ns'],12_000_000_000,'x',VECTORS[0]['payload']['session_id'])
+            assert (reason is None)==vector.get('expect_command_valid',True)
+            if reason:assert reason==vector['reason']
 
 def test_generated_c_header_is_current():
     spec=importlib.util.spec_from_file_location("vectors",ROOT/"scripts/generate_protocol_vectors.py")

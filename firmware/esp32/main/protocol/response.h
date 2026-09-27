@@ -1,10 +1,6 @@
 #pragma once
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
 #include "tark_protocol.h"
-
-/* All response builders are bounded/static and Phase-1 output is always zero. */
-bool tark_build_ack(uint64_t sequence,uint64_t timestamp_ns,const char *reason,uint8_t *out,size_t *out_size);
-bool tark_build_nack(uint64_t sequence,uint64_t timestamp_ns,const char *reason,uint8_t *out,size_t *out_size);
-bool tark_build_status(uint64_t sequence,uint64_t timestamp_ns,const char *reason,uint8_t *out,size_t *out_size);
+bool tark_build_ack(uint64_t sequence,uint64_t timestamp,const char *reason,const char *hash,const char *session,uint8_t *out,size_t *out_n);
+bool tark_build_nack(uint64_t sequence,uint64_t timestamp,const char *reason,const char *hash,const char *session,uint8_t *out,size_t *out_n);
+bool tark_build_status(uint64_t sequence,uint64_t timestamp,const char *reason,const char *hash,const char *session,uint8_t *out,size_t *out_n);
+bool tark_build_session(uint64_t timestamp,const char *request,const char *hash,const char *session,uint8_t *out,size_t *out_n);

@@ -1,5 +1,27 @@
 # Test Report
 
+## Prompt-2 protocol/firmware/replay correction — 2026-09-27
+
+Current details: [correction report](PROTOCOL_FIRMWARE_REPLAY_CORRECTION_REPORT.md).
+The older results below are dated historical evidence, not current gate status.
+
+- Final backend regression: **252 passed, 0 failed, 0 skipped**, 25.39 s,
+  including the current 36 shared vectors and fresh C interoperability fixture.
+  An intermediate run had 221 passes and 31 setup errors due to Windows
+  Application Control (WinError 4551). The same previously blocked artifact
+  subsequently ran unchanged, followed by the fully passing fresh rebuild/run.
+- Fresh standalone GCC 15.2.0 protocol and service/supervisor tests both run
+  successfully with the current 36 shared vectors; the final cross-language
+  pytest gate also passes. Strict `-std=c11 -Wall -Wextra -Werror`
+  compilation remains required; no security policy or test assertion was weakened.
+- Current functional rerun: 44 passed; resource/concurrency: 8 passed;
+  safety/authority: 86 passed. Replay coverage: 35 tests. All 65 Prompt-1
+  integrity tests remain unchanged and passing.
+- Frontend: 39 passed; TypeScript and production build pass. Existing MapView
+  chunk-size advisory and two upstream Python deprecation warnings remain.
+- No hardware accessed. All Prompt-2 gates pass for the single authorized local
+  completion commit. No push or freeze-tag change; Prompt 3 remains separate.
+
 Last final-master audit run: 2026-09-15.
 
 ## Software and communication closure update — 2026-09-20
