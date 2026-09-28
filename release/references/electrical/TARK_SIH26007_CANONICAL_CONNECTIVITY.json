@@ -1,0 +1,2711 @@
+{
+  "project": "TARK SIH26007",
+  "revision": "1.0",
+  "date": "2026-09-21",
+  "status": "CONTROLLED DESIGN / PRE HARDWARE COMMISSIONING",
+  "traction": "DISABLED_PHASE_1",
+  "hard_speed_cap_mps": 0.0,
+  "components": {
+    "B1": "12.8 V LiFePO4 battery",
+    "BMS": "Battery management system",
+    "F1": "Main fuse",
+    "F2": "Logic branch fuse",
+    "F3": "E-stop branch fuse",
+    "PS1": "12.8 V to 5 V DC-DC converter",
+    "ES1": "Physical NC E-stop",
+    "CD1": "Contactor coil driver",
+    "K1": "DC contactor",
+    "D1/S1": "Coil suppression, type TBD",
+    "SC1": "K1 auxiliary signal conditioning",
+    "U1": "Raspberry Pi 4 Model B",
+    "U2": "ESP32-S3-DevKitC-1",
+    "U3": "Cytron MDD10A Rev2.0",
+    "LD2450": "HLK-LD2450",
+    "MLX90640": "MLX90640-D55 breakout",
+    "BNO055": "BNO055 breakout",
+    "M1": "Left JGB37-520 motor",
+    "M2": "Right JGB37-520 motor",
+    "ENC-L": "Left Hall encoder",
+    "ENC-R": "Right Hall encoder",
+    "CAM1": "RGB UVC camera",
+    "GNSS1": "Waveshare LC29H(AA)",
+    "ANT1": "External active GNSS antenna"
+  },
+  "connections": [
+    {
+      "connection_id": "W-PWR-001",
+      "wire_id": "W-PWR-001",
+      "net": "N-BAT+",
+      "source": "B1",
+      "source_pin": "positive (vendor terminal TBD)",
+      "destination": "BMS",
+      "destination_pin": "battery positive input (TBD)",
+      "domain": "TRACTION",
+      "wire_class": "HIGH CURRENT",
+      "signal_type": "HIGH CURRENT",
+      "power_class": "HIGH CURRENT - RATING TBD",
+      "status": "HOLD",
+      "verification": "H03: exact BMS topology and terminals.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "positive (vendor terminal TBD)",
+      "destination_signal": "battery positive input (TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N001",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-PWR-002",
+      "wire_id": "W-PWR-002",
+      "net": "N-BMS+",
+      "source": "BMS",
+      "source_pin": "protected positive output (TBD)",
+      "destination": "F1",
+      "destination_pin": "IN (terminal TBD)",
+      "domain": "TRACTION",
+      "wire_class": "HIGH CURRENT",
+      "signal_type": "HIGH CURRENT",
+      "power_class": "HIGH CURRENT - RATING TBD",
+      "status": "HOLD",
+      "verification": "H03/H04: BMS topology and fuse rating.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "protected positive output (TBD)",
+      "destination_signal": "IN (terminal TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N002",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-PWR-003",
+      "wire_id": "W-PWR-003",
+      "net": "N-PROTECTED12+",
+      "source": "F1",
+      "source_pin": "OUT (terminal TBD)",
+      "destination": "K1",
+      "destination_pin": "MAIN IN (terminal TBD)",
+      "domain": "TRACTION",
+      "wire_class": "HIGH CURRENT",
+      "signal_type": "HIGH CURRENT",
+      "power_class": "HIGH CURRENT - RATING TBD",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H04/H13: fuse and contact ratings; approved C01/C02 nomenclature.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "OUT (terminal TBD)",
+      "destination_signal": "MAIN IN (terminal TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N003",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-PWR-004",
+      "wire_id": "W-PWR-004",
+      "net": "N-PROTECTED12+",
+      "source": "F1",
+      "source_pin": "OUT (terminal TBD)",
+      "destination": "F2",
+      "destination_pin": "IN (terminal TBD)",
+      "domain": "LOGIC",
+      "wire_class": "LOGIC POWER",
+      "signal_type": "LOGIC POWER",
+      "power_class": "LOGIC - RATING TBD",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H04: branch fuse selection.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "OUT (terminal TBD)",
+      "destination_signal": "IN (terminal TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N003",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-PWR-005",
+      "wire_id": "W-PWR-005",
+      "net": "N-PROTECTED12+",
+      "source": "F1",
+      "source_pin": "OUT (terminal TBD)",
+      "destination": "F3",
+      "destination_pin": "IN (terminal TBD)",
+      "domain": "SAFETY CONTROL",
+      "wire_class": "SAFETY CONTROL",
+      "signal_type": "SAFETY CONTROL",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H04/H11: control branch fuse and coil load.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "OUT (terminal TBD)",
+      "destination_signal": "IN (terminal TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N003",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-PWR-006",
+      "wire_id": "W-PWR-006",
+      "net": "N-TRACTION12+",
+      "source": "K1",
+      "source_pin": "MAIN OUT (terminal TBD)",
+      "destination": "U3",
+      "destination_pin": "T3 POWER+",
+      "domain": "TRACTION",
+      "wire_class": "HIGH CURRENT",
+      "signal_type": "HIGH CURRENT",
+      "power_class": "HIGH CURRENT - RATING TBD",
+      "status": "HOLD",
+      "verification": "H13: DO NOT CONNECT T3 until physical E-stop isolation verified.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "MAIN OUT (terminal TBD)",
+      "destination_signal": "POWER+",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N004",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-PWR-007",
+      "wire_id": "W-PWR-007",
+      "net": "N-TRACTION-",
+      "source": "B1",
+      "source_pin": "negative (vendor terminal TBD)",
+      "destination": "BMS",
+      "destination_pin": "negative reference (TBD)",
+      "domain": "TRACTION",
+      "wire_class": "TRACTION RETURN",
+      "signal_type": "TRACTION RETURN",
+      "power_class": "HIGH CURRENT - RATING TBD",
+      "status": "HOLD",
+      "verification": "H03: same negative-node intent as source; purchased BMS must confirm topology.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "negative (vendor terminal TBD)",
+      "destination_signal": "negative reference (TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N005",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-PWR-008",
+      "wire_id": "W-PWR-008",
+      "net": "N-TRACTION-",
+      "source": "B1",
+      "source_pin": "negative (vendor terminal TBD)",
+      "destination": "U3",
+      "destination_pin": "T4 POWER-",
+      "domain": "TRACTION",
+      "wire_class": "TRACTION RETURN",
+      "signal_type": "TRACTION RETURN",
+      "power_class": "HIGH CURRENT - RATING TBD",
+      "status": "HOLD",
+      "verification": "H03/H13: purchased battery/BMS return and traction verification.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "negative (vendor terminal TBD)",
+      "destination_signal": "POWER-",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N005",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-LOGIC-001",
+      "wire_id": "W-LOGIC-001",
+      "net": "N-LOGIC12+",
+      "source": "F2",
+      "source_pin": "OUT (terminal TBD)",
+      "destination": "PS1",
+      "destination_pin": "IN+",
+      "domain": "LOGIC",
+      "wire_class": "LOGIC POWER",
+      "signal_type": "LOGIC POWER",
+      "power_class": "LOGIC - RATING TBD",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H05: exact DC-DC input, fuse and topology.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "OUT (terminal TBD)",
+      "destination_signal": "IN+",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N006",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-LOGIC-002",
+      "wire_id": "W-LOGIC-002",
+      "net": "N-LOGIC5+",
+      "source": "PS1",
+      "source_pin": "OUT+",
+      "destination": "U1",
+      "destination_pin": "Pin 2 5V",
+      "domain": "LOGIC",
+      "wire_class": "LOGIC POWER",
+      "signal_type": "LOGIC POWER",
+      "power_class": "LOGIC - RATING TBD",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H05/H06: verify regulated output, power method and backfeed prevention.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "OUT+",
+      "destination_signal": "5V",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N007",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-LOGIC-003",
+      "wire_id": "W-LOGIC-003",
+      "net": "N-LOGIC5+",
+      "source": "PS1",
+      "source_pin": "OUT+",
+      "destination": "U2",
+      "destination_pin": "J1-21 5V",
+      "domain": "LOGIC",
+      "wire_class": "LOGIC POWER",
+      "signal_type": "LOGIC POWER",
+      "power_class": "LOGIC - RATING TBD",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H05/H06: verify regulated output, power method and backfeed prevention.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "OUT+",
+      "destination_signal": "5V",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N007",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-LOGIC-004",
+      "wire_id": "W-LOGIC-004",
+      "net": "N-LOGIC5+",
+      "source": "PS1",
+      "source_pin": "OUT+",
+      "destination": "LD2450",
+      "destination_pin": "Pin 1 VCC",
+      "domain": "LOGIC",
+      "wire_class": "LOGIC POWER",
+      "signal_type": "LOGIC POWER",
+      "power_class": "LOGIC - RATING TBD",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H05/H06: verify regulated output, power method and backfeed prevention.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "OUT+",
+      "destination_signal": "VCC",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N007",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-GND-001",
+      "wire_id": "W-GND-001",
+      "net": "N-LOGIC-GND",
+      "source": "PS1",
+      "source_pin": "OUT-",
+      "destination": "U1",
+      "destination_pin": "Pin 6 GND",
+      "domain": "LOGIC",
+      "wire_class": "LOGIC RETURN",
+      "signal_type": "LOGIC RETURN",
+      "power_class": "LOGIC - RATING TBD",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H05: output return only; no assumption of connection to input negative or traction return.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "OUT-",
+      "destination_signal": "GND",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N008",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-GND-002",
+      "wire_id": "W-GND-002",
+      "net": "N-LOGIC-GND",
+      "source": "PS1",
+      "source_pin": "OUT-",
+      "destination": "U1",
+      "destination_pin": "Pin 20 GND",
+      "domain": "LOGIC",
+      "wire_class": "LOGIC RETURN",
+      "signal_type": "LOGIC RETURN",
+      "power_class": "LOGIC - RATING TBD",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H05: output return only; no assumption of connection to input negative or traction return.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "OUT-",
+      "destination_signal": "GND",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N008",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-GND-003",
+      "wire_id": "W-GND-003",
+      "net": "N-LOGIC-GND",
+      "source": "PS1",
+      "source_pin": "OUT-",
+      "destination": "U2",
+      "destination_pin": "J1-22 GND",
+      "domain": "LOGIC",
+      "wire_class": "LOGIC RETURN",
+      "signal_type": "LOGIC RETURN",
+      "power_class": "LOGIC - RATING TBD",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H05: output return only; no assumption of connection to input negative or traction return.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "OUT-",
+      "destination_signal": "GND",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N008",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-GND-004",
+      "wire_id": "W-GND-004",
+      "net": "N-LOGIC-GND",
+      "source": "PS1",
+      "source_pin": "OUT-",
+      "destination": "U3",
+      "destination_pin": "P1 GND",
+      "domain": "LOGIC",
+      "wire_class": "LOGIC RETURN",
+      "signal_type": "LOGIC RETURN",
+      "power_class": "LOGIC - RATING TBD",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H05: output return only; no assumption of connection to input negative or traction return.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "OUT-",
+      "destination_signal": "GND",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N008",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-GND-005",
+      "wire_id": "W-GND-005",
+      "net": "N-LOGIC-GND",
+      "source": "PS1",
+      "source_pin": "OUT-",
+      "destination": "LD2450",
+      "destination_pin": "Pin 2 GND",
+      "domain": "LOGIC",
+      "wire_class": "LOGIC RETURN",
+      "signal_type": "LOGIC RETURN",
+      "power_class": "LOGIC - RATING TBD",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H05: output return only; no assumption of connection to input negative or traction return.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "OUT-",
+      "destination_signal": "GND",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N008",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-GND-006",
+      "wire_id": "W-GND-006",
+      "net": "N-LOGIC-GND",
+      "source": "PS1",
+      "source_pin": "OUT-",
+      "destination": "MLX90640",
+      "destination_pin": "GND (pin TBD)",
+      "domain": "LOGIC",
+      "wire_class": "LOGIC RETURN",
+      "signal_type": "LOGIC RETURN",
+      "power_class": "LOGIC - RATING TBD",
+      "status": "HOLD / PHYSICAL PIN VERIFY",
+      "verification": "H09/H10: intended logic reference only; purchased GND pin and compatibility TBD.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "OUT-",
+      "destination_signal": "GND (pin TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N008",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-GND-007",
+      "wire_id": "W-GND-007",
+      "net": "N-LOGIC-GND",
+      "source": "PS1",
+      "source_pin": "OUT-",
+      "destination": "BNO055",
+      "destination_pin": "GND (pin TBD)",
+      "domain": "LOGIC",
+      "wire_class": "LOGIC RETURN",
+      "signal_type": "LOGIC RETURN",
+      "power_class": "LOGIC - RATING TBD",
+      "status": "HOLD / PHYSICAL PIN VERIFY",
+      "verification": "H09/H10: intended logic reference only; purchased GND pin and compatibility TBD.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "OUT-",
+      "destination_signal": "GND (pin TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N008",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-GND-008",
+      "wire_id": "W-GND-008",
+      "net": "N-LOGIC-GND",
+      "source": "PS1",
+      "source_pin": "OUT-",
+      "destination": "ENC-L",
+      "destination_pin": "GND (pin TBD)",
+      "domain": "LOGIC",
+      "wire_class": "LOGIC RETURN",
+      "signal_type": "LOGIC RETURN",
+      "power_class": "LOGIC - RATING TBD",
+      "status": "HOLD / PHYSICAL PIN VERIFY",
+      "verification": "H07/H08: encoder ground connection is conditional on purchased interface; physical pin TBD.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "OUT-",
+      "destination_signal": "GND (pin TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N008",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-GND-009",
+      "wire_id": "W-GND-009",
+      "net": "N-LOGIC-GND",
+      "source": "PS1",
+      "source_pin": "OUT-",
+      "destination": "ENC-R",
+      "destination_pin": "GND (pin TBD)",
+      "domain": "LOGIC",
+      "wire_class": "LOGIC RETURN",
+      "signal_type": "LOGIC RETURN",
+      "power_class": "LOGIC - RATING TBD",
+      "status": "HOLD / PHYSICAL PIN VERIFY",
+      "verification": "H07/H08: encoder ground connection is conditional on purchased interface; physical pin TBD.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "OUT-",
+      "destination_signal": "GND (pin TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N008",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-ESTOP-001",
+      "wire_id": "W-ESTOP-001",
+      "net": "N-ESTOP-FUSED+",
+      "source": "F3",
+      "source_pin": "OUT (terminal TBD)",
+      "destination": "ES1",
+      "destination_pin": "NC IN (terminal TBD)",
+      "domain": "SAFETY CONTROL",
+      "wire_class": "SAFETY CONTROL",
+      "signal_type": "SAFETY CONTROL",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H04/H11: dedicated fused control branch.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "OUT (terminal TBD)",
+      "destination_signal": "NC IN (terminal TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N009",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-ESTOP-002",
+      "wire_id": "W-ESTOP-002",
+      "net": "N-ESTOP-SWITCHED+",
+      "source": "ES1",
+      "source_pin": "NC OUT (terminal TBD)",
+      "destination": "CD1",
+      "destination_pin": "control/supply IN (TBD)",
+      "domain": "SAFETY CONTROL",
+      "wire_class": "SAFETY CONTROL",
+      "signal_type": "SAFETY CONTROL",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "HOLD",
+      "verification": "H11/H12: driver topology, NC contacts and exact terminals.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "NC OUT (terminal TBD)",
+      "destination_signal": "control/supply IN (TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N010",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-ESTOP-003",
+      "wire_id": "W-ESTOP-003",
+      "net": "K1-COIL+",
+      "source": "CD1",
+      "source_pin": "coil OUT (terminal TBD)",
+      "destination": "K1",
+      "destination_pin": "COIL A (terminal TBD)",
+      "domain": "SAFETY CONTROL",
+      "wire_class": "SAFETY CONTROL",
+      "signal_type": "SAFETY CONTROL",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "HOLD",
+      "verification": "H11/H12: coil voltage/current/polarity and driver circuit.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "coil OUT (terminal TBD)",
+      "destination_signal": "COIL A (terminal TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N011",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-ESTOP-004",
+      "wire_id": "W-ESTOP-004",
+      "net": "K1-COIL+",
+      "source": "K1",
+      "source_pin": "COIL A (terminal TBD)",
+      "destination": "D1/S1",
+      "destination_pin": "coil-side terminal (TBD)",
+      "domain": "SAFETY CONTROL",
+      "wire_class": "SAFETY CONTROL",
+      "signal_type": "SAFETY CONTROL",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "HOLD",
+      "verification": "H14: suppression type/value/polarity TBD; connects across coil.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "COIL A (terminal TBD)",
+      "destination_signal": "coil-side terminal (TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N011",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-ESTOP-005",
+      "wire_id": "W-ESTOP-005",
+      "net": "K1-COIL-",
+      "source": "K1",
+      "source_pin": "COIL B (terminal TBD)",
+      "destination": "D1/S1",
+      "destination_pin": "return-side terminal (TBD)",
+      "domain": "SAFETY CONTROL",
+      "wire_class": "SAFETY CONTROL",
+      "signal_type": "SAFETY CONTROL",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "HOLD",
+      "verification": "H12/H14: return termination unresolved; no invented driver return connection.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "COIL B (terminal TBD)",
+      "destination_signal": "return-side terminal (TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N012",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-K1-AUX-RAW",
+      "wire_id": "W-K1-AUX-RAW",
+      "net": "K1-AUX-RAW",
+      "source": "K1",
+      "source_pin": "AUX signal terminal (TBD)",
+      "destination": "SC1",
+      "destination_pin": "IN (terminal TBD)",
+      "domain": "LOGIC",
+      "wire_class": "DIAGNOSTIC",
+      "signal_type": "DIAGNOSTIC",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "HOLD",
+      "verification": "H15: NO/NC selection, excitation/reference and conditioning circuit TBD.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "AUX signal terminal (TBD)",
+      "destination_signal": "IN (terminal TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N013",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-K1-AUX",
+      "wire_id": "W-K1-AUX",
+      "net": "ESTOP-AUX-STATUS",
+      "source": "SC1",
+      "source_pin": "OUT (terminal TBD)",
+      "destination": "U2",
+      "destination_pin": "J1-19 GPIO13",
+      "domain": "LOGIC",
+      "wire_class": "DIAGNOSTIC",
+      "signal_type": "DIAGNOSTIC",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "HOLD",
+      "verification": "H15: diagnostic only; conditioned interface required.",
+      "sheet": 2,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "OUT (terminal TBD)",
+      "destination_signal": "GPIO13",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N014",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-I2C-SDA-01",
+      "wire_id": "W-I2C-SDA-01",
+      "net": "I2C-SDA",
+      "source": "U1",
+      "source_pin": "Pin 3 GPIO2 SDA",
+      "destination": "MLX90640",
+      "destination_pin": "SDA (pin TBD)",
+      "domain": "LOGIC",
+      "wire_class": "I2C",
+      "signal_type": "I2C",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "HOLD / PHYSICAL PIN VERIFY",
+      "verification": "H09/H10: functional I2C net only; physical module pin TBD / VERIFY; voltage, pullups, address and compatibility HOLD.",
+      "sheet": 3,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "GPIO2 SDA",
+      "destination_signal": "SDA (pin TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N015",
+      "source_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-I2C-SDA-02",
+      "wire_id": "W-I2C-SDA-02",
+      "net": "I2C-SDA",
+      "source": "U1",
+      "source_pin": "Pin 3 GPIO2 SDA",
+      "destination": "BNO055",
+      "destination_pin": "SDA (pin TBD)",
+      "domain": "LOGIC",
+      "wire_class": "I2C",
+      "signal_type": "I2C",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "HOLD / PHYSICAL PIN VERIFY",
+      "verification": "H09/H10: functional I2C net only; physical module pin TBD / VERIFY; voltage, pullups, address and compatibility HOLD.",
+      "sheet": 3,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "GPIO2 SDA",
+      "destination_signal": "SDA (pin TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N015",
+      "source_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-I2C-SCL-01",
+      "wire_id": "W-I2C-SCL-01",
+      "net": "I2C-SCL",
+      "source": "U1",
+      "source_pin": "Pin 5 GPIO3 SCL",
+      "destination": "MLX90640",
+      "destination_pin": "SCL (pin TBD)",
+      "domain": "LOGIC",
+      "wire_class": "I2C",
+      "signal_type": "I2C",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "HOLD / PHYSICAL PIN VERIFY",
+      "verification": "H09/H10: functional I2C net only; physical module pin TBD / VERIFY; voltage, pullups, address and compatibility HOLD.",
+      "sheet": 3,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "GPIO3 SCL",
+      "destination_signal": "SCL (pin TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N016",
+      "source_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-I2C-SCL-02",
+      "wire_id": "W-I2C-SCL-02",
+      "net": "I2C-SCL",
+      "source": "U1",
+      "source_pin": "Pin 5 GPIO3 SCL",
+      "destination": "BNO055",
+      "destination_pin": "SCL (pin TBD)",
+      "domain": "LOGIC",
+      "wire_class": "I2C",
+      "signal_type": "I2C",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "HOLD / PHYSICAL PIN VERIFY",
+      "verification": "H09/H10: functional I2C net only; physical module pin TBD / VERIFY; voltage, pullups, address and compatibility HOLD.",
+      "sheet": 3,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "GPIO3 SCL",
+      "destination_signal": "SCL (pin TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N016",
+      "source_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-RAD-001",
+      "wire_id": "W-RAD-001",
+      "net": "RADAR-TX",
+      "source": "LD2450",
+      "source_pin": "Pin 3 TX",
+      "destination": "U1",
+      "destination_pin": "Pin 10 GPIO15 RX",
+      "domain": "LOGIC",
+      "wire_class": "UART",
+      "signal_type": "UART",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H16: 256000 baud 8N1; verify purchased electrical levels.",
+      "sheet": 3,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "TX",
+      "destination_signal": "GPIO15 RX",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N017",
+      "source_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-RAD-002",
+      "wire_id": "W-RAD-002",
+      "net": "RADAR-RX",
+      "source": "U1",
+      "source_pin": "Pin 8 GPIO14 TX",
+      "destination": "LD2450",
+      "destination_pin": "Pin 4 RX",
+      "domain": "LOGIC",
+      "wire_class": "UART",
+      "signal_type": "UART",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H16: 256000 baud 8N1; verify purchased electrical levels.",
+      "sheet": 3,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "GPIO14 TX",
+      "destination_signal": "RX",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N018",
+      "source_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-USB-CAM",
+      "wire_id": "W-USB-CAM",
+      "net": "CAMERA-USB",
+      "source": "CAM1",
+      "source_pin": "USB connector (TBD)",
+      "destination": "U1",
+      "destination_pin": "USB port (selection TBD)",
+      "domain": "CABLE INTERFACE",
+      "wire_class": "USB CABLE",
+      "signal_type": "USB CABLE",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H17/H18: exact camera/cable and USB power compatibility.",
+      "sheet": 3,
+      "notes": "Cable assembly only; individual conductors/pins and power behavior not defined.",
+      "kind": "CABLE",
+      "source_signal": "USB connector (TBD)",
+      "destination_signal": "USB port (selection TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "CABLE-CAMERA-USB",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-USB-GNSS",
+      "wire_id": "W-USB-GNSS",
+      "net": "GNSS-USB",
+      "source": "GNSS1",
+      "source_pin": "USB serial connector (TBD)",
+      "destination": "U1",
+      "destination_pin": "USB port (selection TBD)",
+      "domain": "CABLE INTERFACE",
+      "wire_class": "USB CABLE",
+      "signal_type": "USB CABLE",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H18/H19: verify USB interface, path, baud and NMEA; no GPIO allocation.",
+      "sheet": 3,
+      "notes": "Cable assembly only; individual conductors/pins and power behavior not defined.",
+      "kind": "CABLE",
+      "source_signal": "USB serial connector (TBD)",
+      "destination_signal": "USB port (selection TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "CABLE-GNSS-USB",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-GNSS-ANT",
+      "wire_id": "W-GNSS-ANT",
+      "net": "GNSS-ANTENNA",
+      "source": "ANT1",
+      "source_pin": "RF connector (TBD)",
+      "destination": "GNSS1",
+      "destination_pin": "antenna socket (TBD)",
+      "domain": "CABLE INTERFACE",
+      "wire_class": "RF CABLE",
+      "signal_type": "RF CABLE",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "HOLD",
+      "verification": "H19: exact active antenna, connector and receiver compatibility.",
+      "sheet": 3,
+      "notes": "Cable assembly only; individual conductors/pins and power behavior not defined.",
+      "kind": "CABLE",
+      "source_signal": "RF connector (TBD)",
+      "destination_signal": "antenna socket (TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "CABLE-GNSS-ANTENNA",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-PWM1",
+      "wire_id": "W-PWM1",
+      "net": "ESP-PWM1",
+      "source": "U2",
+      "source_pin": "J1-15 GPIO9",
+      "destination": "U3",
+      "destination_pin": "P4 PWM1",
+      "domain": "LOGIC",
+      "wire_class": "DIGITAL SIGNAL",
+      "signal_type": "DIGITAL SIGNAL",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H20: physical board and logic-level compatibility; all Phase 1 outputs zero.",
+      "sheet": 4,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "GPIO9",
+      "destination_signal": "PWM1",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N019",
+      "source_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-DIR1",
+      "wire_id": "W-DIR1",
+      "net": "ESP-DIR1",
+      "source": "U2",
+      "source_pin": "J1-16 GPIO10",
+      "destination": "U3",
+      "destination_pin": "P5 DIR1",
+      "domain": "LOGIC",
+      "wire_class": "DIGITAL SIGNAL",
+      "signal_type": "DIGITAL SIGNAL",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H20: physical board and logic-level compatibility; all Phase 1 outputs zero.",
+      "sheet": 4,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "GPIO10",
+      "destination_signal": "DIR1",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N020",
+      "source_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-PWM2",
+      "wire_id": "W-PWM2",
+      "net": "ESP-PWM2",
+      "source": "U2",
+      "source_pin": "J1-17 GPIO11",
+      "destination": "U3",
+      "destination_pin": "P2 PWM2",
+      "domain": "LOGIC",
+      "wire_class": "DIGITAL SIGNAL",
+      "signal_type": "DIGITAL SIGNAL",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H20: physical board and logic-level compatibility; all Phase 1 outputs zero.",
+      "sheet": 4,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "GPIO11",
+      "destination_signal": "PWM2",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N021",
+      "source_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-DIR2",
+      "wire_id": "W-DIR2",
+      "net": "ESP-DIR2",
+      "source": "U2",
+      "source_pin": "J1-18 GPIO12",
+      "destination": "U3",
+      "destination_pin": "P3 DIR2",
+      "domain": "LOGIC",
+      "wire_class": "DIGITAL SIGNAL",
+      "signal_type": "DIGITAL SIGNAL",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "CONTROLLED / VERIFY",
+      "verification": "H20: physical board and logic-level compatibility; all Phase 1 outputs zero.",
+      "sheet": 4,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "GPIO12",
+      "destination_signal": "DIR2",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N022",
+      "source_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-ENC-L-A",
+      "wire_id": "W-ENC-L-A",
+      "net": "ENC-L-A",
+      "source": "ENC-L",
+      "source_pin": "A (pin TBD)",
+      "destination": "U2",
+      "destination_pin": "J1-4 GPIO4",
+      "domain": "LOGIC",
+      "wire_class": "ENCODER",
+      "signal_type": "ENCODER",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "HOLD",
+      "verification": "H07/H08: VCC, interface, output levels, pin numbers and polarity TBD.",
+      "sheet": 4,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "A (pin TBD)",
+      "destination_signal": "GPIO4",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N023",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-ENC-L-B",
+      "wire_id": "W-ENC-L-B",
+      "net": "ENC-L-B",
+      "source": "ENC-L",
+      "source_pin": "B (pin TBD)",
+      "destination": "U2",
+      "destination_pin": "J1-5 GPIO5",
+      "domain": "LOGIC",
+      "wire_class": "ENCODER",
+      "signal_type": "ENCODER",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "HOLD",
+      "verification": "H07/H08: VCC, interface, output levels, pin numbers and polarity TBD.",
+      "sheet": 4,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "B (pin TBD)",
+      "destination_signal": "GPIO5",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N024",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-ENC-R-A",
+      "wire_id": "W-ENC-R-A",
+      "net": "ENC-R-A",
+      "source": "ENC-R",
+      "source_pin": "A (pin TBD)",
+      "destination": "U2",
+      "destination_pin": "J1-6 GPIO6",
+      "domain": "LOGIC",
+      "wire_class": "ENCODER",
+      "signal_type": "ENCODER",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "HOLD",
+      "verification": "H07/H08: VCC, interface, output levels, pin numbers and polarity TBD.",
+      "sheet": 4,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "A (pin TBD)",
+      "destination_signal": "GPIO6",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N025",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-ENC-R-B",
+      "wire_id": "W-ENC-R-B",
+      "net": "ENC-R-B",
+      "source": "ENC-R",
+      "source_pin": "B (pin TBD)",
+      "destination": "U2",
+      "destination_pin": "J1-7 GPIO7",
+      "domain": "LOGIC",
+      "wire_class": "ENCODER",
+      "signal_type": "ENCODER",
+      "power_class": "SIGNAL / CONTROL - VERIFY",
+      "status": "HOLD",
+      "verification": "H07/H08: VCC, interface, output levels, pin numbers and polarity TBD.",
+      "sheet": 4,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "B (pin TBD)",
+      "destination_signal": "GPIO7",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N026",
+      "source_pin_status": "HOLD / PHYSICAL PIN VERIFY",
+      "destination_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+    },
+    {
+      "connection_id": "W-M1-A",
+      "wire_id": "W-M1-A",
+      "net": "M1A",
+      "source": "U3",
+      "source_pin": "T2 M1A",
+      "destination": "M1",
+      "destination_pin": "M1A (terminal TBD)",
+      "domain": "TRACTION",
+      "wire_class": "HIGH CURRENT",
+      "signal_type": "HIGH CURRENT",
+      "power_class": "HIGH CURRENT - RATING TBD",
+      "status": "HOLD",
+      "verification": "H13/H21: isolated traction, exact motor terminal identification and rated wiring.",
+      "sheet": 4,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "M1A",
+      "destination_signal": "M1A (terminal TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N027",
+      "source_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-M1-B",
+      "wire_id": "W-M1-B",
+      "net": "M1B",
+      "source": "U3",
+      "source_pin": "T1 M1B",
+      "destination": "M1",
+      "destination_pin": "M1B (terminal TBD)",
+      "domain": "TRACTION",
+      "wire_class": "HIGH CURRENT",
+      "signal_type": "HIGH CURRENT",
+      "power_class": "HIGH CURRENT - RATING TBD",
+      "status": "HOLD",
+      "verification": "H13/H21: isolated traction, exact motor terminal identification and rated wiring.",
+      "sheet": 4,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "M1B",
+      "destination_signal": "M1B (terminal TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N028",
+      "source_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-M2-A",
+      "wire_id": "W-M2-A",
+      "net": "M2A",
+      "source": "U3",
+      "source_pin": "T5 M2A",
+      "destination": "M2",
+      "destination_pin": "M2A (terminal TBD)",
+      "domain": "TRACTION",
+      "wire_class": "HIGH CURRENT",
+      "signal_type": "HIGH CURRENT",
+      "power_class": "HIGH CURRENT - RATING TBD",
+      "status": "HOLD",
+      "verification": "H13/H21: isolated traction, exact motor terminal identification and rated wiring.",
+      "sheet": 4,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "M2A",
+      "destination_signal": "M2A (terminal TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N029",
+      "source_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "connection_id": "W-M2-B",
+      "wire_id": "W-M2-B",
+      "net": "M2B",
+      "source": "U3",
+      "source_pin": "T6 M2B",
+      "destination": "M2",
+      "destination_pin": "M2B (terminal TBD)",
+      "domain": "TRACTION",
+      "wire_class": "HIGH CURRENT",
+      "signal_type": "HIGH CURRENT",
+      "power_class": "HIGH CURRENT - RATING TBD",
+      "status": "HOLD",
+      "verification": "H13/H21: isolated traction, exact motor terminal identification and rated wiring.",
+      "sheet": 4,
+      "notes": "Functional terminal labels are not purchased terminal numbers. No energization authorization.",
+      "kind": "CONDUCTOR",
+      "source_signal": "M2B",
+      "destination_signal": "M2B (terminal TBD)",
+      "source_ref": "S1/S2/S3/S4/S5/S6; see SOURCE_REGISTER.md",
+      "net_id": "N030",
+      "source_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY",
+      "destination_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+    }
+  ],
+  "nets": [
+    {
+      "net_id": "N001",
+      "net": "N-BAT+",
+      "members": [
+        {
+          "component": "B1",
+          "pin": "positive (vendor terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "BMS",
+          "pin": "battery positive input (TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 0,
+      "hold_terminal_count": 2
+    },
+    {
+      "net_id": "N002",
+      "net": "N-BMS+",
+      "members": [
+        {
+          "component": "BMS",
+          "pin": "protected positive output (TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "F1",
+          "pin": "IN (terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 0,
+      "hold_terminal_count": 2
+    },
+    {
+      "net_id": "N003",
+      "net": "N-PROTECTED12+",
+      "members": [
+        {
+          "component": "F1",
+          "pin": "OUT (terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "F2",
+          "pin": "IN (terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "F3",
+          "pin": "IN (terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "K1",
+          "pin": "MAIN IN (terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 0,
+      "hold_terminal_count": 4
+    },
+    {
+      "net_id": "N004",
+      "net": "N-TRACTION12+",
+      "members": [
+        {
+          "component": "K1",
+          "pin": "MAIN OUT (terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "U3",
+          "pin": "T3 POWER+",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 1,
+      "hold_terminal_count": 1
+    },
+    {
+      "net_id": "N005",
+      "net": "N-TRACTION-",
+      "members": [
+        {
+          "component": "B1",
+          "pin": "negative (vendor terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "BMS",
+          "pin": "negative reference (TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "U3",
+          "pin": "T4 POWER-",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 1,
+      "hold_terminal_count": 2
+    },
+    {
+      "net_id": "N006",
+      "net": "N-LOGIC12+",
+      "members": [
+        {
+          "component": "F2",
+          "pin": "OUT (terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "PS1",
+          "pin": "IN+",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 0,
+      "hold_terminal_count": 2
+    },
+    {
+      "net_id": "N007",
+      "net": "N-LOGIC5+",
+      "members": [
+        {
+          "component": "LD2450",
+          "pin": "Pin 1 VCC",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        },
+        {
+          "component": "PS1",
+          "pin": "OUT+",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "U1",
+          "pin": "Pin 2 5V",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        },
+        {
+          "component": "U2",
+          "pin": "J1-21 5V",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 3,
+      "hold_terminal_count": 1
+    },
+    {
+      "net_id": "N008",
+      "net": "N-LOGIC-GND",
+      "members": [
+        {
+          "component": "BNO055",
+          "pin": "GND (pin TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "ENC-L",
+          "pin": "GND (pin TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "ENC-R",
+          "pin": "GND (pin TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "LD2450",
+          "pin": "Pin 2 GND",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        },
+        {
+          "component": "MLX90640",
+          "pin": "GND (pin TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "PS1",
+          "pin": "OUT-",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "U1",
+          "pin": "Pin 20 GND",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        },
+        {
+          "component": "U1",
+          "pin": "Pin 6 GND",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        },
+        {
+          "component": "U2",
+          "pin": "J1-22 GND",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        },
+        {
+          "component": "U3",
+          "pin": "P1 GND",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 5,
+      "hold_terminal_count": 5
+    },
+    {
+      "net_id": "N009",
+      "net": "N-ESTOP-FUSED+",
+      "members": [
+        {
+          "component": "ES1",
+          "pin": "NC IN (terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "F3",
+          "pin": "OUT (terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 0,
+      "hold_terminal_count": 2
+    },
+    {
+      "net_id": "N010",
+      "net": "N-ESTOP-SWITCHED+",
+      "members": [
+        {
+          "component": "CD1",
+          "pin": "control/supply IN (TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "ES1",
+          "pin": "NC OUT (terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 0,
+      "hold_terminal_count": 2
+    },
+    {
+      "net_id": "N011",
+      "net": "K1-COIL+",
+      "members": [
+        {
+          "component": "CD1",
+          "pin": "coil OUT (terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "D1/S1",
+          "pin": "coil-side terminal (TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "K1",
+          "pin": "COIL A (terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 0,
+      "hold_terminal_count": 3
+    },
+    {
+      "net_id": "N012",
+      "net": "K1-COIL-",
+      "members": [
+        {
+          "component": "D1/S1",
+          "pin": "return-side terminal (TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "K1",
+          "pin": "COIL B (terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 0,
+      "hold_terminal_count": 2
+    },
+    {
+      "net_id": "N013",
+      "net": "K1-AUX-RAW",
+      "members": [
+        {
+          "component": "K1",
+          "pin": "AUX signal terminal (TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "SC1",
+          "pin": "IN (terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 0,
+      "hold_terminal_count": 2
+    },
+    {
+      "net_id": "N014",
+      "net": "ESTOP-AUX-STATUS",
+      "members": [
+        {
+          "component": "SC1",
+          "pin": "OUT (terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "U2",
+          "pin": "J1-19 GPIO13",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 1,
+      "hold_terminal_count": 1
+    },
+    {
+      "net_id": "N015",
+      "net": "I2C-SDA",
+      "members": [
+        {
+          "component": "BNO055",
+          "pin": "SDA (pin TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "MLX90640",
+          "pin": "SDA (pin TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "U1",
+          "pin": "Pin 3 GPIO2 SDA",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 1,
+      "hold_terminal_count": 2
+    },
+    {
+      "net_id": "N016",
+      "net": "I2C-SCL",
+      "members": [
+        {
+          "component": "BNO055",
+          "pin": "SCL (pin TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "MLX90640",
+          "pin": "SCL (pin TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "U1",
+          "pin": "Pin 5 GPIO3 SCL",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 1,
+      "hold_terminal_count": 2
+    },
+    {
+      "net_id": "N017",
+      "net": "RADAR-TX",
+      "members": [
+        {
+          "component": "LD2450",
+          "pin": "Pin 3 TX",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        },
+        {
+          "component": "U1",
+          "pin": "Pin 10 GPIO15 RX",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 2,
+      "hold_terminal_count": 0
+    },
+    {
+      "net_id": "N018",
+      "net": "RADAR-RX",
+      "members": [
+        {
+          "component": "LD2450",
+          "pin": "Pin 4 RX",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        },
+        {
+          "component": "U1",
+          "pin": "Pin 8 GPIO14 TX",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 2,
+      "hold_terminal_count": 0
+    },
+    {
+      "net_id": "N019",
+      "net": "ESP-PWM1",
+      "members": [
+        {
+          "component": "U2",
+          "pin": "J1-15 GPIO9",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        },
+        {
+          "component": "U3",
+          "pin": "P4 PWM1",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 2,
+      "hold_terminal_count": 0
+    },
+    {
+      "net_id": "N020",
+      "net": "ESP-DIR1",
+      "members": [
+        {
+          "component": "U2",
+          "pin": "J1-16 GPIO10",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        },
+        {
+          "component": "U3",
+          "pin": "P5 DIR1",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 2,
+      "hold_terminal_count": 0
+    },
+    {
+      "net_id": "N021",
+      "net": "ESP-PWM2",
+      "members": [
+        {
+          "component": "U2",
+          "pin": "J1-17 GPIO11",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        },
+        {
+          "component": "U3",
+          "pin": "P2 PWM2",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 2,
+      "hold_terminal_count": 0
+    },
+    {
+      "net_id": "N022",
+      "net": "ESP-DIR2",
+      "members": [
+        {
+          "component": "U2",
+          "pin": "J1-18 GPIO12",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        },
+        {
+          "component": "U3",
+          "pin": "P3 DIR2",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 2,
+      "hold_terminal_count": 0
+    },
+    {
+      "net_id": "N023",
+      "net": "ENC-L-A",
+      "members": [
+        {
+          "component": "ENC-L",
+          "pin": "A (pin TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "U2",
+          "pin": "J1-4 GPIO4",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 1,
+      "hold_terminal_count": 1
+    },
+    {
+      "net_id": "N024",
+      "net": "ENC-L-B",
+      "members": [
+        {
+          "component": "ENC-L",
+          "pin": "B (pin TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "U2",
+          "pin": "J1-5 GPIO5",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 1,
+      "hold_terminal_count": 1
+    },
+    {
+      "net_id": "N025",
+      "net": "ENC-R-A",
+      "members": [
+        {
+          "component": "ENC-R",
+          "pin": "A (pin TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "U2",
+          "pin": "J1-6 GPIO6",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 1,
+      "hold_terminal_count": 1
+    },
+    {
+      "net_id": "N026",
+      "net": "ENC-R-B",
+      "members": [
+        {
+          "component": "ENC-R",
+          "pin": "B (pin TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "U2",
+          "pin": "J1-7 GPIO7",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 1,
+      "hold_terminal_count": 1
+    },
+    {
+      "net_id": "N027",
+      "net": "M1A",
+      "members": [
+        {
+          "component": "M1",
+          "pin": "M1A (terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "U3",
+          "pin": "T2 M1A",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 1,
+      "hold_terminal_count": 1
+    },
+    {
+      "net_id": "N028",
+      "net": "M1B",
+      "members": [
+        {
+          "component": "M1",
+          "pin": "M1B (terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "U3",
+          "pin": "T1 M1B",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 1,
+      "hold_terminal_count": 1
+    },
+    {
+      "net_id": "N029",
+      "net": "M2A",
+      "members": [
+        {
+          "component": "M2",
+          "pin": "M2A (terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "U3",
+          "pin": "T5 M2A",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 1,
+      "hold_terminal_count": 1
+    },
+    {
+      "net_id": "N030",
+      "net": "M2B",
+      "members": [
+        {
+          "component": "M2",
+          "pin": "M2B (terminal TBD)",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        },
+        {
+          "component": "U3",
+          "pin": "T6 M2B",
+          "physical_pin_status": "RESOLVED IDENTIFIER / HARDWARE VERIFY"
+        }
+      ],
+      "status": "CONTROLLED DESIGN / VERIFY",
+      "resolved_terminal_count": 1,
+      "hold_terminal_count": 1
+    },
+    {
+      "net_id": "N031",
+      "net": "PS1-IN-RETURN-HOLD",
+      "members": [
+        {
+          "component": "PS1",
+          "pin": "IN-",
+          "physical_pin_status": "HOLD / PHYSICAL PIN VERIFY"
+        }
+      ],
+      "status": "HOLD",
+      "resolved_terminal_count": 0,
+      "hold_terminal_count": 1
+    }
+  ],
+  "holds": [
+    {
+      "id": "H01",
+      "item": "U1 Pin 1",
+      "status": "NO EXTERNAL POWER",
+      "requirement": "Pi Pin 1 must have no external power net."
+    },
+    {
+      "id": "H02",
+      "item": "U2 J1 unallocated",
+      "status": "DO NOT CONNECT",
+      "requirement": "J1 positions 1, 2, 3, 8, 9, 10, 11, 12, 13, 14, 20; no new GPIO identities assigned."
+    },
+    {
+      "id": "H03",
+      "item": "B1 / BMS",
+      "status": "TBD / VERIFY",
+      "requirement": "Battery/BMS variant, terminal identity, current rating and actual protection topology."
+    },
+    {
+      "id": "H04",
+      "item": "F1 / F2 / F3",
+      "status": "TBD / VERIFY",
+      "requirement": "Fuse ratings, holders, interruption ratings and protected load calculations."
+    },
+    {
+      "id": "H05",
+      "item": "PS1",
+      "status": "TBD / VERIFY",
+      "requirement": "PS1-IN-RETURN-HOLD is the isolated IN- stub, source open. OUT- remains N-LOGIC-GND; its physical terminal identity is HOLD. Verify topology, ratings, polarity and regulation."
+    },
+    {
+      "id": "H06",
+      "item": "U1 / U2 power",
+      "status": "TBD / VERIFY",
+      "requirement": "Approved 5 V powering method, USB backfeed behavior and current capacity."
+    },
+    {
+      "id": "H07",
+      "item": "ENC-L VCC / signals",
+      "status": "TBD / VERIFY",
+      "requirement": "No VCC net; verify output interface, ground reference, polarity and pin numbering."
+    },
+    {
+      "id": "H08",
+      "item": "ENC-R VCC / signals",
+      "status": "TBD / VERIFY",
+      "requirement": "No VCC net; verify output interface, ground reference, polarity and pin numbering."
+    },
+    {
+      "id": "H09",
+      "item": "MLX90640 VCC / I2C / GND",
+      "status": "TBD / VERIFY",
+      "requirement": "SDA/SCL/GND: HOLD / PHYSICAL PIN VERIFY. VCC/VIN, pullup voltage, address and purchased D55 breakout pins remain unverified."
+    },
+    {
+      "id": "H10",
+      "item": "BNO055 VCC / I2C / GND",
+      "status": "TBD / VERIFY",
+      "requirement": "SDA/SCL/GND: HOLD / PHYSICAL PIN VERIFY. VCC/VIN, pullup voltage, address and purchased breakout pins; calibration pending."
+    },
+    {
+      "id": "H11",
+      "item": "K1 coil",
+      "status": "TBD / VERIFY",
+      "requirement": "DESIGN HOLD \u2014 DO NOT ENERGIZE. Exact coil voltage/current and driver, coil return, suppression polarity/component must be verified from purchased contactor/driver before energization. Coil A/B and MAIN IN/OUT are functional interfaces, not terminal numbers. Coil polarity, duty and markings remain TBD."
+    },
+    {
+      "id": "H12",
+      "item": "CD1 and coil return",
+      "status": "TBD / VERIFY",
+      "requirement": "Driver circuit, supply/return topology and coil return termination. No internal design invented."
+    },
+    {
+      "id": "H13",
+      "item": "K1 main contact / U3 T3",
+      "status": "HOLD",
+      "requirement": "T3 must remain disconnected until physical E-stop isolation is verified; NO PHYSICAL TRACTION AUTHORIZATION."
+    },
+    {
+      "id": "H14",
+      "item": "D1/S1 suppression",
+      "status": "TBD / VERIFY",
+      "requirement": "Type, value, rating and polarity. Only the parallel connection intent is defined."
+    },
+    {
+      "id": "H15",
+      "item": "K1 auxiliary / SC1",
+      "status": "TBD / VERIFY",
+      "requirement": "NO/NC choice, excitation/reference, power, signal conditioning and GPIO13 levels."
+    },
+    {
+      "id": "H16",
+      "item": "LD2450 interface",
+      "status": "TBD / VERIFY",
+      "requirement": "Exact purchased connector orientation and TX/RX electrical compatibility; 256000 8N1 controlled."
+    },
+    {
+      "id": "H17",
+      "item": "CAM1",
+      "status": "TBD / VERIFY",
+      "requirement": "Purchased camera model, USB/UVC cable and connector; no GPIO pins allocated."
+    },
+    {
+      "id": "H18",
+      "item": "USB interfaces",
+      "status": "TBD / VERIFY",
+      "requirement": "Port/cable identities and simultaneous power paths; USB assembly internals not assigned."
+    },
+    {
+      "id": "H19",
+      "item": "GNSS1 / ANT1",
+      "status": "TBD / VERIFY",
+      "requirement": "LC29H(AA) USB path, baud, NMEA, antenna connector and compatibility; physical evidence pending."
+    },
+    {
+      "id": "H20",
+      "item": "U2 / U3",
+      "status": "TBD / VERIFY",
+      "requirement": "Purchased board revisions, printed pin/terminal markings and logic levels."
+    },
+    {
+      "id": "H21",
+      "item": "M1 / M2",
+      "status": "TBD / VERIFY",
+      "requirement": "Motor ratings, terminal/polarity identity and mechanical direction; no current or speed assumed."
+    },
+    {
+      "id": "H22",
+      "item": "Harnesses / connectors",
+      "status": "TBD / VERIFY",
+      "requirement": "Wire gauge, length, connector variant/pitch, crimps and ratings."
+    },
+    {
+      "id": "H23",
+      "item": "PCB footprints",
+      "status": "TBD / VERIFY",
+      "requirement": "Manufacturer footprints and actual connector pinouts unavailable; no fabrication file."
+    },
+    {
+      "id": "H24",
+      "item": "PCB mechanics",
+      "status": "TBD / VERIFY",
+      "requirement": "Board dimensions, mounting holes, enclosure and connector locations."
+    },
+    {
+      "id": "H25",
+      "item": "PCB routing classes",
+      "status": "TBD / VERIFY",
+      "requirement": "Trace widths, clearances, stackup and allowed currents require physical/electrical data."
+    },
+    {
+      "id": "H26",
+      "item": "Pi to ESP32 transport",
+      "status": "TBD / VERIFY",
+      "requirement": "Configured serial software boundary only; no physical GPIO or cable assignment in this package."
+    },
+    {
+      "id": "H27",
+      "item": "U1 unallocated header",
+      "status": "DO NOT CONNECT",
+      "requirement": "All 32 header positions without a controlled TARK allocation remain UNALLOCATED / DO NOT CONNECT; full 40-position table on S3. Pin 1 separately remains NO EXTERNAL POWER (H01)."
+    }
+  ],
+  "pins": [
+    {
+      "component": "U2",
+      "pin": "J1-1",
+      "signal": "UNALLOCATED",
+      "net": "DO NOT CONNECT",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-2",
+      "signal": "UNALLOCATED",
+      "net": "DO NOT CONNECT",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-3",
+      "signal": "UNALLOCATED",
+      "net": "DO NOT CONNECT",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-4",
+      "signal": "GPIO4",
+      "net": "ENC-L-A",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-5",
+      "signal": "GPIO5",
+      "net": "ENC-L-B",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-6",
+      "signal": "GPIO6",
+      "net": "ENC-R-A",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-7",
+      "signal": "GPIO7",
+      "net": "ENC-R-B",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-8",
+      "signal": "UNALLOCATED",
+      "net": "DO NOT CONNECT",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-9",
+      "signal": "UNALLOCATED",
+      "net": "DO NOT CONNECT",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-10",
+      "signal": "UNALLOCATED",
+      "net": "DO NOT CONNECT",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-11",
+      "signal": "UNALLOCATED",
+      "net": "DO NOT CONNECT",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-12",
+      "signal": "UNALLOCATED",
+      "net": "DO NOT CONNECT",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-13",
+      "signal": "UNALLOCATED",
+      "net": "DO NOT CONNECT",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-14",
+      "signal": "UNALLOCATED",
+      "net": "DO NOT CONNECT",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-15",
+      "signal": "GPIO9",
+      "net": "ESP-PWM1",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-16",
+      "signal": "GPIO10",
+      "net": "ESP-DIR1",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-17",
+      "signal": "GPIO11",
+      "net": "ESP-PWM2",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-18",
+      "signal": "GPIO12",
+      "net": "ESP-DIR2",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-19",
+      "signal": "GPIO13",
+      "net": "ESTOP-AUX-STATUS",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-20",
+      "signal": "UNALLOCATED",
+      "net": "DO NOT CONNECT",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-21",
+      "signal": "5V",
+      "net": "N-LOGIC5+",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U2",
+      "pin": "J1-22",
+      "signal": "GND",
+      "net": "N-LOGIC-GND",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 1",
+      "signal": "3V3",
+      "net": "NO EXTERNAL POWER",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 2",
+      "signal": "5V",
+      "net": "N-LOGIC5+",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 3",
+      "signal": "GPIO2 SDA",
+      "net": "I2C-SDA",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 4",
+      "signal": "5V",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 5",
+      "signal": "GPIO3 SCL",
+      "net": "I2C-SCL",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 6",
+      "signal": "GND",
+      "net": "N-LOGIC-GND",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 7",
+      "signal": "GPIO4",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 8",
+      "signal": "GPIO14 TX",
+      "net": "RADAR-RX",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 9",
+      "signal": "GND",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 10",
+      "signal": "GPIO15 RX",
+      "net": "RADAR-TX",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 11",
+      "signal": "GPIO17",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 12",
+      "signal": "GPIO18",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 13",
+      "signal": "GPIO27",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 14",
+      "signal": "GND",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 15",
+      "signal": "GPIO22",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 16",
+      "signal": "GPIO23",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 17",
+      "signal": "3V3",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 18",
+      "signal": "GPIO24",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 19",
+      "signal": "GPIO10",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 20",
+      "signal": "GND",
+      "net": "N-LOGIC-GND",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 21",
+      "signal": "GPIO9",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 22",
+      "signal": "GPIO25",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 23",
+      "signal": "GPIO11",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 24",
+      "signal": "GPIO8",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 25",
+      "signal": "GND",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 26",
+      "signal": "GPIO7",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 27",
+      "signal": "ID_SD",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 28",
+      "signal": "ID_SC",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 29",
+      "signal": "GPIO5",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 30",
+      "signal": "GND",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 31",
+      "signal": "GPIO6",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 32",
+      "signal": "GPIO12",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 33",
+      "signal": "GPIO13",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 34",
+      "signal": "GND",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 35",
+      "signal": "GPIO19",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 36",
+      "signal": "GPIO16",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 37",
+      "signal": "GPIO26",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 38",
+      "signal": "GPIO20",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 39",
+      "signal": "GND",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U1",
+      "pin": "Pin 40",
+      "signal": "GPIO21",
+      "net": "UNALLOCATED",
+      "status": "DO NOT CONNECT"
+    },
+    {
+      "component": "U3",
+      "pin": "P1",
+      "signal": "GND",
+      "net": "N-LOGIC-GND",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U3",
+      "pin": "P2",
+      "signal": "PWM2",
+      "net": "ESP-PWM2",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U3",
+      "pin": "P3",
+      "signal": "DIR2",
+      "net": "ESP-DIR2",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U3",
+      "pin": "P4",
+      "signal": "PWM1",
+      "net": "ESP-PWM1",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U3",
+      "pin": "P5",
+      "signal": "DIR1",
+      "net": "ESP-DIR1",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U3",
+      "pin": "T1",
+      "signal": "M1B",
+      "net": "M1B",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U3",
+      "pin": "T2",
+      "signal": "M1A",
+      "net": "M1A",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U3",
+      "pin": "T3",
+      "signal": "POWER+",
+      "net": "N-TRACTION12+",
+      "status": "HOLD"
+    },
+    {
+      "component": "U3",
+      "pin": "T4",
+      "signal": "POWER-",
+      "net": "N-TRACTION-",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U3",
+      "pin": "T5",
+      "signal": "M2A",
+      "net": "M2A",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "U3",
+      "pin": "T6",
+      "signal": "M2B",
+      "net": "M2B",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "LD2450",
+      "pin": "Pin 1",
+      "signal": "VCC",
+      "net": "N-LOGIC5+",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "LD2450",
+      "pin": "Pin 2",
+      "signal": "GND",
+      "net": "N-LOGIC-GND",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "LD2450",
+      "pin": "Pin 3",
+      "signal": "TX",
+      "net": "RADAR-TX",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "LD2450",
+      "pin": "Pin 4",
+      "signal": "RX",
+      "net": "RADAR-RX",
+      "status": "CONTROLLED / VERIFY"
+    },
+    {
+      "component": "MLX90640",
+      "pin": "vendor pin TBD",
+      "signal": "SDA",
+      "net": "I2C-SDA",
+      "status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "component": "MLX90640",
+      "pin": "vendor pin TBD",
+      "signal": "SCL",
+      "net": "I2C-SCL",
+      "status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "component": "MLX90640",
+      "pin": "vendor pin TBD",
+      "signal": "GND",
+      "net": "N-LOGIC-GND",
+      "status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "component": "MLX90640",
+      "pin": "vendor pin TBD",
+      "signal": "VCC/VIN",
+      "net": "UNASSIGNED / HOLD",
+      "status": "HOLD"
+    },
+    {
+      "component": "BNO055",
+      "pin": "vendor pin TBD",
+      "signal": "SDA",
+      "net": "I2C-SDA",
+      "status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "component": "BNO055",
+      "pin": "vendor pin TBD",
+      "signal": "SCL",
+      "net": "I2C-SCL",
+      "status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "component": "BNO055",
+      "pin": "vendor pin TBD",
+      "signal": "GND",
+      "net": "N-LOGIC-GND",
+      "status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "component": "BNO055",
+      "pin": "vendor pin TBD",
+      "signal": "VCC/VIN",
+      "net": "UNASSIGNED / HOLD",
+      "status": "HOLD"
+    },
+    {
+      "component": "ENC-L",
+      "pin": "vendor pin TBD",
+      "signal": "A",
+      "net": "ENC-L-A",
+      "status": "HOLD"
+    },
+    {
+      "component": "ENC-L",
+      "pin": "vendor pin TBD",
+      "signal": "B",
+      "net": "ENC-L-B",
+      "status": "HOLD"
+    },
+    {
+      "component": "ENC-L",
+      "pin": "vendor pin TBD",
+      "signal": "GND",
+      "net": "N-LOGIC-GND",
+      "status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "component": "ENC-L",
+      "pin": "vendor pin TBD",
+      "signal": "VCC",
+      "net": "UNASSIGNED / HOLD",
+      "status": "HOLD"
+    },
+    {
+      "component": "ENC-R",
+      "pin": "vendor pin TBD",
+      "signal": "A",
+      "net": "ENC-R-A",
+      "status": "HOLD"
+    },
+    {
+      "component": "ENC-R",
+      "pin": "vendor pin TBD",
+      "signal": "B",
+      "net": "ENC-R-B",
+      "status": "HOLD"
+    },
+    {
+      "component": "ENC-R",
+      "pin": "vendor pin TBD",
+      "signal": "GND",
+      "net": "N-LOGIC-GND",
+      "status": "HOLD / PHYSICAL PIN VERIFY"
+    },
+    {
+      "component": "ENC-R",
+      "pin": "vendor pin TBD",
+      "signal": "VCC",
+      "net": "UNASSIGNED / HOLD",
+      "status": "HOLD"
+    }
+  ],
+  "unresolved_ports": [
+    {
+      "component": "PS1",
+      "pin": "IN-",
+      "net": "PS1-IN-RETURN-HOLD",
+      "termination": "UNASSIGNED",
+      "hold": "H05"
+    },
+    {
+      "component": "K1",
+      "pin": "COIL B (terminal TBD)",
+      "net": "K1-COIL-",
+      "termination": "driver return UNASSIGNED",
+      "hold": "H12"
+    }
+  ]
+}

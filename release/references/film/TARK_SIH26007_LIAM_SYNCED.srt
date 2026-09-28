@@ -1,0 +1,315 @@
+1
+00:00:00,000 --> 00:00:02,360
+Out here, fog does more than hide the road.
+
+2
+00:00:02,880 --> 00:00:04,580
+It changes what a driver can trust.
+
+3
+00:00:05,380 --> 00:00:09,080
+Is that shape a vehicle,
+a person, or the edge of the road?
+
+4
+00:00:09,840 --> 00:00:11,520
+We started with that uncertainty.
+
+5
+00:00:12,240 --> 00:00:14,380
+Our challenge wasn't simply to see farther.
+
+6
+00:00:14,920 --> 00:00:17,680
+It was to know when the evidence
+was no longer good enough.
+
+7
+00:00:18,360 --> 00:00:20,140
+So we built TARK around a question:
+
+8
+00:00:20,900 --> 00:00:24,060
+when visibility drops,
+how do we make a more informed decision?
+
+9
+00:00:24,780 --> 00:00:25,780
+Let us show you.
+
+10
+00:00:26,440 --> 00:00:29,200
+This engineering demonstrator
+brings sensing interfaces,
+
+11
+00:00:29,240 --> 00:00:32,960
+reasoning, bounded control,
+and monitoring together.
+
+12
+00:00:34,020 --> 00:00:37,660
+You're seeing conceptual hardware alongside
+our integrated software demonstration,
+
+13
+00:00:38,360 --> 00:00:40,460
+not a claim of completed mine testing.
+
+14
+00:00:41,180 --> 00:00:43,200
+Different sensors answer
+different questions.
+
+15
+00:00:43,740 --> 00:00:45,460
+Radar provides local targets.
+
+16
+00:00:46,100 --> 00:00:47,840
+Cameras add visual context;
+
+17
+00:00:48,760 --> 00:00:50,340
+thermal sensing adds temperature patterns.
+
+18
+00:00:51,260 --> 00:00:53,040
+The inertial sensor describes orientation.
+
+19
+00:00:54,100 --> 00:00:56,680
+Encoders report wheel response,
+not ground speed.
+
+20
+00:00:57,200 --> 00:00:59,640
+Today, radar feeds our decision pipeline.
+
+21
+00:01:00,460 --> 00:01:03,060
+Other sensors supply observations
+and health information.
+
+22
+00:01:03,800 --> 00:01:07,360
+Inside the Raspberry Pi,
+we ask something before trusting a reading:
+
+23
+00:01:07,940 --> 00:01:10,420
+is it healthy, fresh, and worth using?
+
+24
+00:01:11,280 --> 00:01:13,380
+Then we follow radar targets over time,
+
+25
+00:01:13,580 --> 00:01:16,100
+rather than treating every
+detection as a new object.
+
+26
+00:01:16,840 --> 00:01:18,520
+Uncertainty travels with that track.
+
+27
+00:01:19,140 --> 00:01:20,720
+If an observation gets old,
+
+28
+00:01:21,100 --> 00:01:24,740
+the system shouldn't quietly present
+yesterday's confidence as today's evidence.
+
+29
+00:01:25,500 --> 00:01:28,740
+Now, seeing something isn't the same
+as having enough room to respond.
+
+30
+00:01:29,460 --> 00:01:32,940
+Time to collision asks how quickly
+a closing situation could develop.
+
+31
+00:01:33,600 --> 00:01:36,440
+In this demo, you'll see that
+value marked unavailable.
+
+32
+00:01:37,240 --> 00:01:39,900
+Stopping requirement brings
+together reaction distance,
+
+33
+00:01:40,320 --> 00:01:42,060
+braking distance, and margin.
+
+34
+00:01:42,900 --> 00:01:46,840
+Comparing that requirement with observable
+distance gives us the next question:
+
+35
+00:01:47,680 --> 00:01:49,720
+what operation can the evidence justify?
+
+36
+00:01:50,360 --> 00:01:54,280
+We call that the Perception-Verified
+Safe Operating Envelope.
+
+37
+00:01:54,320 --> 00:01:55,680
+The idea is simple:
+
+38
+00:01:56,240 --> 00:02:00,180
+weaker evidence should mean less
+operating freedom, not more guesswork.
+
+39
+00:02:00,700 --> 00:02:05,460
+NORMAL, RESTRICT, STOP,
+and UNKNOWN make that judgement visible.
+
+40
+00:02:06,060 --> 00:02:07,360
+UNKNOWN is important.
+
+41
+00:02:07,940 --> 00:02:09,840
+It says we don't have enough
+trustworthy information.
+
+42
+00:02:10,660 --> 00:02:15,100
+A missing sensor or stale message must
+never quietly create permission to do more.
+
+43
+00:02:15,860 --> 00:02:16,900
+The Pi handles reasoning.
+
+44
+00:02:17,700 --> 00:02:21,800
+The ESP thirty-two software checks
+bounded commands before accepting them.
+
+45
+00:02:22,360 --> 00:02:24,280
+Separately, our electrical design
+
+46
+00:02:24,320 --> 00:02:28,020
+gives the emergency stop an independent
+path through the contactor system.
+
+47
+00:02:28,720 --> 00:02:30,680
+Those responsibilities stay separate.
+
+48
+00:02:31,160 --> 00:02:33,240
+And the dashboard never
+controls the vehicle.
+
+49
+00:02:34,140 --> 00:02:37,220
+In this software demonstration,
+traction stays disabled;
+
+50
+00:02:38,100 --> 00:02:38,940
+neither a browser click
+
+51
+00:02:38,980 --> 00:02:42,060
+nor a healthy-looking screen
+grants motion authority.
+
+52
+00:02:42,980 --> 00:02:46,100
+Location answers another question:
+where are we on the map?
+
+53
+00:02:46,780 --> 00:02:51,200
+That's the role of GNSS
+and the intended LC twenty-nine H receiver.
+
+54
+00:02:51,680 --> 00:02:54,880
+But radar asks where a target
+is relative to our vehicle.
+
+55
+00:02:55,500 --> 00:02:57,440
+We keep those coordinate systems separate.
+
+56
+00:02:58,040 --> 00:02:59,160
+Without a vehicle fix,
+
+57
+00:02:59,500 --> 00:03:04,060
+the map uses a clearly labelled India
+overview, not an invented location.
+
+58
+00:03:04,780 --> 00:03:06,840
+And this is the actual TARK dashboard.
+
+59
+00:03:07,500 --> 00:03:09,220
+You're looking at our public software demo.
+
+60
+00:03:09,760 --> 00:03:11,300
+The simulation labels stay visible.
+
+61
+00:03:11,940 --> 00:03:17,500
+You can inspect system state, sensor health,
+communication, maps, logs, and replay.
+
+62
+00:03:18,160 --> 00:03:20,600
+When a sensor is missing,
+the interface says so.
+
+63
+00:03:20,940 --> 00:03:25,040
+For us, the important part is being
+able to ask why a decision happened,
+
+64
+00:03:25,380 --> 00:03:26,980
+and trace the evidence behind it.
+
+65
+00:03:27,520 --> 00:03:28,980
+We've brought sensing interfaces,
+
+66
+00:03:29,280 --> 00:03:34,320
+reasoning, safety logic, and bounded
+control together with a real dashboard.
+
+67
+00:03:35,120 --> 00:03:38,400
+One testable software system,
+not a collection of parts.
+
+68
+00:03:39,160 --> 00:03:41,160
+The goal was never blind trust in a sensor.
+
+69
+00:03:41,820 --> 00:03:43,100
+Trust the evidence you can verify.
+
+70
+00:03:43,560 --> 00:03:45,180
+That's TARK.

@@ -1,5 +1,11 @@
 # V9 Prompt 6 Control Software Report
 
+> HISTORICAL BASELINE — SUPERSEDED BY LATER RED-TEAM / CORRECTION RELEASE.
+> Retained as a dated record, not current completion or protocol authority.
+> Use [R1 release index](TARK_RELEASE_INDEX.md),
+> [Protocol V2](ESP32_PROTOCOL_V2.md) and
+> [supersession register](TARK_SUPERSESSION_REGISTER.md).
+
 ## Implemented in this pass
 
 - Hardened Pi protocol client validation for uint32 sequences, finite bounded

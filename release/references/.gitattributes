@@ -1,0 +1,3 @@
+# Preserve supplied binary references exactly; never normalize PDF object offsets.
+*.pdf binary
+*.docx binary

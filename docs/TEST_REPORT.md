@@ -1,5 +1,47 @@
 # Test Report
 
+## Current R1 software-evidence gate — 2026-09-28
+
+Current software commit: `bf87304ab2080452d5446fb4b6bbfcb945cf74ea`.
+Prompt 4 is documentation/release control only. Earlier result sections below
+are HISTORICAL BASELINE records, not present counts or blanket completion claims.
+
+| Gate | Current result |
+|---|---|
+| Prompt-3 artifact verification | PASS; 20 scenarios, 150 repetitions, 85 artifacts, 971433 inventoried bytes |
+| Full backend | 322 passed, no failed/skipped tests |
+| Protocol/interoperability | 68 passed, included in full suite |
+| Recording/replay | 35 passed, included in full suite |
+| Prompt-1 integrity | 65 passed, included in full suite |
+| Prompt-3 harness | 70 passed, included in full suite |
+| Shared protocol vectors | 36 consumed by Python and fresh C fixture |
+| Strict C protocol/service/supervisor | PASS; freshly compiled and executed via test_protocol_correctness.py::host |
+| C/Python bidirectional interoperability | PASS in that same fresh fixture |
+| Frontend | 39 passed, 9 files |
+| TypeScript | PASS |
+| Production build | PASS; existing 816.49 kB lazy MapView advisory |
+
+Execution used bundled Python 3.12.14 plus the existing project site-packages,
+with inherited TARK_* variables cleared and TARK_DATABASE_PATH=:memory: before
+app import. No packages were installed. Commands were the evidence verifier,
+`pytest -q -p no:cacheprovider --tb=short`, `pnpm test`,
+`pnpm run lint:types`, `pnpm run build`. Fresh C compilation uses GCC 15.2.0
+with `-std=c11 -Wall -Wextra -Werror`, then runs protocol/service binaries and
+stdin/stdout interop. No OS security policy was changed.
+
+Initial convergence run on September 27: backend 52.40 s; frontend 5.90 s;
+Vite build 4.61 s. Final September 28 recheck: backend 322 passed in 70.90 s;
+frontend 39 passed in 6.57 s; TypeScript PASS; Vite build PASS in 5.63 s.
+Prompt-3 verification again PASS before that full rerun. Two upstream TestClient/AnyIO
+deprecation warnings persist; no test weakening or dependency upgrade.
+Prior separate shell-helper WinError 4551 is retained in Prompt-3 history and
+is not called a pass; the canonical fresh pytest host fixture passes.
+
+All tests are software-only. No COM/USB/I2C/camera/vehicle/E-stop test occurred.
+See [manifest](TARK_RELEASE_MANIFEST.md) and [scope](EVIDENCE_AUTHORITY.md).
+
+## Historical stage records (retained below)
+
 ## Prompt-2 protocol/firmware/replay correction — 2026-09-27
 
 Current details: [correction report](PROTOCOL_FIRMWARE_REPLAY_CORRECTION_REPORT.md).

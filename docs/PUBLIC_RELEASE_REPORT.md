@@ -1,5 +1,11 @@
 # TARK SIH26007 — Public Release Report
 
+> HISTORICAL BASELINE — SUPERSEDED BY LATER RED-TEAM / CORRECTION RELEASE.
+> Retained as a dated record, not current completion or protocol authority.
+> Use [R1 release index](TARK_RELEASE_INDEX.md),
+> [Protocol V2](ESP32_PROTOCOL_V2.md) and
+> [supersession register](TARK_SUPERSESSION_REGISTER.md).
+
 Release state: **DEPLOYMENT READY**. This report distinguishes verified local evidence from hosting and device checks that have not occurred.
 
 The subsequent final master audit retained this classification and added regression coverage for public-profile authentication combinations, explicit CORS origins, public CSP WebSocket transport, secure session cookie attributes, disabled-traction payload rejection, stale-data removal, keyboard focus treatment and 320 px event-layout wrapping. See [FINAL_MASTER_ENGINEERING_AUDIT_REPORT.md](FINAL_MASTER_ENGINEERING_AUDIT_REPORT.md).

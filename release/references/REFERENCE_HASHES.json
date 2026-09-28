@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "note": "Read-only reference copies/extractions; not production evidence. Self and explanatory README excluded. Text portable hashes normalize CRLF to LF; binaries hash exact bytes. Original source archive/deck identities are in README/SLIDE_TEXT. The local .gitattributes is packaging metadata, not an imported reference artifact; it is excluded.",
+  "files": [
+    {
+      "path": "dossier/TARK_SIH26007_MASTER_PROJECT_DOSSIER_V1_0.docx",
+      "bytes_at_import": 60507,
+      "import_raw_sha256": "c6225835f0440f7b673a7b0db935c7bfc0019062a86e686a83a5c5756f856c88",
+      "portable_hash_mode": "EXACT_BYTES",
+      "portable_sha256": "c6225835f0440f7b673a7b0db935c7bfc0019062a86e686a83a5c5756f856c88"
+    },
+    {
+      "path": "dossier/TARK_SIH26007_MASTER_PROJECT_DOSSIER_V1_0.pdf",
+      "bytes_at_import": 42998,
+      "import_raw_sha256": "9ace06d3217cc9c9ea0f42703ba7ded0ab20a7f62a1bacdc04e7d51065b6300a",
+      "portable_hash_mode": "EXACT_BYTES",
+      "portable_sha256": "9ace06d3217cc9c9ea0f42703ba7ded0ab20a7f62a1bacdc04e7d51065b6300a"
+    },
+    {
+      "path": "dossier/TARK_SIH26007_MASTER_PROJECT_INDEX.md",
+      "bytes_at_import": 3284,
+      "import_raw_sha256": "3a37fded450c82ff506cfd86b67bd69579ad4df730f50c1c28d3b334766bdeae",
+      "portable_hash_mode": "CRLF_TO_LF",
+      "portable_sha256": "66015e2e70ad00e3033cf84c5b74149755940aebde49d289ff7ff3a824c14829"
+    },
+    {
+      "path": "electrical/HOLD_REGISTER.md",
+      "bytes_at_import": 4037,
+      "import_raw_sha256": "85018f1263d39b6675eb739124ca2a8fac9f2989bfb9825004782321d536a08c",
+      "portable_hash_mode": "CRLF_TO_LF",
+      "portable_sha256": "9f59fc4d73b3687ae3b259f703f727ffde8b3eba553b2ee5b0651358fd2895a4"
+    },
+    {
+      "path": "electrical/NODE_TABLE.md",
+      "bytes_at_import": 3090,
+      "import_raw_sha256": "d969cfbb878fb98baf431122264e2e907383af02b229581f276c07c0b99db753",
+      "portable_hash_mode": "CRLF_TO_LF",
+      "portable_sha256": "a25e89fc3a4242fd777175262596711d7523055ab31d4dd295beb26e6d38c750"
+    },
+    {
+      "path": "electrical/SOURCE_REGISTER.md",
+      "bytes_at_import": 7853,
+      "import_raw_sha256": "a4ef984a322fe6cec7fce70f0c17cf9ec34aafa67e7a9688a5d59a1e928c1b3b",
+      "portable_hash_mode": "CRLF_TO_LF",
+      "portable_sha256": "a4ef984a322fe6cec7fce70f0c17cf9ec34aafa67e7a9688a5d59a1e928c1b3b"
+    },
+    {
+      "path": "electrical/TARK_SIH26007_CANONICAL_CONNECTIVITY.json",
+      "bytes_at_import": 89691,
+      "import_raw_sha256": "10e1fb411f0e55f16bfbb43cab67ed0b2b065dce33242ba09aa3d6c1b0b2361d",
+      "portable_hash_mode": "CRLF_TO_LF",
+      "portable_sha256": "2c65b4189952021e88cb812474009678d58504981b81a40fd8f4dcdb40ffbcf0"
+    },
+    {
+      "path": "electrical/TARK_SIH26007_INDEPENDENT_EXPORT_AUDIT.md",
+      "bytes_at_import": 6432,
+      "import_raw_sha256": "0faf017cbc7472618b44c8eabbc4e49d2d5b7e0feb57cbb6a51389cbd7da6b25",
+      "portable_hash_mode": "CRLF_TO_LF",
+      "portable_sha256": "dedf0bbf19b35d5b6c3a2bc27fe32d68b7a9e128a85533a81f03d1eed0531737"
+    },
+    {
+      "path": "electrical/TARK_SIH26007_MASTER_ELECTRICAL_SCHEMATIC_SET.pdf",
+      "bytes_at_import": 44035,
+      "import_raw_sha256": "6c3905cb64bef9ea4c62979decc56dc8df24764304bc78ab145b6d9dbd01bfc4",
+      "portable_hash_mode": "EXACT_BYTES",
+      "portable_sha256": "6c3905cb64bef9ea4c62979decc56dc8df24764304bc78ab145b6d9dbd01bfc4"
+    },
+    {
+      "path": "electrical/TARK_SIH26007_PCB_INTERFACE_DESIGN_DEFINITION.md",
+      "bytes_at_import": 6500,
+      "import_raw_sha256": "8fa76bb1dac490b2d34db793e92c9629e61c4354c3ea2909c0b71ec8ba2b0cbb",
+      "portable_hash_mode": "CRLF_TO_LF",
+      "portable_sha256": "8fa76bb1dac490b2d34db793e92c9629e61c4354c3ea2909c0b71ec8ba2b0cbb"
+    },
+    {
+      "path": "electrical/TARK_SIH26007_PROJECT_ERC_REPORT.md",
+      "bytes_at_import": 2541,
+      "import_raw_sha256": "80f3b0197758c691e2159870a0ebfb619b7df376870dca79007a55c2734fc9fd",
+      "portable_hash_mode": "CRLF_TO_LF",
+      "portable_sha256": "f4f320a8d490d6f9a53f9623bec86763c299f99e5628aa6133f7579b1a13496c"
+    },
+    {
+      "path": "film/FINAL_NARRATION.txt",
+      "bytes_at_import": 3499,
+      "import_raw_sha256": "79362ca283953388d18d3c8714e53242fd8b2fb29bac33bd02806bcf5bf69f11",
+      "portable_hash_mode": "CRLF_TO_LF",
+      "portable_sha256": "731aea20c6cf480aac1532444207226f78cfc19617f27161aa12c170d39c3db8"
+    },
+    {
+      "path": "film/production.json",
+      "bytes_at_import": 26294,
+      "import_raw_sha256": "85e3b3c722d82c12df780ed39235709b35d41351b48d124df76b4efec1de9d7d",
+      "portable_hash_mode": "CRLF_TO_LF",
+      "portable_sha256": "1ae938422e8d7ebcd216afc79d3ecc65ad45c8f7725fa9bd27805863c6a8826c"
+    },
+    {
+      "path": "film/SYNC_QA.json",
+      "bytes_at_import": 7128,
+      "import_raw_sha256": "36aa255f838668cfd033855f521078e418f5cde5a144de3ba6226ed50738215a",
+      "portable_hash_mode": "CRLF_TO_LF",
+      "portable_sha256": "84da7805144c18040798de3c2d95b234bbf9582e2fcfd1549312f733ec055f9c"
+    },
+    {
+      "path": "film/TARK_SIH26007_LIAM_SYNCED.srt",
+      "bytes_at_import": 6156,
+      "import_raw_sha256": "bef51ef0a810c9ea67e2fccdfe053bab53f247043295d521c4d1d6a7a13a483c",
+      "portable_hash_mode": "CRLF_TO_LF",
+      "portable_sha256": "1dea1685221671e360fbcaa0bd508727b1b746f3bee917776dcbf908d86b9eaa"
+    },
+    {
+      "path": "film/TECHNICAL_SCOPE.md",
+      "bytes_at_import": 3254,
+      "import_raw_sha256": "3e297f4dc26251fc34a1680bae22a47e5864113efce774f24488e9b1b7b5ecbc",
+      "portable_hash_mode": "CRLF_TO_LF",
+      "portable_sha256": "a0c9adb72f3440ffde544642d134bf273b347618ed0e462df55d680b64b29744"
+    },
+    {
+      "path": "film/visual_cues.json",
+      "bytes_at_import": 8608,
+      "import_raw_sha256": "65edddfb63a5550590b77336c5f9e2df59cca4d96fd272fb26123db0fdf05829",
+      "portable_hash_mode": "CRLF_TO_LF",
+      "portable_sha256": "f4e7b8c61f25fb624d56ba507b94abc258b5bef51d2170f782ba45970303e931"
+    },
+    {
+      "path": "presentation/SLIDE_TEXT.md",
+      "bytes_at_import": 32094,
+      "import_raw_sha256": "70aaf6d0d2f2c2cea7c79bb03005bb0f0cb1876b1668cd0b7f258cb826e4f7b2",
+      "portable_hash_mode": "CRLF_TO_LF",
+      "portable_sha256": "70aaf6d0d2f2c2cea7c79bb03005bb0f0cb1876b1668cd0b7f258cb826e4f7b2"
+    },
+    {
+      "path": "research/SIMULATION2_VERIFICATION.md",
+      "bytes_at_import": 2175,
+      "import_raw_sha256": "fadda3328a809a407db201ef3ef2ed30482c4dfd5796cd964f2f8e00b09e72b7",
+      "portable_hash_mode": "CRLF_TO_LF",
+      "portable_sha256": "fadda3328a809a407db201ef3ef2ed30482c4dfd5796cd964f2f8e00b09e72b7"
+    }
+  ]
+}

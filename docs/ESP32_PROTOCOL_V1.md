@@ -1,4 +1,12 @@
-# TARK Pi ↔ ESP32 protocol — current version 2
+# Historical protocol document (retained filename)
+
+> SUPERSEDED BY PROTOCOL V2 — NOT AUTHORITATIVE FOR CURRENT RELEASE.
+> Use [ESP32_PROTOCOL_V2.md](ESP32_PROTOCOL_V2.md).
+> The body below is the Prompt-2 V2 migration snapshot formerly held under
+> the V1 filename; it is not an operative V1 compatibility specification.
+> Historical text is retained verbatim below.
+
+## Archived body: TARK Pi ↔ ESP32 protocol — current version 2
 
 This is the sole current wire contract. The historical filename is retained
 for existing links; **V1 is superseded and rejected**, not auto-detected or

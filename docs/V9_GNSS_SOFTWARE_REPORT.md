@@ -1,5 +1,11 @@
 # V9 Vehicle GNSS and Live Map Software Report
 
+> HISTORICAL BASELINE — SUPERSEDED BY LATER RED-TEAM / CORRECTION RELEASE.
+> Retained as a dated record, not current completion or protocol authority.
+> Use [R1 release index](TARK_RELEASE_INDEX.md),
+> [Protocol V2](ESP32_PROTOCOL_V2.md) and
+> [supersession register](TARK_SUPERSESSION_REGISTER.md).
+
 ## Existing foundation reused
 
 R9 already provided the India-first MapLibre map, browser-device location separation, a server-side reverse-geocoder and route-provider boundary, local-frame radar overlay, and an observation-only HMI. The former vehicle-location endpoint truthfully returned no connected receiver.

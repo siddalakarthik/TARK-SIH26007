@@ -1,5 +1,11 @@
 # V9 Final Control-Stack Software Freeze
 
+> HISTORICAL BASELINE — SUPERSEDED BY LATER RED-TEAM / CORRECTION RELEASE.
+> Retained as a dated record, not current completion or protocol authority.
+> Use [R1 release index](TARK_RELEASE_INDEX.md),
+> [Protocol V2](ESP32_PROTOCOL_V2.md) and
+> [supersession register](TARK_SUPERSESSION_REGISTER.md).
+
 > Superseded test evidence: the 2026-09-20 closure pass adds the documented
 > LD2450 target-report decoder, real-source gating and an explicit encoder
 > count contract. See `FINAL_SOFTWARE_COMMUNICATION_CLOSURE_REPORT.md` for the

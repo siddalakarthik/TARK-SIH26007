@@ -1,7 +1,7 @@
 # Protocol implementation
 
 The current, explicitly approved **V2** contract is in
-[the retained protocol specification](ESP32_PROTOCOL_V1.md). V1 frames are
+[Protocol V2](ESP32_PROTOCOL_V2.md). V1 frames are
 rejected. There is one Python codec/client and one firmware codec/service;
 shared vectors cover both. Envelope framing remains COBS + CRC32C + canonical
 CBOR. Sessions, strict response correlation, finite numeric compatibility and

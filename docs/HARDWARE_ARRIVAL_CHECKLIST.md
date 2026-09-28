@@ -2,13 +2,17 @@
 
 ## Universal rule
 
-Keep traction isolated. Use the released schematic, V2 manual and exact purchased documentation to identify every board and connector. Do not infer terminal orientation, voltage, wire size, fuse value or E-stop behavior from software. Record part number, revision, serial number, photo, owner and date before connecting it.
+Keep traction isolated. Start with the [controlled five-sheet design and HOLDs](../release/references/README.md)
+and [next-phase gates](PHYSICAL_VALIDATION_NEXT_PHASE.md). Older manual/wiring
+instructions do not override these HOLDs. This is not an energization release.
+Identify every purchased board/connector; do not infer orientation, voltage,
+wire size, fuse value or E-stop behavior from software. Record identity and evidence.
 
 | Component | First software selection | First verification | Do not connect or claim yet |
 |---|---|---|---|
 | Raspberry Pi 4 | `simulation` until OS, storage and controlled logic rail are verified | boot, hostname, software/configuration hash, local API | traction or unknown sensor VCC |
 | ESP32-S3 DevKitC-1 | firmware build only after exact board docs | enumerate verified USB port, flash, boot identity, STATUS and Phase 1 disabled output | MDD10A/motor control, E-stop substitution |
-| HLK-LD2450 | raw serial capture first | actual board label, serial device, 256000 8N1 capture, preserve raw bytes | normalized real detections until vendor frame decoder is reviewed |
+| HLK-LD2450 | raw serial capture first, only after separate authorization | actual board label, selected serial device, 256000 8N1 capture, preserve raw bytes | software decoder exists; purchased-device format/identity must still be confirmed |
 | MDD10A | `NOT_CONNECTED_PHASE_2` | model/terminal labels match V2 and purchased manual | traction feed/motor output; no PWM claim |
 | motors | `NOT_CONNECTED_PHASE_2` | left/right label and terminal documentation | powered movement |
 | encoders | `NOT_CONNECTED_PHASE_2` | connector labels and actual output/interface documentation | VCC, because it remains TBD/VERIFY; ground-speed claim |

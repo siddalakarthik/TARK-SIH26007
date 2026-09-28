@@ -1,5 +1,15 @@
 # TARK universal access and public deployment
 
+## Current release record
+
+[Recorded public software demo](https://tark-sih26007-demo.onrender.com)
+is simulation/monitoring only. The master dossier records owner-reported access
+and the film records earlier genuine public UI captures. Prompt 4 did not
+contact the service, verify WSS, change deployment or establish its current
+commit. The local [R1 release](TARK_RELEASE_MANIFEST.md) is not pushed/deployed.
+Earlier account/access limitations in historical reports describe their dates,
+not evidence that this recorded URL does not exist.
+
 TARK is one same-origin FastAPI application: the browser loads the React build, REST endpoints and WebSocket from the hostname in its address bar. The frontend uses relative `/api/...` paths and derives `ws://` or `wss://` from the current page protocol and host. It does not embed `localhost`, an IP address, or port 8000 in production transport code.
 
 ## Deployment profiles
@@ -51,4 +61,8 @@ Map style configuration is optional. The HMI defaults to OpenFreeMap Liberty wit
 
 ## Verification limits
 
-This repository has been locally built and browser-automated on a desktop viewport and responsive emulated viewports. A public URL, real WSS through a provider, custom DNS, an external network, real Chrome/Edge/Firefox installations, and physical iPhone/Android devices have **not** been verified because no hosting/DNS account or external test device was provided.
+Earlier reports record local browser/emulated-viewport checks and later public
+demo captures. R1 re-runs local software tests, TypeScript and production build;
+it does not newly verify public availability, WSS, custom DNS, external networks
+or physical mobile devices. Existing provider instructions above are retained
+operating guidance, not a new platform availability or pricing check.

@@ -1,5 +1,11 @@
 # TARK SIH26007 — Final Pre-Hardware Software Completion Report
 
+> HISTORICAL BASELINE — SUPERSEDED BY LATER RED-TEAM / CORRECTION RELEASE.
+> Retained as a dated record, not current completion or protocol authority.
+> Use [R1 release index](TARK_RELEASE_INDEX.md),
+> [Protocol V2](ESP32_PROTOCOL_V2.md) and
+> [supersession register](TARK_SUPERSESSION_REGISTER.md).
+
 **Date:** 2026-09-15  
 **Classification:** research prototype; not mine-certified; not a safety-certified motion system.
 

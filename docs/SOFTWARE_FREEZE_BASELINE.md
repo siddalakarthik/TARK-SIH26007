@@ -1,5 +1,11 @@
 # TARK SIH26007 Software Freeze Baseline
 
+> HISTORICAL BASELINE — SUPERSEDED BY LATER RED-TEAM / CORRECTION RELEASE.
+> Retained as a dated record, not current completion or protocol authority.
+> Use [R1 release index](TARK_RELEASE_INDEX.md),
+> [Protocol V2](ESP32_PROTOCOL_V2.md) and
+> [supersession register](TARK_SUPERSESSION_REGISTER.md).
+
 Freeze date: 2026-09-20  
 Frozen software commit: `2d319e7` — `FINALIZE SOFTWARE AND COMMUNICATION STACK`  
 Previous QA commit: `962365e` — `Fix confirmed public QA issues`  

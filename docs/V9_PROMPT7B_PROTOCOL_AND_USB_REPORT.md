@@ -1,5 +1,11 @@
 # V9 Prompt 7B — Firmware Responses and Bidirectional Boundary
 
+> HISTORICAL BASELINE — SUPERSEDED BY LATER RED-TEAM / CORRECTION RELEASE.
+> Retained as a dated record, not current completion or protocol authority.
+> Use [R1 release index](TARK_RELEASE_INDEX.md),
+> [Protocol V2](ESP32_PROTOCOL_V2.md) and
+> [supersession register](TARK_SUPERSESSION_REGISTER.md).
+
 ## Gap closed
 
 Task 7A froze framing and COMMAND decoding but intentionally deferred

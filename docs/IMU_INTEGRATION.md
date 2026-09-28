@@ -2,7 +2,10 @@
 
 ## Status
 
-The BNO055 software contract and dormant I²C boundary are **implemented** and unit-tested with simulation fixtures. They are not functionally verified against hardware, validated for vehicle dynamics, calibrated, or physically verified.
+The BNO055 contract, concrete optional-library acquisition boundary and
+configuration/identity-gated TarkSystem lifecycle are implemented and tested
+with mocks/fixtures. They remain dormant when unconfigured/unverified. This
+is not hardware, mounted-dynamics or calibration verification.
 
 ## Contract and states
 

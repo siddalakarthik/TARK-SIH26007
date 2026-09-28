@@ -1,5 +1,11 @@
 # TARK SIH26007 — R9 Map, Camera and Software Fix Report
 
+> HISTORICAL BASELINE — SUPERSEDED BY LATER RED-TEAM / CORRECTION RELEASE.
+> Retained as a dated record, not current completion or protocol authority.
+> Use [R1 release index](TARK_RELEASE_INDEX.md),
+> [Protocol V2](ESP32_PROTOCOL_V2.md) and
+> [supersession register](TARK_SUPERSESSION_REGISTER.md).
+
 ## Release boundary
 
 This is a software-only, research-prototype presentation and integration pass. Traction remains `DISABLED_PHASE_1`; motor outputs remain zero; the web application remains monitoring-only. No physical sensor, motor, encoder, E-stop, GNSS, camera, ESP32 or LD2450 claim is made by this release.

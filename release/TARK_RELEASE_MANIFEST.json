@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "project": "TARK",
+  "problem_code": "SIH26007",
+  "release_designation": "TARK PHASE-1 SOFTWARE EVIDENCE RELEASE R1",
+  "release_type": "SOFTWARE-EVIDENCE BASELINE / TRACTION DISABLED",
+  "release_date": "2026-09-28",
+  "software_git_commit": "bf87304ab2080452d5446fb4b6bbfcb945cf74ea",
+  "branch": "tark/project-convergence-release",
+  "release_commit_ref": "refs/tags/tark-software-evidence-r1-2026-09-28^{commit}",
+  "release_identity_note": "The exact software commit is pinned. The annotated local tag resolves the documentation/release commit after the single authorized commit; its own future hash is not embedded self-referentially. Absent tag means unreleased.",
+  "prompt_commits": {
+    "prompt1": "8bff0654e2d6db3ff8414c011057274435b6b228",
+    "prompt2": "96bf72bbfea88834c173000b271fd016b6b206e9",
+    "prompt3": "bf87304ab2080452d5446fb4b6bbfcb945cf74ea"
+  },
+  "protocol_version": 2,
+  "configuration": {
+    "path": "config/phase1.json",
+    "identifier": "UNRELEASED-PHASE1",
+    "default_mode": "simulation",
+    "sha256_crlf_normalized": "6a887ae7ad0e3099049d68d37b3d27c8ab931b48a5a9cce18378de661e0205c0",
+    "value_fingerprint_excluding_runtime_mode": "f6e8471fae3618d38f7892e67f2d41eb37e155d5848bf51195e4dc06b373696e",
+    "calibration": "PARAMETERIZED / NOT VALIDATED"
+  },
+  "evidence": {
+    "path": "evidence/prompt3",
+    "schema_version": 1,
+    "source_mode": "TEST_FIXTURE",
+    "scenario_count": 20,
+    "repetitions": 150,
+    "artifact_count": 85,
+    "inventoried_bytes_excluding_hashes_json": 971433,
+    "package_fingerprint_method": "SHA-256 of exact evidence/prompt3/hashes.json bytes",
+    "package_fingerprint": "943c342d763f88b5fff999559447f21acb51f4d1498def0be4d7c2da16014b1d",
+    "manifest_sha256": "563e4c01d24bc84885d0db267e315d9e831e4cb0ca07c5b0731f2c912c55c613",
+    "verification": "PASS",
+    "provenance_note": "Original manifest retains precommit Prompt-2 HEAD and dirty=true; source fingerprints match software commit bf87304. Prompt 4 changes no production behavior and does not regenerate evidence."
+  },
+  "tests": {
+    "backend": 322,
+    "frontend": 39,
+    "frontend_files": 9,
+    "protocol_interoperability": 68,
+    "replay": 35,
+    "prompt1_integrity": 65,
+    "evidence_harness": 70,
+    "shared_protocol_vectors": 36,
+    "firmware_host": "PASS — fresh strict GCC protocol/service plus C/Python interoperability fixture",
+    "typescript": "PASS",
+    "production_build": "PASS",
+    "counts_note": "Protocol/replay/integrity/harness counts are subsets of backend; do not sum them as independent totals.",
+    "record": "docs/TEST_REPORT.md"
+  },
+  "traction": "DISABLED_PHASE_1",
+  "permitted_speed_mps": 0,
+  "left_command": 0,
+  "right_command": 0,
+  "hardware_access": false,
+  "physical_validation_status": "PHYSICAL-VALIDATION-PENDING",
+  "hardware_commissioning_status": "PHYSICAL-VALIDATION-PENDING",
+  "electrical_release_status": "CONTROLLED DESIGN / PRE HARDWARE COMMISSIONING — NOT RELEASED FOR ENERGIZATION OR PCB FABRICATION",
+  "known_hold_status": {
+    "count": 27,
+    "register": "release/references/electrical/HOLD_REGISTER.md",
+    "closed_in_this_release": 0
+  },
+  "public_demo": {
+    "url": "https://tark-sih26007-demo.onrender.com",
+    "scope": "SIMULATION / MONITORING ONLY",
+    "evidence": "Historical owner-reported availability and film capture records",
+    "availability_verified_this_pass": false,
+    "release_pushed": false,
+    "release_deployed": false
+  },
+  "presentation": {
+    "ppt": "PATCH SHEET ONLY — BINARY NOT MODIFIED",
+    "film": "CLAIM AUDIT COMPLETE — BINARY NOT MODIFIED"
+  },
+  "claim_alignment": {
+    "audited": 60,
+    "kept": 37,
+    "corrected": 22,
+    "historical": 1,
+    "hold_pending": 10
+  },
+  "old_freeze_tag": {
+    "name": "tark-software-freeze-2026-09-20",
+    "object": "94b149a50d77c45d3a8b962781c503a1055a0c8f",
+    "changed": false
+  },
+  "limitations": [
+    "Provisional nearest-radar-target envelope; not calibrated free-space observability.",
+    "Zero assumed production vehicle speed; no measured braking/deceleration.",
+    "TTC helper is not production policy; WARN semantics not executable.",
+    "No production EKF/multisensor fusion; external studies are research only.",
+    "Board-specific USB, unique boot identity, scheduler and hardware watchdog binding remain pending.",
+    "No physical sensor, encoder, motor, E-stop, K1, vehicle, fog or mine-certification claim.",
+    "Historical PPT/film binaries remain unchanged; patch documents are not corrected binaries.",
+    "Software evidence scope only; not a zero-bugs, industrial deployment, autonomy or collision-prevention guarantee."
+  ]
+}

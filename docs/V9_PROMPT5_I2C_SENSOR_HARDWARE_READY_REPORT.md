@@ -1,5 +1,11 @@
 # V9 Prompt 5 — I²C Sensor Hardware-Ready Report
 
+> HISTORICAL BASELINE — SUPERSEDED BY LATER RED-TEAM / CORRECTION RELEASE.
+> Retained as a dated record, not current completion or protocol authority.
+> Use [R1 release index](TARK_RELEASE_INDEX.md),
+> [Protocol V2](ESP32_PROTOCOL_V2.md) and
+> [supersession register](TARK_SUPERSESSION_REGISTER.md).
+
 ## Architecture
 
 One optional `I2cTransport` now owns selected Linux bus/address open, close, byte/block read/write, bounded errors and clean release. One `I2cSensorWorker` supplies bounded polling/retry and duplicate-worker prevention. Both BNO055 and MLX90640 adapters retain their normalized contracts and may start a real worker only after explicit identity verification evidence is recorded.

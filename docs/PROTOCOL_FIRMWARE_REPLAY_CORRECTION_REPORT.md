@@ -1,5 +1,10 @@
 # Protocol, firmware supervision and replay correction
 
+> SCOPED CORRECTION EVIDENCE — historical run counts and forward-looking
+> statements below describe this correction stage. Its source/evidence remains
+> applicable as recorded; [R1](TARK_RELEASE_MANIFEST.md) controls current identity,
+> combined counts and remaining scope. [Protocol V2](ESP32_PROTOCOL_V2.md) is current.
+
 ## A. Baseline and scope
 
 Started: 2026-09-26. Last verification: 2026-09-27.

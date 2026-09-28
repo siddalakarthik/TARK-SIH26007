@@ -2,16 +2,27 @@
 
 ## Host protocol test
 
-From `tark` on a machine with GCC:
+From the repository root in the installed project Python environment, with
+GCC available and hardware configuration unset:
 
 ```powershell
-gcc -std=c11 -Wall -Wextra -Werror -I firmware/esp32/main/protocol -I firmware/esp32/main/command firmware/esp32/tests/host_test.c firmware/esp32/main/protocol/tark_protocol.c firmware/esp32/main/command/command_supervisor.c -o firmware/esp32/tests/host_protocol_tests.exe
-.\firmware\esp32\tests\host_protocol_tests.exe
+python -B -m pytest -q -p no:cacheprovider backend/tests/test_protocol_correctness.py
 ```
 
-## ESP-IDF build and flash
+The existing fixture compiles fresh protocol, service/supervisor and interop
+executables with all required sources using `-std=c11 -Wall -Wextra -Werror`.
+It executes both host suites and Python/C cases. The older one-line link
+command omitted required implementation sources and is superseded by this
+tested workflow. On POSIX, `sh firmware/esp32/tests/run_host_tests.sh` is also
+provided. Report application-control denials rather than disabling OS policy.
 
-After installing the ESP-IDF version approved for the purchased ESP32-S3 board and exporting its environment:
+## ESP-IDF build and flash — future gated hardware work
+
+Not executed or authorized by the software-evidence release. The current
+entrypoint stays UNAVAILABLE_HARDWARE_BINDING_PENDING. A reviewed board
+RX/TX, unique boot identity, scheduling/disconnect and hardware-watchdog binding
+is required before claiming a communicating board. After separate approval,
+install the ESP-IDF version approved for that board and export its environment:
 
 ```powershell
 cd firmware/esp32
@@ -21,4 +32,3 @@ idf.py -p <verified_usb_serial_port> flash monitor
 ```
 
 `<verified_usb_serial_port>` must come from the actual board/USB enumeration. Do not guess a port or USB controller configuration. A successful build or flash is not physical traction validation.
-

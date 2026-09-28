@@ -2,7 +2,10 @@
 
 ## Status
 
-The MLX90640 32×24 frame contract and dormant I²C boundary are **implemented** with deterministic simulation fixtures. No real thermal device, temperature, optics, field of view or calibration has been verified.
+The MLX90640 32×24 frame contract, concrete optional-library acquisition and
+configuration/identity-gated TarkSystem lifecycle are implemented and tested
+with mocks/fixtures. They remain dormant when unconfigured/unverified. No
+real thermal device, temperature, optics, field of view or calibration is verified.
 
 ## Validity and health
 
