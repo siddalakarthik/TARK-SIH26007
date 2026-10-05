@@ -1,0 +1,69 @@
+{
+  "format": "TARK_R3_SYNTHETIC_1",
+  "notice": "Normalized synthetic data only. No actual image, physical fix, encoder pulse or sensor capture.",
+  "samples": {
+    "radar-a": {
+      "firmware_profile": "SYNTHETIC_CARTESIAN_PAYLOAD",
+      "frame_number": 1,
+      "points": [
+        {
+          "x_m": 1,
+          "y_m": 3,
+          "z_m": 0,
+          "radial_velocity_mps": -0.5
+        }
+      ]
+    },
+    "rgb-a": {
+      "frame_id": "rgb-fixture",
+      "width": 640,
+      "height": 480,
+      "pixel_format": "RGB",
+      "media_reference": "NO_REAL_IMAGE_SYNTHETIC_METADATA",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "thermal-a": {
+      "frame_id": "thermal-fixture",
+      "width": 160,
+      "height": 120,
+      "pixel_format": "Y16",
+      "media_reference": "NO_REAL_IMAGE_SYNTHETIC_METADATA",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "ffc_state": "UNKNOWN",
+      "radiometry": "UNAVAILABLE"
+    },
+    "imu-a": {
+      "report_id": 1,
+      "acceleration_m_s2": [
+        0,
+        0,
+        9.8
+      ]
+    },
+    "encoders-a": {
+      "left_count": 3,
+      "right_count": 4,
+      "interval_start_ns": 1,
+      "interval_end_ns": 100000001,
+      "invalid_edges": 0
+    },
+    "gnss-a": {
+      "fix_type": "RTK_FLOAT",
+      "latitude_deg": 17,
+      "longitude_deg": 78,
+      "horizontal_uncertainty_m": 2
+    },
+    "gnss-b": {
+      "fix_type": "RTK_FLOAT",
+      "latitude_deg": 17.001,
+      "longitude_deg": 78.001,
+      "horizontal_uncertainty_m": 3
+    },
+    "gnss-base": {
+      "fix_type": "STANDALONE",
+      "latitude_deg": 17,
+      "longitude_deg": 78,
+      "horizontal_uncertainty_m": 5
+    }
+  }
+}

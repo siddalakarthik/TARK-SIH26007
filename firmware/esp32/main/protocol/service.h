@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "tark_protocol.h"
+#include "response.h"
 #include "../command/command_supervisor.h"
 
 typedef void (*tark_tx_callback_t)(const uint8_t *frame,size_t length,void *context);
@@ -15,3 +16,6 @@ void tark_protocol_service_receive(tark_protocol_service_t *service,const uint8_
 void tark_protocol_service_status(tark_protocol_service_t *service,uint64_t sequence,uint64_t now_ns);
 void tark_protocol_service_tick(tark_protocol_service_t *service,uint64_t now_ns);
 void tark_protocol_service_disconnect(tark_protocol_service_t *service);
+/* Observation-only emission. Caller supplies source sequence; no motor output.
+ * The active service supplies configuration/session, not untrusted sensor data. */
+bool tark_protocol_service_encoder(tark_protocol_service_t *service,uint32_t sequence,uint64_t now_ns,const tark_encoder_observation_t *sample);

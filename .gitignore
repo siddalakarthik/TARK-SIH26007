@@ -7,6 +7,19 @@ frontend/node_modules/
 frontend/dist/
 frontend/node-compile-cache/
 frontend/tsconfig.tsbuildinfo
+
+# Local QA / demonstration outputs (versioned research evidence stays tracked)
+work/
+.coverage
+.coverage.*
+htmlcov/
+coverage/
+frontend/coverage/
+.ruff_cache/
+.mypy_cache/
+.DS_Store
+Thumbs.db
+*.tmp
 firmware/esp32/tests/*.exe
 .env
 *.db

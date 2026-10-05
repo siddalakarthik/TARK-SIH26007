@@ -2,6 +2,43 @@
 
 Perception-aware safety-assistance research for mine vehicles in low visibility.
 
+## Current: R3 SIH pre-selection software baseline
+
+Start with [the pre-selection freeze](docs/TARK_R3_PRESELECTION_FREEZE.md),
+[three flagship demonstrations](docs/SIH_FLAGSHIP_DEMOS.md), and the current
+[R3 reasoning report](docs/R3_REASONING_REPORT.md). R3 adds a separately labelled,
+evidence-qualified research advisory; the legacy decision/control path is retained.
+Conditional R3 TTC uses qualified successive positions under explicit research
+assumptions, not Doppler as a velocity vector. Neither advisory nor browser can
+command motion. Traction remains `DISABLED_PHASE_1`.
+
+```powershell
+# From the existing installed project environment; no hardware required
+.\.venv\Scripts\python.exe scripts/run_sih_demos.py --scenario all
+$env:TARK_HARDWARE_PROFILE='R3_PI5_ADVISORY'
+$env:TARK_R3_FIXTURE_PATH=(Resolve-Path 'data\fixtures\r3_sources_v1.json').Path
+.\scripts\run_demo.ps1
+```
+
+Open `http://localhost:8000/#/safety`; Driver is `/#/hmi`, Diagnostics
+`/#/diagnostics`, Replay `/#/replay`. The dashboard fixture is intentionally
+uncommissioned/UNKNOWN, not the positive-envelope CLI research demo. See
+[local setup and optional Windows dependency selection](docs/R2_WEBSITE_RUN.md).
+
+Tests: `python -B -m pytest backend/tests -q -p no:cacheprovider`; from
+`frontend`: `pnpm test`, `pnpm run lint:types`, `pnpm run build`.
+Artifacts go outside the repository to `../work/sih_preselection`; existing
+outputs are never overwritten. Choose a fresh `--output` to repeat a run.
+
+**Claim boundary:** R3 normalized-evidence reasoning/replay is software verified
+using deterministic synthetic fixtures. Hardware, Hailo inference, real fog,
+sensor synchronization, HEMM braking and mine certification remain unverified.
+See [R3 foundation/vendor boundaries](docs/R3_SOFTWARE_INTEGRATION.md) and
+[physical work](docs/PHYSICAL_VALIDATION_NEXT_PHASE.md). No public deployment is
+updated by the Git freeze alone.
+
+## Historical R1 release (retained, not current R3 status)
+
 **TARK PHASE-1 SOFTWARE EVIDENCE RELEASE R1** is a controlled software-evidence
 baseline, not an as-built vehicle release. `DISABLED_PHASE_1`: permitted speed,
 left command and right command are always zero.

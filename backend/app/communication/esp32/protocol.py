@@ -16,8 +16,8 @@ import cbor2
 from app.domain.models import BoundedCommand, CommandResult
 
 MAGIC=0x544B; VERSION=2
-COMMAND=1; ACK=2; NACK=3; HEARTBEAT=4; STATUS=5; SESSION_OPEN=6; SESSION_READY=7
-MESSAGE_NAMES={COMMAND:'COMMAND',ACK:'ACK',NACK:'NACK',HEARTBEAT:'HEARTBEAT',STATUS:'STATUS',SESSION_OPEN:'SESSION_OPEN',SESSION_READY:'SESSION_READY'}
+COMMAND=1; ACK=2; NACK=3; HEARTBEAT=4; STATUS=5; SESSION_OPEN=6; SESSION_READY=7; OBSERVATION=8
+MESSAGE_NAMES={COMMAND:'COMMAND',ACK:'ACK',NACK:'NACK',HEARTBEAT:'HEARTBEAT',STATUS:'STATUS',SESSION_OPEN:'SESSION_OPEN',SESSION_READY:'SESSION_READY',OBSERVATION:'OBSERVATION'}
 MAX_SEQUENCE=0xFFFFFFFF; MAX_UINT64=0xFFFFFFFFFFFFFFFF
 MAX_PAYLOAD=512; MAX_FRAME=640; HEADER=struct.Struct('!HBBIQQ')
 MAX_COMMAND_LIFETIME_NS=500_000_000; MAX_PENDING=64
@@ -107,6 +107,18 @@ def encode_command(command:BoundedCommand,session_id:str)->bytes:
 def encode_heartbeat(sequence:int,timestamp_ns:int,configuration_hash:str,session_id:str)->bytes:
     return encode_message(HEARTBEAT,sequence,timestamp_ns,{'configuration_hash':configuration_hash,'protocol_version':VERSION,'session_id':session_id})
 
+def validate_encoder_observation(payload:dict,timestamp_ns:int)->None:
+    fields={'kind','node_id','source_id','session_id','left_count','right_count','drop_count','fault_bits','source_mode',
+            'invalid_edges','lost_edges','source_counter','interval_end_ns','interval_start_ns','calibration_id','configuration_hash'}
+    if set(payload)!=fields or payload['kind']!='ENCODER_V1':raise ProtocolError('INVALID_OBSERVATION_SCHEMA')
+    if not token(payload['node_id'],16) or not token(payload['source_id'],32) or not hex_token(payload['session_id'],48):raise ProtocolError('INVALID_OBSERVATION_IDENTITY')
+    if not token(payload['configuration_hash'],64) or (payload['calibration_id'] is not None and not token(payload['calibration_id'],64)):raise ProtocolError('INVALID_OBSERVATION_CONFIG')
+    if payload['source_mode'] not in {'REAL','SIMULATION'}:raise ProtocolError('INVALID_OBSERVATION_MODE')
+    if any(type(payload[k]) is not int or not -(2**31)<=payload[k]<2**31 for k in ('left_count','right_count')):raise ProtocolError('INVALID_ENCODER_COUNT')
+    if any(not uint(payload[k],MAX_SEQUENCE) for k in ('drop_count','fault_bits','invalid_edges','source_counter')):raise ProtocolError('INVALID_OBSERVATION_COUNTER')
+    if payload['lost_edges'] is not None and not uint(payload['lost_edges'],MAX_SEQUENCE):raise ProtocolError('INVALID_OBSERVATION_COUNTER')
+    if not uint(payload['interval_start_ns']) or not uint(payload['interval_end_ns']) or not payload['interval_start_ns']<payload['interval_end_ns']<=timestamp_ns:raise ProtocolError('INVALID_OBSERVATION_TIME')
+
 def decode_frame(frame:bytes)->tuple[int,dict[str,Any]]:
     if len(frame)>MAX_FRAME:raise ProtocolError('frame too large')
     if not frame.startswith(b'\0') or not frame.endswith(b'\0'):raise ProtocolError('missing delimiter')
@@ -184,6 +196,7 @@ class ESP32Client:
             for sequence in self.pending:self.terminal.append((sequence,'SUPERSEDED'))
             self.pending.clear();self.session_id=None;self.request_id=None;self.request_timestamp_ns=None;self.request_deadline_ns=None
             self.last_sequence=-1;self.last_feedback=None;self.last_exchange_ns=None;self.last_status_timestamp_ns=None
+            self.last_observation_sequence=None;self.last_observation_timestamp_ns=None;self.last_sensor_observation=None
     def expire_pending(self,now_ns:int)->list[int]:
         with self._lock:
             expired=[q for q,p in self.pending.items() if p.deadline_ns<=now_ns]
@@ -207,6 +220,14 @@ class ESP32Client:
         # Only the explicit in-process simulator offers synchronous replies.
         if isinstance(self.transport,ESP32ProtocolSimulator) and self.transport.last_response:
             self.receive(self.transport.last_response,now)
+    def open_observation_session(self,configuration_hash:str,now_ns:int)->None:
+        """Session negotiation only. R3 never submits a motor command."""
+        with self._lock:
+            if not token(configuration_hash,64):raise ProtocolError('INVALID_CONFIGURATION')
+            if self.configuration_hash not in {None,configuration_hash}:raise ProtocolError('CONFIGURATION_MISMATCH')
+            self.configuration_hash=configuration_hash
+            self.expire_pending(now_ns)
+            if self.session_id is None:self._open_session(now_ns)
     def submit(self,command:BoundedCommand,now_ns:int)->CommandResult:
         def rejected(reason):return CommandResult(accepted=False,reason=reason,sequence=command.sequence)
         with self._lock:
@@ -261,6 +282,16 @@ class ESP32Client:
                 or p['configuration_hash']!=self.configuration_hash or p['source_mode']!=source or not hex_token(p['session_id'],48)):
                 raise ProtocolError('INVALID_SESSION_RESPONSE')
             self.session_id=p['session_id'];self.request_id=None;self.request_deadline_ns=None;return None
+        if message==OBSERVATION:
+            validate_encoder_observation(p,envelope['timestamp_ns'])
+            if self.session_id is None or p['session_id']!=self.session_id or p['configuration_hash']!=self.configuration_hash or p['source_mode']!=source:raise ProtocolError('RESPONSE_IDENTITY_MISMATCH')
+            if self.last_observation_sequence is not None and q<=self.last_observation_sequence:raise ProtocolError('OLD_OBSERVATION')
+            if self.last_observation_timestamp_ns is not None and envelope['timestamp_ns']<=self.last_observation_timestamp_ns:raise ProtocolError('OLD_OBSERVATION_TIME')
+            self.last_observation_sequence=q;self.last_observation_timestamp_ns=envelope['timestamp_ns']
+            result=ESP32Feedback(message,q,envelope['timestamp_ns'],False,'OBSERVATION_ONLY',OUTPUT_STATE,p,'OBSERVATION')
+            self.last_sensor_observation=result
+            # Telemetry does not acknowledge a command or refresh last_exchange_ns.
+            return result
         if message not in {ACK,NACK,STATUS}:raise ProtocolError('unexpected ESP32 feedback message')
         fields={'reason','output_state','source_mode','session_id','configuration_hash'}
         if message in {ACK,NACK}:fields|={'accepted','applied_left','applied_right'}

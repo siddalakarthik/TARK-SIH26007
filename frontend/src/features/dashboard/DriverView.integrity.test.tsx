@@ -15,3 +15,14 @@ test('SI-06 TTC is explicitly not computed, not a generic N/A',()=>{
   render(<DriverView snapshot={snapshot}/>);
   expect(within(screen.getByText('TTC').parentElement!).getByText('NOT COMPUTED')).toBeInTheDocument();
 });
+test.each(['WARN','RESTRICT','UNKNOWN','STOP'] as const)('driver preserves %s and never offers motion authority',state=>{
+  render(<DriverView snapshot={{...snapshot,decision:{...snapshot.decision,state}}}/>);
+  expect(screen.getByText(state,{exact:true})).toBeInTheDocument();
+  expect(screen.getByText(/Keep traction disabled/)).toBeInTheDocument();
+  expect(screen.queryByRole('button')).not.toBeInTheDocument();
+});
+test('driver source status matches the existing ld2450 radar identity',()=>{
+  render(<DriverView snapshot={{...snapshot,sensors:[{device_id:'ld2450',source_mode:'SIMULATION',state:'ONLINE',age_ms:1,quality:1,reason:'TEST'}]}}/>);
+  expect(screen.getByText('Radar').parentElement).toHaveTextContent('Online');
+  expect(screen.getByText('Radar').parentElement).toHaveTextContent('SIMULATION');
+});

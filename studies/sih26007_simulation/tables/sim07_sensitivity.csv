@@ -1,0 +1,6 @@
+parameter,pearson_correlation,method,simulation_id,scenario_id,input_provenance,result_class
+delay_s,-0.08921300004908031,marginal Pearson correlation over declared independent uniform bounds,SIM-07,sim07_sensitivity-000001,ASSUMED_SENSITIVITY,SENSITIVITY_RESULT
+deceleration_mps2,0.2856982702005946,marginal Pearson correlation over declared independent uniform bounds,SIM-07,sim07_sensitivity-000002,ASSUMED_SENSITIVITY,SENSITIVITY_RESULT
+uncertainty_m,-0.02596222074043618,marginal Pearson correlation over declared independent uniform bounds,SIM-07,sim07_sensitivity-000003,ASSUMED_SENSITIVITY,SENSITIVITY_RESULT
+range_m,0.6072824256085726,marginal Pearson correlation over declared independent uniform bounds,SIM-07,sim07_sensitivity-000004,ASSUMED_SENSITIVITY,SENSITIVITY_RESULT
+speed_mps,-0.6490974811104703,marginal Pearson correlation over declared independent uniform bounds,SIM-07,sim07_sensitivity-000005,ASSUMED_SENSITIVITY,SENSITIVITY_RESULT

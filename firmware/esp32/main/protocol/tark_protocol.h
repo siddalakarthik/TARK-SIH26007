@@ -7,7 +7,7 @@
 #define TARK_PROTOCOL_VERSION 2u
 #define TARK_MAX_PAYLOAD 512u
 #define TARK_MAX_FRAME 640u
-typedef enum { TARK_COMMAND=1, TARK_ACK=2, TARK_NACK=3, TARK_HEARTBEAT=4, TARK_STATUS=5, TARK_SESSION_OPEN=6, TARK_SESSION_READY=7 } tark_message_type_t;
+typedef enum { TARK_COMMAND=1, TARK_ACK=2, TARK_NACK=3, TARK_HEARTBEAT=4, TARK_STATUS=5, TARK_SESSION_OPEN=6, TARK_SESSION_READY=7, TARK_OBSERVATION=8 } tark_message_type_t;
 typedef enum { TARK_OK=0, TARK_BAD_MAGIC, TARK_BAD_LENGTH, TARK_BAD_FRAME, TARK_BAD_CRC, TARK_BAD_VERSION, TARK_OVERSIZED, TARK_UNKNOWN_TYPE } tark_protocol_result_t;
 /* V2 retains the uint64 wire slots; all message sequences are uint32-bound. */
 typedef struct { uint8_t type; uint64_t sequence; uint64_t timestamp_ns; uint32_t payload_length; const uint8_t *payload; } tark_frame_t;

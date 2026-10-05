@@ -17,10 +17,14 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import StreamingResponse
 
 from app.config import Settings
+from app.flagship import flagship_snapshot
 from app.services.system import TarkSystem
 from app.services.runtime import RuntimeOwner, RuntimeUnavailable
 from app.replay.engine import ReplayConfigurationError, ReplayFormatError, replay_recording, replay_timeline
 from app.replay.store import RecordingError
+from app.r3.experiments import Experiment
+from app.r3.replay import recompute_evidence, recompute_advisory, experiment_summary
+from app.r3.runtime import r3_software_fingerprint
 from app.location import (DisabledReverseGeocoder, DisabledRouteProvider, NominatimReverseGeocoder,
                           OSRMRouteProvider, ProviderUnavailable, ReverseGeocodeRequest,
                           RouteRequest, validated_provider_url)
@@ -186,6 +190,56 @@ def create_app(settings: Settings | None = None, deployment: DeploymentConfig | 
     @app.get("/api/v1/status", dependencies=[Depends(require_access)])
     def system_status() -> dict: return latest_snapshot()
 
+    @app.get("/api/v1/flagship", dependencies=[Depends(require_access)])
+    def flagship_status(response: Response) -> dict:
+        response.headers["Cache-Control"] = "no-store"
+        return flagship_snapshot(settings.mode, latest_snapshot(), runtime.clock())
+
+    @app.get('/api/v2/r3/readiness', dependencies=[Depends(require_access)])
+    def r3_readiness(response:Response)->dict:
+        response.headers['Cache-Control']='no-store'
+        return latest_snapshot()['r3']
+
+    @app.get('/api/v2/r3/experiments', dependencies=[Depends(require_access)])
+    def r3_experiments()->list[dict]:
+        return system.r3.experiments.list()
+
+    @app.get('/api/v2/r3/advisory', dependencies=[Depends(require_access)])
+    def r3_advisory(response:Response)->dict:
+        response.headers['Cache-Control']='no-store'
+        return {'scope':'R3_ADVISORY','advisory':latest_snapshot()['r3']['advisory']}
+
+    @app.post('/api/v2/r3/experiments', dependencies=[Depends(require_recording_write)])
+    def r3_start_experiment(item:Experiment)->dict:
+        # Local engineering metadata only: never configuration or sensor input.
+        if system.recording_store.active_session_id is not None:
+            raise HTTPException(409,'Create the experiment before starting its recording')
+        if (item.hardware_profile!=system.r3.profile.profile_id or item.configuration_bundle!=system.r3.bundle.bundle_id
+                or item.software_version!=system.r3.bundle.software_version
+                or set(item.expected_sources)-set(system.r3.channel.profiles)
+                or set(item.calibration_bundle)!={key for keys in system.r3.bundle.calibration_bundle.values() for key in keys}):
+            raise HTTPException(409,'Experiment must match the current R3 software/configuration/calibration bundle')
+        try: return system.r3.experiments.start(item)
+        except ValueError as error: raise HTTPException(409,str(error)) from error
+
+    @app.post('/api/v2/r3/experiments/finish', dependencies=[Depends(require_recording_write)])
+    def r3_finish_experiment()->dict:
+        if system.recording_store.active_session_id is not None:
+            raise HTTPException(409,'Stop the attached recording first')
+        try:
+            view=latest_snapshot()['r3']
+            current=system.r3.experiments.current()
+            summary={'sources':view['sources'],'duration_ns':None,'recording_validity':'NO_RECORDING',
+                     'replay_result':'NOT_CHECKED','hardware_verified':False}
+            if current and current['recording_id']:
+                session=system.recording_session(current['recording_id'])
+                summary.update(duration_ns=session['stopped_ns']-session['started_ns'] if session['stopped_ns'] else None,
+                               recording_validity=session['status'])
+                summary['replay_result']=recompute_evidence(system.recording_store.iter_records(session['session_id']),session.get('metadata',{}).get('r3'),r3_software_fingerprint())
+                summary.update(experiment_summary(system.recording_store.iter_records(session['session_id'])))
+            return system.r3.experiments.finish(summary)
+        except ValueError as error: raise HTTPException(409,str(error)) from error
+
     @app.get("/api/v1/tracks", dependencies=[Depends(require_access)])
     def tracks() -> list[dict]: return latest_snapshot()["tracks"]
 
@@ -306,7 +360,10 @@ def create_app(settings: Settings | None = None, deployment: DeploymentConfig | 
             if session["configuration_hash"] != settings.configuration_hash:
                 raise ReplayConfigurationError("recording configuration hash is incompatible with active configuration")
             result=replay_recording(system.recording_store.iter_records(session_id),settings,session)
+            r3_result=recompute_evidence(system.recording_store.iter_records(session_id),session.get('metadata',{}).get('r3'),r3_software_fingerprint())
             return {"session_id":session_id,"result":result.result,"first_divergence":result.first_divergence,
+                    "r3_evidence":r3_result,
+                    "r3_advisory":recompute_advisory(system.recording_store.iter_records(session_id),session.get('metadata',{}).get('r3'),r3_software_fingerprint()),
                     "replayed_decisions":result.decisions,"decisions_preview_limit":100,
                     "verified_records":result.verified_records,"verified_decisions":result.verified_decisions,
                     "first_sequence":result.first_sequence,"last_sequence":result.last_sequence,

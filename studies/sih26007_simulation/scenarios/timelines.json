@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "provenance_class": "ASSUMED_SENSITIVITY",
+  "reason": "Synthetic equal-duration explanatory epochs, not measured fog or receiver behaviour",
+  "epoch_s": 10,
+  "desired_speed_mps": 5,
+  "fog": [
+    {"name": "initial", "visual_m": 5, "range_m": 40, "uncertainty_m": 1, "age_s": 0, "available": true},
+    {"name": "visual_lower", "visual_m": 4, "range_m": 40, "uncertainty_m": 1, "age_s": 0, "available": true},
+    {"name": "range_contracts", "visual_m": 3, "range_m": 15, "uncertainty_m": 2, "age_s": 0.5, "available": true},
+    {"name": "missing", "visual_m": 4, "range_m": 0, "uncertainty_m": 2, "age_s": 1.1, "available": false},
+    {"name": "recovered", "visual_m": 5, "range_m": 40, "uncertainty_m": 1, "age_s": 0, "available": true}
+  ],
+  "integrated": [
+    {"name": "low_visibility", "visual_m": 5, "range_m": 40, "separation_m": 80, "uncertainty_m": 1, "age_s": 0, "available": true, "link": true},
+    {"name": "dense_visual_fog", "visual_m": 3, "range_m": 40, "separation_m": 60, "uncertainty_m": 1, "age_s": 0, "available": true, "link": true},
+    {"name": "stopped_target", "visual_m": 3, "range_m": 40, "separation_m": 20, "uncertainty_m": 1, "age_s": 0, "available": true, "link": true},
+    {"name": "quality_degraded", "visual_m": 3, "range_m": 15, "separation_m": 20, "uncertainty_m": 3, "age_s": 0.5, "available": true, "link": true},
+    {"name": "response_loss", "visual_m": 3, "range_m": 15, "separation_m": 20, "uncertainty_m": 3, "age_s": 1.1, "available": false, "link": false},
+    {"name": "session_and_evidence_recovered", "visual_m": 4, "range_m": 40, "separation_m": 40, "uncertainty_m": 1, "age_s": 0, "available": true, "link": true},
+    {"name": "restored", "visual_m": 5, "range_m": 40, "separation_m": 80, "uncertainty_m": 1, "age_s": 0, "available": true, "link": true}
+  ]
+}

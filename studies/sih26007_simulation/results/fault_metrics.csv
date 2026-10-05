@@ -1,0 +1,10 @@
+source_scenario,first_sampled_expiry_s,maximum_research_cap_mps,maximum_live_command,recovery_actions,interpretation
+EV-03,1.1,0.0,0.0,,"First observed expiry sample, NOT physical latency; blank means no expiry sample in selected trace"
+EV-05,,0.0,0.0,,"First observed expiry sample, NOT physical latency; blank means no expiry sample in selected trace"
+EV-07,,0.0,0.0,,"First observed expiry sample, NOT physical latency; blank means no expiry sample in selected trace"
+EV-10,0.7,0.0,0.0,,"First observed expiry sample, NOT physical latency; blank means no expiry sample in selected trace"
+EV-11,0.7,0.0,0.0,,"First observed expiry sample, NOT physical latency; blank means no expiry sample in selected trace"
+EV-13,,0.0,0.0,RESTART_RECEIVER; RESTART_SENDER,"First observed expiry sample, NOT physical latency; blank means no expiry sample in selected trace"
+EV-14,,0.0,0.0,RESTART_SENDER; RESTORE_COMMUNICATION,"First observed expiry sample, NOT physical latency; blank means no expiry sample in selected trace"
+EV-15,,0.0,0.0,TRANSPORT_RECONNECT,"First observed expiry sample, NOT physical latency; blank means no expiry sample in selected trace"
+EV-20,2.3,0.0,0.0,TRANSPORT_RECONNECT; RESTART_RECEIVER; RESTORE_COMMUNICATION,"First observed expiry sample, NOT physical latency; blank means no expiry sample in selected trace"

@@ -82,3 +82,11 @@ void tark_protocol_service_tick(tark_protocol_service_t *s,uint64_t now){
         tark_protocol_service_status(s,s->supervisor.last_sequence,now);s->last_status_ns=now;
     }
 }
+bool tark_protocol_service_encoder(tark_protocol_service_t *s,uint32_t q,uint64_t now,const tark_encoder_observation_t *sample){
+    if(!s||!sample||!s->available||!s->session_active||!s->tx||(s->tick_seen&&now<s->last_tick_ns))return false;
+    tark_encoder_observation_t value=*sample;
+    value.session_id=s->session_id;value.configuration_hash=s->configuration_hash;
+    uint8_t out[TARK_MAX_FRAME];size_t n=sizeof(out);
+    if(!tark_build_encoder_observation(q,now,&value,out,&n))return false;
+    s->tx(out,n,s->tx_context);return true;
+}

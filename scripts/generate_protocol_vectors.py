@@ -22,7 +22,8 @@ def render_header(vectors:list[dict])->str:
     lines.append('};')
     return "\n".join(lines)+"\n"
 if __name__=="__main__":
-    vectors=json.loads((ROOT/"protocol_vectors.json").read_text())
+    source_name='r3_protocol_vectors' if '--r3' in sys.argv else 'protocol_vectors'
+    vectors=json.loads((ROOT/f'{source_name}.json').read_text())
     if '--refresh' in sys.argv:
         sys.path.insert(0,str(ROOT/'backend'))
         import cbor2
@@ -42,5 +43,5 @@ if __name__=="__main__":
             vector['cbor_hex']=raw.hex().upper()
             vector['frame_hex']=frame.hex().upper()
             vector['crc32c']=f'{checksum:08X}'
-        (ROOT/'protocol_vectors.json').write_text(json.dumps(vectors,indent=2)+'\n')
-    (ROOT/"firmware/esp32/tests/protocol_vectors.h").write_text(render_header(vectors))
+        (ROOT/f'{source_name}.json').write_text(json.dumps(vectors,indent=2)+'\n')
+    (ROOT/f'firmware/esp32/tests/{source_name}.h').write_text(render_header(vectors))

@@ -1,4 +1,23 @@
-# TARK PHASE-1 SOFTWARE EVIDENCE RELEASE R1
+# TARK release navigation
+
+## CURRENT — R3 pre-selection software
+
+- [Freeze and exact commands](TARK_R3_PRESELECTION_FREEZE.md)
+- [Three SIH flagship demonstrations](SIH_FLAGSHIP_DEMOS.md)
+- [Current R3 reasoning/evidence/limitations](R3_REASONING_REPORT.md)
+- [R3 design review](R3_REASONING_DESIGN_REVIEW.md)
+- [R3 normalized vendor boundaries](R3_VENDOR_FORMATS.md) / [observation protocol](R3_ESP32_OBSERVATION_PROTOCOL.md)
+- [Local launcher/setup](R2_WEBSITE_RUN.md)
+
+Earlier R3 integration/verification reports are foundation milestones, not the
+latest test totals. R2 hardware designs under `hardware/r2-freeze`,
+`tark-r2-master`, `tark-r2-master2` and `tark-r2-flagship-redesign` are retained
+design history, not current R3 as-built wiring releases. The
+`studies/sih26007_simulation` bundle is an isolated R1 research study, not one
+of the three production-path R3 demos. Its published inputs/results/hashes are
+retained together for traceability.
+
+## HISTORICAL — PHASE-1 SOFTWARE EVIDENCE RELEASE R1
 
 Controlled navigation. Software evidence only; traction disabled.
 

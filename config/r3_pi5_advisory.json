@@ -1,0 +1,167 @@
+{
+  "profile_id": "R3_PI5_ADVISORY",
+  "version": 1,
+  "physical_access_enabled": false,
+  "traction": "DISABLED_PHASE_1",
+  "usb_topology": {
+    "pi": "EXPECTED_TREE_REQUIRES_RECEIPT_VERIFICATION",
+    "hub": "UH720_UN_V5_DATA_PORT_POWER_PENDING",
+    "radar": "IWR6843ISK_REV_FIRMWARE_POWER_GATE_G04",
+    "thermal": "PURETHERMAL3_FORMAT_GATE_G09"
+  },
+  "startup_order": [
+    "configuration",
+    "clock_registry",
+    "calibration_registry",
+    "recorder",
+    "adapter_identity_gate",
+    "source_workers",
+    "readiness"
+  ],
+  "sources": [
+    {
+      "source_id": "radar-a",
+      "node_id": "A",
+      "device_class": "RADAR",
+      "manufacturer": "Texas Instruments",
+      "part_number": "IWR6843ISK",
+      "adapter": "ti_iwr6843",
+      "transport": "USB_UART",
+      "expected_rate_hz": null,
+      "max_age_ns": 200000000,
+      "max_time_uncertainty_ns": 20000000,
+      "required_calibrations": [
+        "RADAR_TO_BODY"
+      ],
+      "allowed_purpose": "LOCAL_RADIAL_EVIDENCE",
+      "max_queue": 8,
+      "status": "PROPOSED_ACCEPTANCE_NOT_MEASURED"
+    },
+    {
+      "source_id": "rgb-a",
+      "node_id": "A",
+      "device_class": "RGB",
+      "manufacturer": "Arducam",
+      "part_number": "B0200",
+      "adapter": "uvc_rgb",
+      "transport": "USB_UVC",
+      "expected_rate_hz": 30,
+      "max_age_ns": 200000000,
+      "max_time_uncertainty_ns": 25000000,
+      "required_calibrations": [
+        "RGB_TO_BODY",
+        "RGB_INTRINSICS"
+      ],
+      "allowed_purpose": "VISIBLE_CORROBORATION",
+      "max_queue": 8,
+      "status": "PROPOSED_ACCEPTANCE_NOT_MEASURED"
+    },
+    {
+      "source_id": "thermal-a",
+      "node_id": "A",
+      "device_class": "THERMAL",
+      "manufacturer": "FLIR/GroupGets",
+      "part_number": "500-0771-01/PureThermal3",
+      "adapter": "lepton_purethermal",
+      "transport": "USB_UVC",
+      "expected_rate_hz": 8.7,
+      "max_age_ns": 350000000,
+      "max_time_uncertainty_ns": 60000000,
+      "required_calibrations": [
+        "THERMAL_TO_BODY",
+        "THERMAL_ALIGNMENT"
+      ],
+      "allowed_purpose": "THERMAL_CORROBORATION",
+      "max_queue": 8,
+      "status": "PROPOSED_ACCEPTANCE_NOT_MEASURED"
+    },
+    {
+      "source_id": "gnss-a",
+      "node_id": "A",
+      "device_class": "GNSS",
+      "manufacturer": "Waveshare/Quectel",
+      "part_number": "33000/LG290P",
+      "adapter": "lg290p",
+      "transport": "USB_NMEA_RTCM_PPS",
+      "expected_rate_hz": 10,
+      "max_age_ns": 300000000,
+      "max_time_uncertainty_ns": 10000000,
+      "required_calibrations": [
+        "GNSS_A_TO_BODY"
+      ],
+      "allowed_purpose": "GLOBAL_LOCATION",
+      "max_queue": 8,
+      "status": "PROPOSED_ACCEPTANCE_NOT_MEASURED"
+    },
+    {
+      "source_id": "imu-a",
+      "node_id": "A",
+      "device_class": "IMU",
+      "manufacturer": "Adafruit/CEVA",
+      "part_number": "4754/BNO085",
+      "adapter": "bno085",
+      "transport": "MCU_SPI_SH2",
+      "expected_rate_hz": null,
+      "max_age_ns": 100000000,
+      "max_time_uncertainty_ns": 10000000,
+      "required_calibrations": [
+        "IMU_TO_BODY"
+      ],
+      "allowed_purpose": "MOTION_CORROBORATION",
+      "max_queue": 8,
+      "status": "PROPOSED_ACCEPTANCE_NOT_MEASURED"
+    },
+    {
+      "source_id": "encoders-a",
+      "node_id": "A",
+      "device_class": "ENCODERS",
+      "manufacturer": "Same Sky",
+      "part_number": "AMT102-V_PAIR",
+      "adapter": "esp32_encoder",
+      "transport": "MCU_QUADRATURE",
+      "expected_rate_hz": null,
+      "max_age_ns": 100000000,
+      "max_time_uncertainty_ns": 5000000,
+      "required_calibrations": [
+        "ENCODER_GEOMETRY"
+      ],
+      "allowed_purpose": "WHEEL_RESPONSE_ONLY",
+      "max_queue": 8,
+      "status": "PROPOSED_ACCEPTANCE_NOT_MEASURED"
+    },
+    {
+      "source_id": "gnss-b",
+      "node_id": "B",
+      "device_class": "GNSS",
+      "manufacturer": "Waveshare/Quectel",
+      "part_number": "33000/LG290P",
+      "adapter": "node_b",
+      "transport": "WIFI_COOPERATIVE",
+      "expected_rate_hz": 10,
+      "max_age_ns": 500000000,
+      "max_time_uncertainty_ns": 20000000,
+      "required_calibrations": [
+        "GNSS_B_TO_BODY"
+      ],
+      "allowed_purpose": "COOPERATIVE_LOCATION",
+      "max_queue": 8,
+      "status": "PROPOSED_ACCEPTANCE_NOT_MEASURED"
+    },
+    {
+      "source_id": "gnss-base",
+      "node_id": "BASE",
+      "device_class": "GNSS",
+      "manufacturer": "Waveshare/Quectel",
+      "part_number": "33000/LG290P",
+      "adapter": "lg290p",
+      "transport": "USB_RTCM",
+      "expected_rate_hz": 10,
+      "max_age_ns": 1000000000,
+      "max_time_uncertainty_ns": 10000000,
+      "required_calibrations": [],
+      "allowed_purpose": "CORRECTION_CONTEXT",
+      "max_queue": 8,
+      "status": "PROPOSED_ACCEPTANCE_NOT_MEASURED"
+    }
+  ]
+}

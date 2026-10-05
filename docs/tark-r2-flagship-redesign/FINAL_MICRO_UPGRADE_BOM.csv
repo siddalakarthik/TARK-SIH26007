@@ -1,0 +1,2 @@
+"ITEM","MANUFACTURER","MODEL","QTY","APPROX_COST","WHY_REQUIRED","FEATURE_UNLOCKED","PER_VEHICLE_SHARED_OR_PROTOTYPE","BUDGET_IMPACT"
+"NO ADDITIONAL FLAGSHIP HARDWARE REQUIRED","N/A","N/A","0","0","Existing F01-F27 supports the bounded research demo. Existing fabrication, calibration and integration gates remain; this is not physical verification.","No new capability purchased. Existing wheel sensing already satisfies the required motion source.","N/A - no addition in any category","0"

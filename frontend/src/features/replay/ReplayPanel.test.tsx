@@ -17,6 +17,17 @@ vi.mock('../../api',()=>({
 
 afterEach(()=>{cleanup();vi.clearAllMocks();});
 
+test('R3 decision recomputation is shown separately from legacy MATCH',async()=>{
+ const api=await import('../../api');
+ vi.mocked(api.verifyReplay).mockResolvedValueOnce({session_id:'session-1',result:'MATCH',first_divergence:null,
+   r3_advisory:{result:'MISMATCH',reason:'R3_DECISION_DIFFERS',first_divergence:7,computation_ns:100}});
+ render(<ReplayPanel/>);await screen.findByText(/Select a completed observation/i);
+ fireEvent.change(screen.getByLabelText('Recording session'),{target:{value:'session-1'}});
+ fireEvent.click(screen.getByRole('button',{name:'Load recording'}));await screen.findByText(/REPLAY loaded/i);
+ fireEvent.click(screen.getByRole('button',{name:'Verify replay'}));
+ expect(await screen.findByText(/R3 recorded vs recomputed advisory: MISMATCH at sequence 7/)).toBeInTheDocument();
+});
+
 test('loads an isolated replay timeline and supports step, seek and reset',async()=>{
   render(<ReplayPanel/>);
   await screen.findByText(/Select a completed observation/i);

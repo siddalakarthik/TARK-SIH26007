@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "study_date": "2026-09-29",
+  "seed": 26007,
+  "sets": {
+    "favourable": {"delay_s": 0.5, "deceleration_mps2": 3.0, "margin_m": 0.5, "uncertainty_m": 0.5},
+    "reference": {"delay_s": 1.5, "deceleration_mps2": 1.5, "margin_m": 2.0, "uncertainty_m": 1.0},
+    "adverse": {"delay_s": 2.5, "deceleration_mps2": 0.5, "margin_m": 5.0, "uncertainty_m": 5.0}
+  },
+  "visual_cases_m": [3, 4, 5],
+  "range_grid_m": [0, 150, 1],
+  "speed_grid_mps": [0, 15, 0.25],
+  "candidate_speeds_mps": [2, 5, 10, 15],
+  "encounter": {"separations_m": [5, 20, 40, 80], "speeds_mps": [2, 5, 10], "ranges_m": [5, 20, 50], "lead_speed_ratio": 0.5, "oncoming_speed_ratio": -1, "post_stop_horizon_s": 5},
+  "uncertainty": {"counts": [1000, 5000, 10000, 20000, 40000], "delay_s": [0.5, 2.5], "deceleration_mps2": [0.5, 3], "uncertainty_m": [0.5, 5], "range_m": [3, 100], "speed_mps": [0, 15], "margin_m": 2, "quantiles": [0.05, 0.5, 0.95], "fraction_stability_tolerance": 0.02, "quantile_stability_tolerance_m": 3},
+  "cycle": {"fixed_fraction": 0.4, "nonfog_fraction": 0.3, "fog_fraction": 0.3, "desired_speed_mps": 5, "range_cases_m": [3, 5, 10, 20, 40], "visual_m": 4, "halt_dwell_indices": [0, 0.25, 1], "recovery_range_m": 40},
+  "freshness": {"fresh_s": 0.25, "stale_s": 1, "command_ttl_s": 0.5},
+  "numerics": {"absolute_tolerance": 1e-8, "relative_tolerance": 1e-9, "root_iterations": 120, "boundary_epsilon_m": 1e-7},
+  "provenance": {
+    "default_class": "ASSUMED_SENSITIVITY",
+    "default_source": "Preregistered engineering sensitivity design, not measured NMDC data",
+    "visual_cases_m": "OFFICIAL_SIH: S1 Background specifies endpoints 3 and 5 m; midpoint 4 m DERIVED",
+    "freshness": "CURRENT_TARK_CONFIG: config/phase1.json and docs/ESP32_PROTOCOL_V2.md",
+    "numerics": "DERIVED: numerical verification tolerances and solver controls, not physical parameters"
+  }
+}

@@ -7,6 +7,7 @@ import time
 from typing import Awaitable, Callable
 
 from app.services.system import TarkSystem
+from app.r3.evidence import age_readiness
 
 
 class RuntimeUnavailable(RuntimeError):
@@ -52,7 +53,10 @@ class RuntimeOwner:
         evidence_deadline = snapshot.get("normal_evidence_valid_until_ns")
         if evidence_deadline is not None and now_ns > evidence_deadline:
             raise RuntimeUnavailable("Decision evidence expired; awaiting next runtime snapshot")
-        return deepcopy(snapshot)
+        result=deepcopy(snapshot)
+        if 'r3' in result:
+            result['r3']=age_readiness(result['r3'],now_ns)
+        return result
 
     async def stop(self) -> None:
         self.closed = True

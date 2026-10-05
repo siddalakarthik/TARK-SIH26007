@@ -1,0 +1,9 @@
+{
+  "duration_s": 70.0,
+  "model_available_fraction": 0.8571428571428571,
+  "restricted_fraction": 0.14285714285714285,
+  "halted_fraction": 0.14285714285714285,
+  "normalized_cap_time_integral": 0.8069999428113829,
+  "visual_cap_time_integral": 0.07832918630643348,
+  "meaning": "Condition-epoch capability integral, NOT traveled distance or a dynamic haul cycle; transitions require separate physical feasibility validation"
+}

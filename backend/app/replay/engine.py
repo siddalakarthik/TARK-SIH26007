@@ -192,6 +192,7 @@ def replay_recording(records: Iterable[dict], settings: Settings, session: dict 
     return result
 
 def replay_timeline(records: Iterable[dict], session: dict, settings: Settings) -> dict:
+    from app.r3.replay import advisory_preview
     compatible_pipeline(session, settings)
     items = []
     for record, reports in _ticks(records, session):
@@ -200,7 +201,7 @@ def replay_timeline(records: Iterable[dict], session: dict, settings: Settings) 
         items.append({"position": len(items), "sequence": record["sequence"], "timestamp_ns": record["timestamp_ns"],
                       "source_mode": "REPLAY", "original_source_mode": record["source_mode"],
                       "decision": payload["decision"], "event": payload["event"], "command": payload["command"],
-                      "track_count": sum(len(detections) for _, detections in reports)})
+                      "track_count": sum(len(detections) for _, detections in reports),"r3_advisory":advisory_preview(payload)})
     start = items[0]["timestamp_ns"] if items else None
     end = items[-1]["timestamp_ns"] if items else None
     return {"session_id": session["session_id"], "source_mode": "REPLAY", "state": "READY" if items else "NO_REPLAYABLE_OBSERVATIONS",

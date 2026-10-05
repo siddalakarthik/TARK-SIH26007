@@ -1,0 +1,33 @@
+[
+  {
+    "id": "S1",
+    "url": "https://sih.gov.in/sih2026PS",
+    "file": "SIH26007_official_modal.html",
+    "scope": "modal ViewProblemStatement26007",
+    "complete_page_sha256": "30d875ae896bcd576dd610e47c2a028b4d88b6ae2a73cf7dad4bf691e128caac",
+    "retrieved_date": "2026-09-29",
+    "authority": "OFFICIAL_SIH",
+    "http_status": 200,
+    "sha256": "2da3393c4ae68dc142a3e5393f8f3df39fe4f0644aac3ce7ee5608a33ffb24d2"
+  },
+  {
+    "id": "S2",
+    "url": "https://sih.gov.in/letters/2026/SIH%202026%20Guidelines.pdf",
+    "file": "SIH2026-Guidelines.pdf",
+    "scope": "complete official download",
+    "retrieved_date": "2026-09-29",
+    "authority": "OFFICIAL_SIH",
+    "http_status": 200,
+    "sha256": "5dcbab76e01805d2e6577f217d97b22e26313ae7d40b369237b12b587c3a7fd7"
+  },
+  {
+    "id": "S3",
+    "url": "https://sih.gov.in/letters/2026/SIH2026-IDEA-Presentation-Format.pptx",
+    "file": "SIH2026-IDEA-Presentation-Format.pptx",
+    "scope": "complete official download",
+    "retrieved_date": "2026-09-29",
+    "authority": "OFFICIAL_SIH",
+    "http_status": 200,
+    "sha256": "ce3e5deebec2741f3383cb2dd21269cad8d9930f7c747c9903d7d4b27db14de6"
+  }
+]
