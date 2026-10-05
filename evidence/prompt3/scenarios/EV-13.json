@@ -1,0 +1,89 @@
+{
+  "configuration": "config/phase1.json",
+  "expected_final_state": "NORMAL",
+  "expected_invariants": "PHASE1_ZERO_NO_HARDWARE_NO_REPLAY_AUTHORITY",
+  "initial_receiver_time": 1000000000,
+  "initial_reports": [
+    {
+      "age_ns": 0,
+      "candidate_id": 1,
+      "distance_m": 3.0,
+      "empty": false
+    }
+  ],
+  "initial_runtime_time": 10000000000,
+  "observer_profile": "none",
+  "purpose": "Receiver reboot rejects old session and duplicate sequence",
+  "record_from_start": true,
+  "repeat_count": 10,
+  "response_policy": "deliver",
+  "scenario_id": "EV-13",
+  "steps": [
+    {
+      "action": "OLD_COMMAND",
+      "args": {},
+      "expect": {
+        "receiver_active": false,
+        "receiver_reason": "DUPLICATE_SEQUENCE"
+      }
+    },
+    {
+      "action": "RESTART_RECEIVER",
+      "args": {},
+      "expect": {
+        "receiver_reason": "NOT_ENABLED"
+      }
+    },
+    {
+      "action": "OLD_COMMAND",
+      "args": {},
+      "expect": {
+        "receiver_active": false,
+        "receiver_reason": "NOT_ENABLED"
+      }
+    },
+    {
+      "action": "RESTART_SENDER",
+      "args": {},
+      "expect": {
+        "session_active": false
+      }
+    },
+    {
+      "action": "ADVANCE_TIME",
+      "args": {
+        "pi_ns": 100000000,
+        "receiver_ns": 100000000,
+        "tick": true
+      },
+      "expect": {
+        "communication": "ONLINE",
+        "session_active": true
+      }
+    },
+    {
+      "action": "OLD_COMMAND",
+      "args": {},
+      "expect": {
+        "receiver_active": false,
+        "receiver_reason": "SESSION_MISMATCH"
+      }
+    },
+    {
+      "action": "STOP_RECORDING",
+      "args": {},
+      "expect": {
+        "state": "NORMAL"
+      }
+    },
+    {
+      "action": "VERIFY_REPLAY",
+      "args": {},
+      "expect": {
+        "replay": "MATCH",
+        "state": "NORMAL"
+      }
+    }
+  ],
+  "title": "Receiver reboot rejects old session and duplicate sequence"
+}

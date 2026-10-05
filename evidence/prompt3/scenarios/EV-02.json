@@ -1,0 +1,51 @@
+{
+  "configuration": "config/phase1.json",
+  "expected_final_state": "NORMAL",
+  "expected_invariants": "PHASE1_ZERO_NO_HARDWARE_NO_REPLAY_AUTHORITY",
+  "initial_receiver_time": 1000000000,
+  "initial_reports": [
+    {
+      "age_ns": 0,
+      "candidate_id": 1,
+      "distance_m": 3.0,
+      "empty": false
+    }
+  ],
+  "initial_runtime_time": 10000000000,
+  "observer_profile": "none",
+  "purpose": "AGING preserves the current provisional NORMAL semantics",
+  "record_from_start": true,
+  "repeat_count": 5,
+  "response_policy": "deliver",
+  "scenario_id": "EV-02",
+  "steps": [
+    {
+      "action": "ADVANCE_TIME",
+      "args": {
+        "pi_ns": 500000000,
+        "receiver_ns": 500000000,
+        "tick": true
+      },
+      "expect": {
+        "freshness": "AGING",
+        "state": "NORMAL"
+      }
+    },
+    {
+      "action": "STOP_RECORDING",
+      "args": {},
+      "expect": {
+        "state": "NORMAL"
+      }
+    },
+    {
+      "action": "VERIFY_REPLAY",
+      "args": {},
+      "expect": {
+        "replay": "MATCH",
+        "state": "NORMAL"
+      }
+    }
+  ],
+  "title": "AGING preserves the current provisional NORMAL semantics"
+}

@@ -9,6 +9,7 @@ from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import urlsplit
+from typing import Callable
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response, WebSocket, WebSocketDisconnect, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,9 +17,14 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import StreamingResponse
 
 from app.config import Settings
+from app.flagship import flagship_snapshot
 from app.services.system import TarkSystem
+from app.services.runtime import RuntimeOwner, RuntimeUnavailable
 from app.replay.engine import ReplayConfigurationError, ReplayFormatError, replay_recording, replay_timeline
 from app.replay.store import RecordingError
+from app.r3.experiments import Experiment
+from app.r3.replay import recompute_evidence, recompute_advisory, experiment_summary
+from app.r3.runtime import r3_software_fingerprint
 from app.location import (DisabledReverseGeocoder, DisabledRouteProvider, NominatimReverseGeocoder,
                           OSRMRouteProvider, ProviderUnavailable, ReverseGeocodeRequest,
                           RouteRequest, validated_provider_url)
@@ -78,12 +84,14 @@ class DeploymentConfig:
         return cls(environment, auth_mode, os.getenv("TARK_ACCESS_TOKEN", ""), origins)
 
 
-def create_app(settings: Settings | None = None, deployment: DeploymentConfig | None = None) -> FastAPI:
+def create_app(settings: Settings | None = None, deployment: DeploymentConfig | None = None,
+               *, runtime_factory: Callable[[TarkSystem], RuntimeOwner] = RuntimeOwner) -> FastAPI:
     settings = settings or Settings.from_file(ROOT / "config" / "phase1.json")
     deployment = deployment or DeploymentConfig.from_environment()
     if deployment.environment == "public_demo" and settings.mode != "simulation":
         raise ValueError("public_demo deployments must use simulation mode")
     system = TarkSystem(settings)
+    runtime = runtime_factory(system)
     browser_camera_enabled = os.getenv("TARK_ENABLE_BROWSER_CAMERA", "").strip().lower() in {"1", "true", "yes"}
     reverse_url = os.getenv("TARK_REVERSE_GEOCODER_URL", "").strip()
     route_url = os.getenv("TARK_ROUTE_PROVIDER_URL", "").strip()
@@ -91,11 +99,25 @@ def create_app(settings: Settings | None = None, deployment: DeploymentConfig | 
     route_provider = OSRMRouteProvider(validated_provider_url(route_url)) if route_url else DisabledRouteProvider()
     @asynccontextmanager
     async def lifespan(_: FastAPI):
-        yield
-        system.close()
+        nonlocal system, runtime
+        if runtime.task is not None and not runtime.closed:
+            raise RuntimeError("application runtime already started")
+        if runtime.closed:
+            system = TarkSystem(settings)
+            runtime = runtime_factory(system)
+            app.state.system, app.state.runtime = system, runtime
+        try:
+            await runtime.start()
+            yield
+        finally:
+            try:
+                await runtime.stop()
+            finally:
+                system.close()
 
     app = FastAPI(title="TARK Phase 1 Backend", version="0.3.0", lifespan=lifespan)
     app.state.system, app.state.deployment = system, deployment
+    app.state.runtime = runtime
     app.state.reverse_geocoder, app.state.route_provider = reverse_geocoder, route_provider
 
     @app.middleware("http")
@@ -128,12 +150,28 @@ def create_app(settings: Settings | None = None, deployment: DeploymentConfig | 
         if not hmac.compare_digest(supplied, deployment.access_token):
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authentication required")
 
+    def require_recording_write(_: None = Depends(require_access)) -> None:
+        if deployment.environment == "public_demo":
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Public demo is monitoring-only; recording mutation is disabled")
+
+    def latest_snapshot() -> dict:
+        try:
+            return runtime.latest()
+        except RuntimeUnavailable as error:
+            raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(error)) from error
+
     @app.get("/health")
     def health() -> dict:
-        return {"status": "ready", "mode": settings.mode, "environment": deployment.environment, "configuration_hash": settings.configuration_hash, "traction": "DISABLED_PHASE_1", "hardware": "NOT_CONNECTED_PHASE_2", "frontend": "served_when_built"}
+        try:
+            runtime.latest()
+            runtime_status = "ready"
+        except RuntimeUnavailable:
+            runtime_status = "unavailable"
+        return {"status": runtime_status, "mode": settings.mode, "environment": deployment.environment, "configuration_hash": settings.configuration_hash, "traction": "DISABLED_PHASE_1", "hardware": "NOT_CONNECTED_PHASE_2", "frontend": "served_when_built"}
 
     @app.get("/ready")
     def ready() -> dict:
+        latest_snapshot()
         return {"ready": True, "mode": settings.mode, "traction": "DISABLED_PHASE_1", "hardware": "NOT_CONNECTED_PHASE_2"}
 
     @app.post("/api/v1/auth/session", status_code=status.HTTP_204_NO_CONTENT)
@@ -150,26 +188,75 @@ def create_app(settings: Settings | None = None, deployment: DeploymentConfig | 
         return response
 
     @app.get("/api/v1/status", dependencies=[Depends(require_access)])
-    def system_status() -> dict: return system.tick()
+    def system_status() -> dict: return latest_snapshot()
+
+    @app.get("/api/v1/flagship", dependencies=[Depends(require_access)])
+    def flagship_status(response: Response) -> dict:
+        response.headers["Cache-Control"] = "no-store"
+        return flagship_snapshot(settings.mode, latest_snapshot(), runtime.clock())
+
+    @app.get('/api/v2/r3/readiness', dependencies=[Depends(require_access)])
+    def r3_readiness(response:Response)->dict:
+        response.headers['Cache-Control']='no-store'
+        return latest_snapshot()['r3']
+
+    @app.get('/api/v2/r3/experiments', dependencies=[Depends(require_access)])
+    def r3_experiments()->list[dict]:
+        return system.r3.experiments.list()
+
+    @app.get('/api/v2/r3/advisory', dependencies=[Depends(require_access)])
+    def r3_advisory(response:Response)->dict:
+        response.headers['Cache-Control']='no-store'
+        return {'scope':'R3_ADVISORY','advisory':latest_snapshot()['r3']['advisory']}
+
+    @app.post('/api/v2/r3/experiments', dependencies=[Depends(require_recording_write)])
+    def r3_start_experiment(item:Experiment)->dict:
+        # Local engineering metadata only: never configuration or sensor input.
+        if system.recording_store.active_session_id is not None:
+            raise HTTPException(409,'Create the experiment before starting its recording')
+        if (item.hardware_profile!=system.r3.profile.profile_id or item.configuration_bundle!=system.r3.bundle.bundle_id
+                or item.software_version!=system.r3.bundle.software_version
+                or set(item.expected_sources)-set(system.r3.channel.profiles)
+                or set(item.calibration_bundle)!={key for keys in system.r3.bundle.calibration_bundle.values() for key in keys}):
+            raise HTTPException(409,'Experiment must match the current R3 software/configuration/calibration bundle')
+        try: return system.r3.experiments.start(item)
+        except ValueError as error: raise HTTPException(409,str(error)) from error
+
+    @app.post('/api/v2/r3/experiments/finish', dependencies=[Depends(require_recording_write)])
+    def r3_finish_experiment()->dict:
+        if system.recording_store.active_session_id is not None:
+            raise HTTPException(409,'Stop the attached recording first')
+        try:
+            view=latest_snapshot()['r3']
+            current=system.r3.experiments.current()
+            summary={'sources':view['sources'],'duration_ns':None,'recording_validity':'NO_RECORDING',
+                     'replay_result':'NOT_CHECKED','hardware_verified':False}
+            if current and current['recording_id']:
+                session=system.recording_session(current['recording_id'])
+                summary.update(duration_ns=session['stopped_ns']-session['started_ns'] if session['stopped_ns'] else None,
+                               recording_validity=session['status'])
+                summary['replay_result']=recompute_evidence(system.recording_store.iter_records(session['session_id']),session.get('metadata',{}).get('r3'),r3_software_fingerprint())
+                summary.update(experiment_summary(system.recording_store.iter_records(session['session_id'])))
+            return system.r3.experiments.finish(summary)
+        except ValueError as error: raise HTTPException(409,str(error)) from error
 
     @app.get("/api/v1/tracks", dependencies=[Depends(require_access)])
-    def tracks() -> list[dict]: return system.tick()["tracks"]
+    def tracks() -> list[dict]: return latest_snapshot()["tracks"]
 
     @app.get("/api/v1/sensors", dependencies=[Depends(require_access)])
-    def sensors() -> list[dict]: return system.tick()["sensors"]
+    def sensors() -> list[dict]: return latest_snapshot()["sensors"]
 
     @app.get("/api/v1/events", dependencies=[Depends(require_access)])
     def events() -> list[dict]:
-        system.tick()
         return system.persisted_events()
 
     @app.get("/api/v1/diagnostics", dependencies=[Depends(require_access)])
     def diagnostics() -> dict:
-        return {"software_version": "0.3.0", "firmware_version": "0.1.0", "protocol_version": 1, "configuration_hash": settings.configuration_hash, "mode": settings.mode.upper(), "phase_2_hardware": "NOT_CONNECTED", "deployment_environment": deployment.environment, "auth_mode": deployment.auth_mode, "map": map_display_config(), "capabilities": {"browser_device_location": True, "browser_camera_preview": browser_camera_enabled, "reverse_geocoding": bool(reverse_url), "routing": bool(route_url)}}
+        return {"software_version": "0.3.0", "firmware_version": "0.1.0", "protocol_version": 2, "configuration_hash": settings.configuration_hash, "mode": settings.mode.upper(), "phase_2_hardware": "NOT_CONNECTED", "deployment_environment": deployment.environment, "auth_mode": deployment.auth_mode, "map": map_display_config(), "capabilities": {"browser_device_location": True, "browser_camera_preview": browser_camera_enabled, "reverse_geocoding": bool(reverse_url), "routing": bool(route_url)}}
 
     @app.get("/api/v1/vehicle-location", dependencies=[Depends(require_access)])
     def vehicle_location() -> dict:
-        return system.vehicle_location()
+        return latest_snapshot()["vehicle_location"]
 
     @app.post("/api/v1/location/reverse", dependencies=[Depends(require_access)])
     def reverse_geocode(request: ReverseGeocodeRequest) -> dict:
@@ -229,20 +316,23 @@ def create_app(settings: Settings | None = None, deployment: DeploymentConfig | 
     @app.get("/api/v1/runs", dependencies=[Depends(require_access)])
     def runs() -> list[dict]:
         """Observation recordings only; an empty array means no recording exists."""
-        return system.recording_sessions()
+        try: return system.recording_sessions()
+        except RecordingError as error: raise recording_error(error) from error
 
-    @app.post("/api/v1/recordings/start", dependencies=[Depends(require_access)])
+    @app.post("/api/v1/recordings/start", dependencies=[Depends(require_recording_write)])
     def start_recording() -> dict:
         try: return system.start_recording()
         except (RecordingError, ValueError) as error: raise recording_error(RecordingError(str(error))) from error
 
-    @app.post("/api/v1/recordings/stop", dependencies=[Depends(require_access)])
+    @app.post("/api/v1/recordings/stop", dependencies=[Depends(require_recording_write)])
     def stop_recording() -> dict:
         try: return system.stop_recording()
         except RecordingError as error: raise recording_error(error) from error
 
     @app.get("/api/v1/replay/sessions", dependencies=[Depends(require_access)])
-    def replay_sessions() -> list[dict]: return system.recording_sessions()
+    def replay_sessions() -> list[dict]:
+        try: return system.recording_sessions()
+        except RecordingError as error: raise recording_error(error) from error
 
     @app.get("/api/v1/replay/sessions/{session_id}", dependencies=[Depends(require_access)])
     def replay_session(session_id: str) -> dict:
@@ -258,7 +348,7 @@ def create_app(settings: Settings | None = None, deployment: DeploymentConfig | 
     def replay_timeline_endpoint(session_id: str) -> dict:
         try:
             session=system.recording_session(session_id)
-            return replay_timeline(system.recording_records(session_id,10_000),session,settings.configuration_hash)
+            return replay_timeline(system.recording_store.iter_records(session_id),session,settings)
         except RecordingError as error: raise recording_error(error) from error
         except ReplayConfigurationError as error: raise HTTPException(status.HTTP_409_CONFLICT,str(error)) from error
         except ReplayFormatError as error: raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY,str(error)) from error
@@ -269,8 +359,16 @@ def create_app(settings: Settings | None = None, deployment: DeploymentConfig | 
             session=system.recording_session(session_id)
             if session["configuration_hash"] != settings.configuration_hash:
                 raise ReplayConfigurationError("recording configuration hash is incompatible with active configuration")
-            result=replay_recording(system.recording_records(session_id,10_000),settings)
-            return {"session_id":session_id,"result":result.result,"first_divergence":result.first_divergence,"replayed_decisions":result.decisions}
+            result=replay_recording(system.recording_store.iter_records(session_id),settings,session)
+            r3_result=recompute_evidence(system.recording_store.iter_records(session_id),session.get('metadata',{}).get('r3'),r3_software_fingerprint())
+            return {"session_id":session_id,"result":result.result,"first_divergence":result.first_divergence,
+                    "r3_evidence":r3_result,
+                    "r3_advisory":recompute_advisory(system.recording_store.iter_records(session_id),session.get('metadata',{}).get('r3'),r3_software_fingerprint()),
+                    "replayed_decisions":result.decisions,"decisions_preview_limit":100,
+                    "verified_records":result.verified_records,"verified_decisions":result.verified_decisions,
+                    "first_sequence":result.first_sequence,"last_sequence":result.last_sequence,
+                    "total_records":session["record_count"],"complete":True,
+                    "comparison_fields":["decision","radar_health","command","event_without_uuid"]}
         except RecordingError as error: raise recording_error(error) from error
         except ReplayConfigurationError as error: raise HTTPException(status.HTTP_409_CONFLICT,str(error)) from error
         except ReplayFormatError as error: raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY,str(error)) from error
@@ -288,7 +386,7 @@ def create_app(settings: Settings | None = None, deployment: DeploymentConfig | 
         try:
             while True:
                 now = time.monotonic_ns()
-                snapshot=system.tick(now)
+                snapshot=latest_snapshot()
                 await socket.send_json({"schema_version": 1, "type": "status", "server_time_ns": now, "configuration_hash": settings.configuration_hash, "payload": snapshot})
                 await socket.send_json({"schema_version": 1, "type": "location_update", "server_time_ns": now, "configuration_hash": settings.configuration_hash, "payload": snapshot["vehicle_location"]})
                 try:
@@ -300,13 +398,16 @@ def create_app(settings: Settings | None = None, deployment: DeploymentConfig | 
                 except (TypeError, ValueError):
                     await socket.send_json({"schema_version": 1, "type": "error", "server_time_ns": time.monotonic_ns(), "configuration_hash": settings.configuration_hash, "payload": {"code": "MALFORMED_OBSERVATION_MESSAGE"}})
         except WebSocketDisconnect: return
+        except HTTPException:
+            await socket.close(code=status.WS_1013_TRY_AGAIN_LATER, reason="Decision runtime unavailable")
 
     frontend = ROOT / "frontend" / "dist"
     if frontend.exists(): app.mount("/", StaticFiles(directory=frontend, html=True), name="frontend")
     return app
 
 
-app = create_app()
+if __name__ != "__main__":
+    app = create_app()
 
 if __name__ == "__main__":
     import uvicorn

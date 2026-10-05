@@ -1,0 +1,58 @@
+{
+  "configuration": "config/phase1.json",
+  "expected_final_state": "STOP",
+  "expected_invariants": "PHASE1_ZERO_NO_HARDWARE_NO_REPLAY_AUTHORITY",
+  "initial_receiver_time": 1000000000,
+  "initial_reports": [],
+  "initial_runtime_time": 10000000000,
+  "observer_profile": "none",
+  "purpose": "Explicit empty report is fresh observation without an envelope",
+  "record_from_start": true,
+  "repeat_count": 10,
+  "response_policy": "deliver",
+  "scenario_id": "EV-06",
+  "steps": [
+    {
+      "action": "RADAR_REPORT",
+      "args": {
+        "age_ns": 0,
+        "candidate_id": 1,
+        "distance_m": 3.0,
+        "empty": true
+      },
+      "expect": {
+        "state": "UNKNOWN"
+      }
+    },
+    {
+      "action": "ADVANCE_TIME",
+      "args": {
+        "pi_ns": 0,
+        "receiver_ns": 0,
+        "tick": true
+      },
+      "expect": {
+        "freshness": "FRESH",
+        "reports_consumed": 1,
+        "state": "STOP",
+        "tracks": 0
+      }
+    },
+    {
+      "action": "STOP_RECORDING",
+      "args": {},
+      "expect": {
+        "state": "STOP"
+      }
+    },
+    {
+      "action": "VERIFY_REPLAY",
+      "args": {},
+      "expect": {
+        "replay": "MATCH",
+        "state": "STOP"
+      }
+    }
+  ],
+  "title": "Explicit empty report is fresh observation without an envelope"
+}

@@ -4,11 +4,34 @@ export type ConnectionState='CONNECTING'|'CONNECTED'|'DEGRADED'|'RECONNECTING'|'
 export class ApiError extends Error { constructor(public readonly status:number,message:string){super(message);} }
 
 function isRecord(value:unknown):value is Record<string,unknown>{return typeof value==='object'&&value!==null;}
+const safetyStates=new Set(['NORMAL','WARN','RESTRICT','UNKNOWN','STOP']);
+function boundedText(value:unknown,maxLength=256):value is string{return typeof value==='string'&&value.length>0&&value.length<=maxLength;}
+function finiteNumber(value:unknown):value is number{return typeof value==='number'&&Number.isFinite(value);}
+function nonnegativeNumber(value:unknown):value is number{return finiteNumber(value)&&value>=0;}
+function nonnegativeInteger(value:unknown):value is number{return nonnegativeNumber(value)&&Number.isInteger(value);}
+function qualityValue(value:unknown):boolean{return nonnegativeNumber(value)&&value<=1;}
+function boundedArray(value:unknown,maxLength:number,valid:(item:unknown)=>boolean):boolean{
+  return Array.isArray(value)&&value.length<=maxLength&&Array.from(value).every(valid);
+}
 export function isSnapshot(value:unknown):value is Snapshot{
-  if(!isRecord(value)||typeof value.mode!=='string'||typeof value.traction!=='string'||!isRecord(value.decision)||!isRecord(value.command))return false;
+  if(!isRecord(value)||!boundedText(value.mode)||!isRecord(value.decision)||!isRecord(value.command))return false;
   if(value.traction!=='DISABLED_PHASE_1')return false;
   const decision=value.decision,command=value.command;
-  return typeof decision.state==='string'&&typeof decision.permitted_speed_mps==='number'&&Number.isFinite(decision.permitted_speed_mps)&&typeof decision.reason_code==='string'&&typeof command.sequence==='number'&&Array.isArray(value.tracks)&&Array.isArray(value.sensors)&&Array.isArray(value.events);
+  // Validate the complete dashboard contract, allowing extra backend fields and
+  // source/state strings used by individual adapters without inventing new enums.
+  return typeof decision.state==='string'&&safetyStates.has(decision.state)
+    &&nonnegativeNumber(decision.permitted_speed_mps)&&nonnegativeNumber(decision.stopping_requirement_m)
+    &&nonnegativeNumber(decision.D_effective_m)&&boundedText(decision.reason_code)
+    &&boundedArray(decision.active_constraints,128,item=>boundedText(item,2048))
+    &&nonnegativeInteger(command.sequence)&&nonnegativeInteger(command.heartbeat)&&nonnegativeInteger(command.valid_until_ns)
+    &&boundedArray(value.tracks,1024,item=>isRecord(item)&&boundedText(item.track_id)
+      &&finiteNumber(item.x_m)&&finiteNumber(item.y_m)&&finiteNumber(item.relative_velocity_mps)
+      &&qualityValue(item.quality)&&nonnegativeNumber(item.uncertainty_m))
+    &&boundedArray(value.sensors,128,item=>isRecord(item)&&boundedText(item.device_id)
+      &&boundedText(item.source_mode)&&boundedText(item.state)&&boundedText(item.reason,2048)
+      &&(item.age_ms===null||nonnegativeNumber(item.age_ms))&&(item.quality===null||qualityValue(item.quality)))
+    &&boundedArray(value.events,100,item=>isRecord(item)&&boundedText(item.event_id)&&nonnegativeInteger(item.timestamp_ns)
+      &&boundedText(item.event_type)&&boundedText(item.severity)&&boundedText(item.reason,2048));
 }
 export function websocketUrl(locationLike:Pick<Location,'protocol'|'host'>=window.location):string{
   return `${locationLike.protocol==='https:'?'wss':'ws'}://${locationLike.host}/api/v1/ws`;
@@ -24,19 +47,19 @@ export type RouteResult={provider:string;distance_m:number;duration_s:number;coo
 export type VehicleLocationStatus={state:string;reason:string;breadcrumbs?:{latitude_deg:number;longitude_deg:number;timestamp_ns:number;source:string}[];location:null|{vehicle_id:string;timestamp_ns:number;source:'GNSS'|'SIMULATION'|'REPLAY'|'UNKNOWN';latitude_deg:number;longitude_deg:number;altitude_m?:number|null;speed_mps?:number|null;heading_deg?:number|null;horizontal_accuracy_m?:number|null;vertical_accuracy_m?:number|null;fix_type:string;satellites?:number|null;freshness_ms?:number|null;quality:string;status:string}};
 export type CameraStatus={source_id:string;source_mode:string;state:string;timestamp_ns:number|null;age_ms:number|null;resolution:string|null;frame_rate_fps:number|null;reason:string;stream_url:string|null;stream_transport:string;hardware_claim:string;camera_id?:string|null;device_path?:string|null;pixel_format?:string|null;sequence?:number|null;dropped_frames?:number;backend?:string|null};
 export type RecordingSession={session_id:string;started_ns:number;stopped_ns:number|null;source_mode:string;configuration_hash:string;status:'RECORDING'|'COMPLETE'|'FULL'|'INTERRUPTED';max_records:number;record_count:number};
-export type ReplayTimelineItem={position:number;sequence:number;timestamp_ns:number;source_mode:'REPLAY';original_source_mode:string;decision:{state:string;reason_code:string;permitted_speed_mps:number};event:{event_type:string;severity:string;reason:string};command:{sequence:number};track_count:number};
+export type ReplayTimelineItem={position:number;sequence:number;timestamp_ns:number;source_mode:'REPLAY';original_source_mode:string;decision:{state:string;reason_code:string;permitted_speed_mps:number};event:{event_type:string;severity:string;reason:string};command:{sequence:number};track_count:number;r3_advisory?:{state:string;limiting_reason:string;source_mode:string}|null};
 export type ReplayTimeline={session_id:string;source_mode:'REPLAY';state:'READY'|'NO_REPLAYABLE_OBSERVATIONS';items:ReplayTimelineItem[];start_timestamp_ns:number|null;end_timestamp_ns:number|null;duration_ns:number;configuration_hash:string};
 async function jsonRequest<T>(path:string,init?:RequestInit):Promise<T>{return await (await request(path,init)).json() as T;}
 export async function reverseGeocode(point:GeographicPoint):Promise<AddressHierarchy>{return jsonRequest('/api/v1/location/reverse',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(point)});}
 export async function calculateRoute(start:GeographicPoint,destination:GeographicPoint):Promise<RouteResult>{return jsonRequest('/api/v1/routes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({start,destination})});}
 export async function getVehicleLocation():Promise<VehicleLocationStatus>{return jsonRequest('/api/v1/vehicle-location');}
-export async function getVehicleCameraStatus():Promise<CameraStatus>{return jsonRequest('/api/v1/cameras/vehicle-rgb');}
+export async function getVehicleCameraStatus(signal?:AbortSignal):Promise<CameraStatus>{return jsonRequest('/api/v1/cameras/vehicle-rgb',{signal,cache:'no-store'});}
 export async function getReplaySessions():Promise<RecordingSession[]>{return jsonRequest('/api/v1/replay/sessions');}
 export async function getReplaySession(sessionId:string):Promise<RecordingSession>{return jsonRequest(`/api/v1/replay/sessions/${encodeURIComponent(sessionId)}`);}
 export async function getReplayTimeline(sessionId:string):Promise<ReplayTimeline>{return jsonRequest(`/api/v1/replay/sessions/${encodeURIComponent(sessionId)}/timeline`);}
 export async function startRecording():Promise<RecordingSession>{return jsonRequest('/api/v1/recordings/start',{method:'POST'});}
 export async function stopRecording():Promise<RecordingSession>{return jsonRequest('/api/v1/recordings/stop',{method:'POST'});}
-export async function verifyReplay(sessionId:string):Promise<{session_id:string;result:'MATCH'|'MISMATCH';first_divergence:number|null}>{return jsonRequest(`/api/v1/replay/sessions/${encodeURIComponent(sessionId)}/verify`,{method:'POST'});}
+export async function verifyReplay(sessionId:string):Promise<{session_id:string;result:'MATCH'|'MISMATCH';first_divergence:number|null;r3_evidence?:{result:string;reason:string;scope:string;raw_inference_result:string};r3_advisory?:{result:string;reason:string;first_divergence:number|null;computation_ns:number}}>{return jsonRequest(`/api/v1/replay/sessions/${encodeURIComponent(sessionId)}/verify`,{method:'POST'});}
 export async function getSnapshot():Promise<Snapshot>{const value:unknown=await (await request('/api/v1/status')).json();if(!isSnapshot(value))throw new Error('Invalid status payload rejected');return value;}
 export async function authenticate(accessToken:string):Promise<void>{await request('/api/v1/auth/session',{method:'POST',headers:{Authorization:`Bearer ${accessToken}`}});}
 const locationSources=new Set(['GNSS','SIMULATION','REPLAY','UNKNOWN']);
@@ -51,7 +74,41 @@ export function isVehicleLocationStatus(value:unknown):value is VehicleLocationS
 export function connect(onSnapshot:(s:Snapshot)=>void,onState:(state:ConnectionState,message?:string)=>void,onLocation?:(location:VehicleLocationStatus)=>void){
   let socket:WebSocket|undefined,stopped=false,retry:number|undefined,stale:number|undefined,attempt=0,lastStatus=0;
   const clearTimers=()=>{if(retry!==undefined)window.clearTimeout(retry);if(stale!==undefined)window.clearInterval(stale);};
-  const scheduleStaleCheck=()=>{if(stale!==undefined)window.clearInterval(stale);stale=window.setInterval(()=>{if(Date.now()-lastStatus>3_000)onState('DEGRADED','Telemetry stale — retaining no new authority in browser.');},1_000);};
-  const open=()=>{if(stopped)return;onState(attempt?'RECONNECTING':'CONNECTING');socket=new WebSocket(websocketUrl());socket.onopen=()=>{attempt=0;scheduleStaleCheck();};socket.onmessage=event=>{try{const message:unknown=JSON.parse(event.data);if(!isRecord(message)){onState('DEGRADED','Malformed WebSocket payload rejected');return;}if(message.type==='status'){if(!isSnapshot(message.payload)){onState('DEGRADED','Invalid WebSocket payload rejected');return;}lastStatus=Date.now();onSnapshot(message.payload);onState('CONNECTED');return;}if(message.type==='location_update'){if(isVehicleLocationStatus(message.payload))onLocation?.(message.payload);return;}onState('DEGRADED','Invalid WebSocket payload rejected');}catch{onState('DEGRADED','Malformed WebSocket payload rejected');}};socket.onerror=()=>onState('DEGRADED','WebSocket unavailable — dashboard is observation only');socket.onclose=event=>{if(stopped)return;clearTimers();if(event.code===1008){onState('OFFLINE','Authentication required for telemetry.');return;}attempt+=1;const delay=Math.min(15_000,1_000*2**Math.min(attempt-1,4));onState('RECONNECTING',`Reconnecting telemetry in ${Math.ceil(delay/1000)} s`);retry=window.setTimeout(open,delay);};};
+  const scheduleStaleCheck=()=>{if(stale!==undefined)window.clearInterval(stale);stale=window.setInterval(()=>{if(Date.now()-lastStatus>3_000)onState('DEGRADED','TELEMETRY STALE — previous values are not current.');},1_000);};
+  const open=()=>{
+    if(stopped)return;
+    onState(attempt?'RECONNECTING':'CONNECTING');
+    const current=new WebSocket(websocketUrl());socket=current;
+    let closed=false;
+    const active=()=>!stopped&&!closed&&socket===current;
+    current.onopen=()=>{if(!active())return;attempt=0;lastStatus=0;scheduleStaleCheck();};
+    current.onmessage=event=>{
+      if(!active())return;
+      try{
+        const message:unknown=JSON.parse(event.data);
+        if(!isRecord(message)){onState('DEGRADED','Malformed WebSocket payload rejected');return;}
+        if(message.type==='status'){
+          if(!isSnapshot(message.payload)){onState('DEGRADED','Invalid WebSocket payload rejected');return;}
+          lastStatus=Date.now();onSnapshot(message.payload);onState('CONNECTED');return;
+        }
+        if(message.type==='location_update'){
+          if(isVehicleLocationStatus(message.payload))onLocation?.(message.payload);
+          else onLocation?.({state:'UNKNOWN',reason:'INVALID LOCATION UPDATE',location:null,breadcrumbs:[]});
+          return;
+        }
+        onState('DEGRADED','Invalid WebSocket payload rejected');
+      }catch{onState('DEGRADED','Malformed WebSocket payload rejected');}
+    };
+    current.onerror=()=>{if(active())onState('DEGRADED','WebSocket unavailable — dashboard is observation only');};
+    current.onclose=event=>{
+      if(!active())return;
+      closed=true;clearTimers();
+      if(event.code===1008){onState('OFFLINE','Authentication required for telemetry.');return;}
+      attempt+=1;
+      const delay=Math.min(15_000,1_000*2**Math.min(attempt-1,4));
+      onState('RECONNECTING',`Telemetry disconnected — reconnecting in ${Math.ceil(delay/1000)} s. Previous values are not current.`);
+      retry=window.setTimeout(open,delay);
+    };
+  };
   open();return()=>{stopped=true;clearTimers();socket?.close();};
 }

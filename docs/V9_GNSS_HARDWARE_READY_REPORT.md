@@ -1,5 +1,11 @@
 # V9 Prompt 2 — GNSS Hardware-Ready Software Report
 
+> HISTORICAL BASELINE — SUPERSEDED BY LATER RED-TEAM / CORRECTION RELEASE.
+> Retained as a dated record, not current completion or protocol authority.
+> Use [R1 release index](TARK_RELEASE_INDEX.md),
+> [Protocol V2](ESP32_PROTOCOL_V2.md) and
+> [supersession register](TARK_SUPERSESSION_REGISTER.md).
+
 ## Driver audit
 
 The earlier V9 foundation had normalized GNSS location, checksum parser, health checks, simulation and map contracts. It was simulated/contract-ready but had no serial transport, continuous reader, reconnection worker, raw stream diagnostics or hardware probe. It intentionally had no real device started by default.

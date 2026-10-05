@@ -1,0 +1,275 @@
+{
+  "verified_at_utc": "2026-09-24T00:03:29.478622+00:00",
+  "status": "PASS",
+  "duration_seconds": 227.32,
+  "total_frames": 5683,
+  "scene_checks": [
+    {
+      "file": "scene_01.mp4",
+      "decoded_frames": 449,
+      "fps": 25,
+      "width": 1920,
+      "height": 1080,
+      "duration_seconds": 17.96,
+      "codec": "h264",
+      "continuous_timestamps": true
+    },
+    {
+      "file": "scene_02.mp4",
+      "decoded_frames": 570,
+      "fps": 25,
+      "width": 1920,
+      "height": 1080,
+      "duration_seconds": 22.8,
+      "codec": "h264",
+      "continuous_timestamps": true
+    },
+    {
+      "file": "scene_03.mp4",
+      "decoded_frames": 565,
+      "fps": 25,
+      "width": 1920,
+      "height": 1080,
+      "duration_seconds": 22.6,
+      "codec": "h264",
+      "continuous_timestamps": true
+    },
+    {
+      "file": "scene_04.mp4",
+      "decoded_frames": 542,
+      "fps": 25,
+      "width": 1920,
+      "height": 1080,
+      "duration_seconds": 21.68,
+      "codec": "h264",
+      "continuous_timestamps": true
+    },
+    {
+      "file": "scene_05.mp4",
+      "decoded_frames": 623,
+      "fps": 25,
+      "width": 1920,
+      "height": 1080,
+      "duration_seconds": 24.92,
+      "codec": "h264",
+      "continuous_timestamps": true
+    },
+    {
+      "file": "scene_06.mp4",
+      "decoded_frames": 637,
+      "fps": 25,
+      "width": 1920,
+      "height": 1080,
+      "duration_seconds": 25.48,
+      "codec": "h264",
+      "continuous_timestamps": true
+    },
+    {
+      "file": "scene_07.mp4",
+      "decoded_frames": 675,
+      "fps": 25,
+      "width": 1920,
+      "height": 1080,
+      "duration_seconds": 27.0,
+      "codec": "h264",
+      "continuous_timestamps": true
+    },
+    {
+      "file": "scene_08.mp4",
+      "decoded_frames": 548,
+      "fps": 25,
+      "width": 1920,
+      "height": 1080,
+      "duration_seconds": 21.92,
+      "codec": "h264",
+      "continuous_timestamps": true
+    },
+    {
+      "file": "scene_09.mp4",
+      "decoded_frames": 571,
+      "fps": 25,
+      "width": 1920,
+      "height": 1080,
+      "duration_seconds": 22.84,
+      "codec": "h264",
+      "continuous_timestamps": true
+    },
+    {
+      "file": "scene_10.mp4",
+      "decoded_frames": 503,
+      "fps": 25,
+      "width": 1920,
+      "height": 1080,
+      "duration_seconds": 20.12,
+      "codec": "h264",
+      "continuous_timestamps": true
+    }
+  ],
+  "input_mix": {
+    "file": "mix.wav",
+    "sample_rate": 48000,
+    "channels": 2,
+    "sample_width_bytes": 2,
+    "samples": 10911360,
+    "duration_seconds": 227.32,
+    "timeline_error_seconds": 0.0
+  },
+  "captions": {
+    "file": "narration.srt",
+    "cues": 70,
+    "first_start_seconds": 0.0,
+    "last_end_seconds": 225.18,
+    "monotonic_nonoverlapping": true,
+    "timing_method": "Local alignment estimates against user-supplied recording"
+  },
+  "final_video": {
+    "file": "TARK_SIH26007_LIAM_SYNCED.mp4",
+    "decoded_frames": 5683,
+    "fps": 25,
+    "width": 1920,
+    "height": 1080,
+    "duration_seconds": 227.32,
+    "codec": "h264",
+    "continuous_timestamps": true
+  },
+  "final_audio_duration_seconds": 227.32,
+  "full_video_audio_decode": "PASS \u2014 FFmpeg -v error -xerror",
+  "video_reencoding_at_mux": false,
+  "audio": "User-supplied ElevenLabs Liam voiceover plus new mix",
+  "alignment": "Locally estimated anchors; not speech-provider word boundaries",
+  "output_sha256": "a4a6eb1fbf16fcf6b00848e05b68f180bc6f6f770522499fb1a18a8ec8f5cffe",
+  "input_voice_sha256": "04f03395a4b52294173fbd730cbe5147e8c69b31dad0b4952c7ff22becebbf53",
+  "limitations": [
+    "Conceptual engineering graphics, not physical hardware footage",
+    "Genuine UI stills retain simulation labels",
+    "No physical verification claim"
+  ],
+  "final_speech_sync_and_original_preservation": {
+    "aac_speech_timing": "PASS",
+    "anchors": [
+      {
+        "second": 5,
+        "lag_samples": 0,
+        "correlation": 0.999619
+      },
+      {
+        "second": 48,
+        "lag_samples": 0,
+        "correlation": 0.999673
+      },
+      {
+        "second": 102,
+        "lag_samples": 0,
+        "correlation": 0.99952
+      },
+      {
+        "second": 150,
+        "lag_samples": 0,
+        "correlation": 0.999489
+      },
+      {
+        "second": 220,
+        "lag_samples": 0,
+        "correlation": 0.999431
+      }
+    ],
+    "previous_film_unchanged": true,
+    "previous_film_sha256": "b8cc2a80a1d3246fc2532a44dce4907fbc848c603e22276c8aa7a36901bb1094",
+    "supplied_recording_unchanged": true,
+    "source_sha256": "04f03395a4b52294173fbd730cbe5147e8c69b31dad0b4952c7ff22becebbf53"
+  },
+  "audio_mastering": {
+    "duration_seconds": 227.32,
+    "source_duration_seconds": 225.306125,
+    "voice_speed_ratio": 1.0,
+    "voice_pitch_changed": false,
+    "voice_truncated": false,
+    "voice_start_offset_seconds": 0,
+    "closing_hold_seconds": 2.013875,
+    "music_source": "C:\\Users\\siddala karthik\\Documents\\Codex\\2026-09-14\\files-mentioned-by-the-user-whatsapp-2\\work\\film_revision\\audio\\music.wav",
+    "music_only_tempo_ratio": 1.2317437972901637,
+    "voice_over_music_by_scene": [
+      {
+        "scene": 1,
+        "voice_over_music_rms_db": 36.64
+      },
+      {
+        "scene": 2,
+        "voice_over_music_rms_db": 30.32
+      },
+      {
+        "scene": 3,
+        "voice_over_music_rms_db": 31.8
+      },
+      {
+        "scene": 4,
+        "voice_over_music_rms_db": 33.76
+      },
+      {
+        "scene": 5,
+        "voice_over_music_rms_db": 35.71
+      },
+      {
+        "scene": 6,
+        "voice_over_music_rms_db": 38.78
+      },
+      {
+        "scene": 7,
+        "voice_over_music_rms_db": 38.09
+      },
+      {
+        "scene": 8,
+        "voice_over_music_rms_db": 34.63
+      },
+      {
+        "scene": 9,
+        "voice_over_music_rms_db": 32.95
+      },
+      {
+        "scene": 10,
+        "voice_over_music_rms_db": 35.0
+      }
+    ],
+    "mastering": {
+      "input_i": "-18.01",
+      "input_tp": "-1.20",
+      "input_lra": "3.60",
+      "input_thresh": "-28.89",
+      "output_i": "-17.79",
+      "output_tp": "-1.20",
+      "output_lra": "3.40",
+      "output_thresh": "-28.65",
+      "normalization_type": "dynamic",
+      "target_offset": "-0.21"
+    },
+    "speech_alignment_checks": [
+      {
+        "at_seconds": 5,
+        "lag_samples": 0,
+        "lag_ms": 0.0
+      },
+      {
+        "at_seconds": 48,
+        "lag_samples": 0,
+        "lag_ms": 0.0
+      },
+      {
+        "at_seconds": 102,
+        "lag_samples": 0,
+        "lag_ms": 0.0
+      },
+      {
+        "at_seconds": 150,
+        "lag_samples": 0,
+        "lag_ms": 0.0
+      },
+      {
+        "at_seconds": 220,
+        "lag_samples": 0,
+        "lag_ms": 0.0
+      }
+    ],
+    "old_voice_included": false,
+    "source_mp3_sha256": "04f03395a4b52294173fbd730cbe5147e8c69b31dad0b4952c7ff22becebbf53"
+  }
+}

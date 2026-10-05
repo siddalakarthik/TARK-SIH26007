@@ -7,8 +7,10 @@ from app.domain.models import *
 
 def freshness(last_seen_ns:int|None, now_ns:int, fresh_ms:int, stale_ms:int)->Freshness:
     if last_seen_ns is None:return Freshness.MISSING
-    age=(now_ns-last_seen_ns)/1e6
-    return Freshness.FRESH if age<=fresh_ms else Freshness.AGING if age<=stale_ms else Freshness.STALE
+    if type(last_seen_ns) is not int or last_seen_ns < 0 or last_seen_ns > now_ns:
+        return Freshness.STALE
+    age_ns=now_ns-last_seen_ns
+    return Freshness.FRESH if age_ns<=fresh_ms*1_000_000 else Freshness.AGING if age_ns<=stale_ms*1_000_000 else Freshness.STALE
 
 def ttc(track:RadarTrack|None, now_ns:int, stale_ms:int)->TTCResult:
     if track is None:return TTCResult(status=TTCStatus.INVALID,seconds=None,reason="MISSING_TRACK")
@@ -37,26 +39,48 @@ def pvsoe(track:RadarTrack|None, health:SensorHealth, current_speed_mps:float, s
 @dataclass
 class Pipeline:
     settings:Settings; tracks:dict[str,RadarTrack]=field(default_factory=dict); events:list[SystemEvent]=field(default_factory=list); last_seen_ns:int|None=None; sequence:int=0
-    def ingest(self,detections:list[RadarDetection],now_ns:int|None=None)->PVSOEResult:
-        now_ns=now_ns or time.monotonic_ns(); self.last_seen_ns=now_ns
+    timestamp_fault:bool=False
+    decision_evidence_valid_until_ns:int|None=None
+    def observe(self,detections:list[RadarDetection],observed_at_ns:int,now_ns:int)->None:
+        """Update evidence without issuing a decision; source time is never restamped.
+
+        There is no approved clock tolerance. Invalid report/detection times
+        invalidate this evidence until a subsequent valid report is received.
+        """
+        stamps=[observed_at_ns,*(d.timestamp_ns for d in detections)]
+        if any(type(stamp) is not int or stamp<0 or stamp>now_ns for stamp in stamps):
+            self.timestamp_fault=True
+            return
+        if self.last_seen_ns is not None and observed_at_ns<self.last_seen_ns:
+            return
+        self.timestamp_fault=False
+        self.last_seen_ns=observed_at_ns
         for d in detections:
             key=f"ld2450:{d.candidate_id}"; existing=self.tracks.get(key)
+            if existing and d.timestamp_ns<existing.last_update_ns:
+                continue
             state=TrackState.TRACKED if existing else TrackState.NEW
-            self.tracks[key]=RadarTrack(track_id=key,state=state,x_m=d.x_m,y_m=d.y_m,relative_velocity_mps=d.velocity_mps,quality=d.quality,uncertainty_m=d.uncertainty_m,first_seen_ns=existing.first_seen_ns if existing else now_ns,last_update_ns=now_ns)
+            self.tracks[key]=RadarTrack(track_id=key,state=state,x_m=d.x_m,y_m=d.y_m,relative_velocity_mps=d.velocity_mps,quality=d.quality,uncertainty_m=d.uncertainty_m,first_seen_ns=existing.first_seen_ns if existing else d.timestamp_ns,last_update_ns=d.timestamp_ns)
+    def ingest(self,detections:list[RadarDetection],now_ns:int|None=None)->PVSOEResult:
+        now_ns=time.monotonic_ns() if now_ns is None else now_ns
+        observed_at_ns=max(d.timestamp_ns for d in detections) if detections else now_ns
+        self.observe(detections,observed_at_ns,now_ns)
         return self.decision(now_ns)
     def health(self,now_ns:int)->SensorHealth:
+        if self.timestamp_fault or (self.last_seen_ns is not None and (self.last_seen_ns<0 or self.last_seen_ns>now_ns)):
+            return SensorHealth(sensor_id="ld2450",state=HealthState.FAILED,freshness=Freshness.STALE,last_seen_ns=self.last_seen_ns,age_ms=None,quality=None,reason="INVALID_OBSERVATION_TIMESTAMP")
         f=freshness(self.last_seen_ns,now_ns,self.settings.fresh_age_ms,self.settings.stale_age_ms)
         state={Freshness.FRESH:HealthState.ONLINE,Freshness.AGING:HealthState.DEGRADED,Freshness.STALE:HealthState.STALE,Freshness.MISSING:HealthState.NOT_CONNECTED}[f]
         age=None if self.last_seen_ns is None else (now_ns-self.last_seen_ns)/1e6
         return SensorHealth(sensor_id="ld2450",state=state,freshness=f,last_seen_ns=self.last_seen_ns,age_ms=age,quality=None,reason=f"freshness_{f}")
     def decision(self,now_ns:int)->PVSOEResult:
-        active=[t for t in self.tracks.values() if (now_ns-t.last_update_ns)/1e6<=self.settings.track_timeout_ms]
+        active=[t for t in self.tracks.values() if 0<=now_ns-t.last_update_ns<=min(self.settings.track_timeout_ms,self.settings.stale_age_ms)*1_000_000]
         track=min(active,key=lambda x:hypot(x.x_m,x.y_m)) if active else None
         result=pvsoe(track,self.health(now_ns),0.0,self.settings,now_ns)
+        self.decision_evidence_valid_until_ns=(min(self.last_seen_ns,track.last_update_ns)+self.settings.stale_age_ms*1_000_000) if result.state==SafetyState.NORMAL and track is not None and self.last_seen_ns is not None else None
         self.events.append(SystemEvent(event_id=str(uuid.uuid4()),timestamp_ns=now_ns,event_type="PVSOE_DECISION",severity="INFO",reason=result.reason_code.value,payload=result.model_dump(mode="json")))
         self.events=self.events[-1000:]
         return result
     def command(self,result:PVSOEResult,now_ns:int)->BoundedCommand:
         self.sequence+=1
         return BoundedCommand(sequence=self.sequence,timestamp_ns=now_ns,valid_until_ns=now_ns+self.settings.esp32_timeout_ms*1_000_000,state=result.state,permitted_speed_mps=result.permitted_speed_mps,left_command=0.0,right_command=0.0,heartbeat=self.sequence,reason_code=result.reason_code,configuration_hash=self.settings.configuration_hash)
-

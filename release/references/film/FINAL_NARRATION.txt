@@ -1,0 +1,19 @@
+Out here, fog does more than hide the road. It changes what a driver can trust. Is that shape a vehicle, a person, or the edge of the road? We started with that uncertainty. Our challenge wasn't simply to see farther. It was to know when the evidence was no longer good enough.
+
+So we built TARK around a question: when visibility drops, how do we make a more informed decision? Let us show you. This engineering demonstrator brings sensing interfaces, reasoning, bounded control, and monitoring together. You're seeing conceptual hardware alongside our integrated software demonstration, not a claim of completed mine testing.
+
+Different sensors answer different questions. Radar provides local targets. Cameras add visual context; thermal sensing adds temperature patterns. The inertial sensor describes orientation. Encoders report wheel response, not ground speed. Today, radar feeds our decision pipeline. Other sensors supply observations and health information.
+
+Inside the Raspberry Pi, we ask something before trusting a reading: is it healthy, fresh, and worth using? Then we follow radar targets over time, rather than treating every detection as a new object. Uncertainty travels with that track. If an observation gets old, the system shouldn't quietly present yesterday's confidence as today's evidence.
+
+Now, seeing something isn't the same as having enough room to respond. Time to collision asks how quickly a closing situation could develop. In this demo, you'll see that value marked unavailable. Stopping requirement brings together reaction distance, braking distance, and margin. Comparing that requirement with observable distance gives us the next question: what operation can the evidence justify?
+
+We call that the Perception-Verified Safe Operating Envelope. The idea is simple: weaker evidence should mean less operating freedom, not more guesswork. NORMAL, RESTRICT, STOP, and UNKNOWN make that judgement visible. UNKNOWN is important. It says we don't have enough trustworthy information. A missing sensor or stale message must never quietly create permission to do more.
+
+The Pi handles reasoning. The ESP thirty-two software checks bounded commands before accepting them. Separately, our electrical design gives the emergency stop an independent path through the contactor system. Those responsibilities stay separate. And the dashboard never controls the vehicle. In this software demonstration, traction stays disabled; neither a browser click nor a healthy-looking screen grants motion authority.
+
+Location answers another question: where are we on the map? That's the role of GNSS and the intended LC twenty-nine H receiver. But radar asks where a target is relative to our vehicle. We keep those coordinate systems separate. Without a vehicle fix, the map uses a clearly labelled India overview, not an invented location.
+
+And this is the actual TARK dashboard. You're looking at our public software demo. The simulation labels stay visible. You can inspect system state, sensor health, communication, maps, logs, and replay. When a sensor is missing, the interface says so. For us, the important part is being able to ask why a decision happened, and trace the evidence behind it.
+
+We've brought sensing interfaces, reasoning, safety logic, and bounded control together with a real dashboard. One testable software system, not a collection of parts. The goal was never blind trust in a sensor. Trust the evidence you can verify. That's TARK.

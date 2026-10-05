@@ -41,7 +41,8 @@ Their data is called **wheel response**, never ground-truth vehicle speed.
 
 ## Protocol controls
 
-Protocol v1 is COBS framed and protected by CRC-32C. The Pi client rejects an
+[Protocol V2](ESP32_PROTOCOL_V2.md) is COBS framed and protected by CRC-32C,
+with explicit sessions and receiver-local bounded expiry. The Pi client rejects an
 expired command, non-monotonic sequence, sequence outside uint32 range,
 non-finite values, a negative permitted speed, and wheel command magnitudes
 greater than one before it writes a frame. The simulator additionally exercises
@@ -59,7 +60,10 @@ mechanism, not an automatic hardware-enable mechanism.
    product, serial/VID/PID evidence. Do not infer identity from the COM port.
 2. Set the reviewed USB path and baudrate in local configuration; use the
    identity-gated transport only after recorded evidence.
-3. Flash and inspect firmware identity, protocol version, configuration hash,
+3. Complete a reviewed board RX/TX, unique-boot-identity, scheduler/disconnect
+   and watchdog binding first; current app_main remains unavailable. Then,
+   under a separately approved procedure, flash and inspect firmware identity,
+   Protocol V2, configuration hash,
    sequence/expiry/NACK behavior and status reporting with traction isolated.
 4. Verify the independent physical E-stop/contactor path separately. GPIO13
    may only be checked as a diagnostic indication.

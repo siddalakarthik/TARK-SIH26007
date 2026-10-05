@@ -1,0 +1,51 @@
+{
+  "config_identifier": {
+    "rejected": "recording configuration identifier is incompatible",
+    "result": "PASS"
+  },
+  "config_values": {
+    "rejected": "INCOMPATIBLE configuration values",
+    "result": "PASS"
+  },
+  "deterministic_field_tamper": {
+    "digest_changed": true,
+    "result": "PASS"
+  },
+  "opener_tripwire": {
+    "deliberate_calls_blocked": 1,
+    "result": "PASS"
+  },
+  "protocol_version": {
+    "rejected": "unsupported protocol version",
+    "result": "PASS"
+  },
+  "replay_mismatch": {
+    "first_divergence": 1,
+    "observed": "MISMATCH",
+    "result": "PASS"
+  },
+  "runtime_failure": {
+    "error_type": "RuntimeError",
+    "last_output_zero": true,
+    "live_authority_unchanged": true,
+    "ready_http": 503,
+    "result": "PASS",
+    "status_http": 503
+  },
+  "storage_failure": {
+    "error_type": "OperationalError",
+    "last_output_zero": true,
+    "live_authority_unchanged": true,
+    "ready_http": 503,
+    "result": "PASS",
+    "status_http": 503
+  },
+  "wrong_expected_result": {
+    "rejected": "EV-01 step 1 sequence: expected 900, actual 2",
+    "result": "PASS"
+  },
+  "zero_output_tripwire": {
+    "nonzero_fixture_rejected": true,
+    "result": "PASS"
+  }
+}

@@ -1,0 +1,355 @@
+{
+  "all_shutdowns_complete": true,
+  "hardware_access": false,
+  "new_production_defects": [],
+  "observer_digest": "fd21d3e2f028a5bfe7264865da2631f1d262cdd0046769a7ee41ecf88765bfef",
+  "observer_equivalence": "MATCH",
+  "performance_note": "Host durations/counts/bytes only. No real-time or physical timing claim.",
+  "physical_validation": false,
+  "repetitions": 150,
+  "result": "PASS",
+  "scenario_count": 20,
+  "scenarios": [
+    {
+      "counts": {
+        "command_submissions": 2,
+        "events": 2,
+        "location_steps": 0,
+        "session_generation": 1,
+        "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+        "ticks": 2,
+        "wire_commands": 2,
+        "wire_writes": 3
+      },
+      "digest": "c177ee8fb30bbb1e3f6b26d256d07526e78c21cb3e02d00e0e42bf1522e1f2b8",
+      "duration_s_total": 0.909431,
+      "repetitions": 10,
+      "result": "PASS",
+      "scenario_id": "EV-01"
+    },
+    {
+      "counts": {
+        "command_submissions": 2,
+        "events": 2,
+        "location_steps": 0,
+        "session_generation": 1,
+        "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+        "ticks": 2,
+        "wire_commands": 2,
+        "wire_writes": 3
+      },
+      "digest": "3a03377e388d069f3e041ec661cd55155ea66651badb6c53f7486789ed194895",
+      "duration_s_total": 0.219042,
+      "repetitions": 5,
+      "result": "PASS",
+      "scenario_id": "EV-02"
+    },
+    {
+      "counts": {
+        "command_submissions": 2,
+        "events": 2,
+        "location_steps": 0,
+        "session_generation": 1,
+        "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+        "ticks": 2,
+        "wire_commands": 2,
+        "wire_writes": 3
+      },
+      "digest": "d979590bfd8e7f876adf02c2dc29b8c62280da81af3e1c17d2e89db7810094f9",
+      "duration_s_total": 0.451894,
+      "repetitions": 10,
+      "result": "PASS",
+      "scenario_id": "EV-03"
+    },
+    {
+      "counts": {
+        "command_submissions": 2,
+        "events": 2,
+        "location_steps": 0,
+        "session_generation": 1,
+        "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+        "ticks": 2,
+        "wire_commands": 2,
+        "wire_writes": 3
+      },
+      "digest": "c7842a5e45e65a3f575f8e54791eea5b4c7b6a10f5cfc6e461eacfa5357e7bbf",
+      "duration_s_total": 0.519389,
+      "repetitions": 10,
+      "result": "PASS",
+      "scenario_id": "EV-04"
+    },
+    {
+      "counts": {
+        "command_submissions": 2,
+        "events": 2,
+        "location_steps": 0,
+        "session_generation": 1,
+        "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+        "ticks": 2,
+        "wire_commands": 2,
+        "wire_writes": 3
+      },
+      "digest": "3728c0d24eeebf9d8dd6816b7ca7a85ccc5e889bc2f8b2cdd46827e72df6a0e6",
+      "duration_s_total": 0.248771,
+      "repetitions": 5,
+      "result": "PASS",
+      "scenario_id": "EV-05"
+    },
+    {
+      "counts": {
+        "command_submissions": 2,
+        "events": 2,
+        "location_steps": 0,
+        "session_generation": 1,
+        "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+        "ticks": 2,
+        "wire_commands": 2,
+        "wire_writes": 3
+      },
+      "digest": "81f8848b7dbbeb5fe3a0a7c3068fa93bd9c8afb6c0662a041f64b1c50bf3a2b6",
+      "duration_s_total": 0.437317,
+      "repetitions": 10,
+      "result": "PASS",
+      "scenario_id": "EV-06"
+    },
+    {
+      "counts": {
+        "command_submissions": 2,
+        "events": 2,
+        "location_steps": 0,
+        "session_generation": 1,
+        "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+        "ticks": 2,
+        "wire_commands": 2,
+        "wire_writes": 3
+      },
+      "digest": "10c687465d5aafe683429b8a2ff2ee37cd6fe8ac129a6f1f84adb46f4980dd21",
+      "duration_s_total": 0.395777,
+      "repetitions": 5,
+      "result": "PASS",
+      "scenario_id": "EV-07"
+    },
+    {
+      "counts": {
+        "command_submissions": 2,
+        "events": 2,
+        "location_steps": 0,
+        "session_generation": 1,
+        "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+        "ticks": 2,
+        "wire_commands": 2,
+        "wire_writes": 3
+      },
+      "digest": "fb5fc37ba0d497ad6e401c972828d2da98dc4034a32340b935b823e682f1c8ad",
+      "duration_s_total": 0.237984,
+      "repetitions": 5,
+      "result": "PASS",
+      "scenario_id": "EV-08"
+    },
+    {
+      "counts": {
+        "command_submissions": 2,
+        "events": 2,
+        "location_steps": 0,
+        "session_generation": 1,
+        "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+        "ticks": 2,
+        "wire_commands": 2,
+        "wire_writes": 3
+      },
+      "digest": "8740de798a7bbaa192cc16b1126cce94ba501c207d92880d72b7da2c0c938aba",
+      "duration_s_total": 0.228906,
+      "repetitions": 5,
+      "result": "PASS",
+      "scenario_id": "EV-09"
+    },
+    {
+      "counts": {
+        "command_submissions": 2,
+        "events": 2,
+        "location_steps": 0,
+        "session_generation": 1,
+        "session_id": null,
+        "ticks": 2,
+        "wire_commands": 2,
+        "wire_writes": 3
+      },
+      "digest": "bf9c2133c0c9c9bbfb78a583e63faaed788f0ab08e9a0bb3dd46306b8de88d02",
+      "duration_s_total": 0.45518,
+      "repetitions": 10,
+      "result": "PASS",
+      "scenario_id": "EV-10"
+    },
+    {
+      "counts": {
+        "command_submissions": 2,
+        "events": 2,
+        "location_steps": 0,
+        "session_generation": 1,
+        "session_id": null,
+        "ticks": 2,
+        "wire_commands": 2,
+        "wire_writes": 3
+      },
+      "digest": "6df90fe375799e2be0b38f45cf301d14445640de5d0687c9282d0f8a88ae079e",
+      "duration_s_total": 0.276756,
+      "repetitions": 5,
+      "result": "PASS",
+      "scenario_id": "EV-11"
+    },
+    {
+      "counts": {
+        "command_submissions": 2,
+        "events": 2,
+        "location_steps": 0,
+        "session_generation": 1,
+        "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+        "ticks": 2,
+        "wire_commands": 2,
+        "wire_writes": 3
+      },
+      "digest": "bbfbc82d8711a09c14c2cdf80919767de3eea0b5cf950cbe4e9c7e689dac2936",
+      "duration_s_total": 0.460453,
+      "repetitions": 5,
+      "result": "PASS",
+      "scenario_id": "EV-12"
+    },
+    {
+      "counts": {
+        "command_submissions": 2,
+        "events": 2,
+        "location_steps": 0,
+        "session_generation": 1,
+        "session_id": "1c5e9645d1d2a875bfe69a4c70a054560000000000000001",
+        "ticks": 2,
+        "wire_commands": 5,
+        "wire_writes": 7
+      },
+      "digest": "2fc4003585bf7b48cea31fa7960ccc7efdeb368efe3b9bd58f567c7c6ebe5391",
+      "duration_s_total": 0.560326,
+      "repetitions": 10,
+      "result": "PASS",
+      "scenario_id": "EV-13"
+    },
+    {
+      "counts": {
+        "command_submissions": 3,
+        "events": 3,
+        "location_steps": 0,
+        "session_generation": 2,
+        "session_id": "33b1c537651a9c10933a0b358e9733540000000000000002",
+        "ticks": 3,
+        "wire_commands": 4,
+        "wire_writes": 6
+      },
+      "digest": "081cb419d1307484bfef1b6bbd72d025ca8683d0a7c6a95630ea0df5a4e11bb7",
+      "duration_s_total": 0.311847,
+      "repetitions": 5,
+      "result": "PASS",
+      "scenario_id": "EV-14"
+    },
+    {
+      "counts": {
+        "command_submissions": 2,
+        "events": 2,
+        "location_steps": 0,
+        "session_generation": 2,
+        "session_id": "33b1c537651a9c10933a0b358e9733540000000000000002",
+        "ticks": 2,
+        "wire_commands": 2,
+        "wire_writes": 4
+      },
+      "digest": "53dd9788ce05439a4fa985d2e55e140a46d6c56627d187e68c3920d19007f40b",
+      "duration_s_total": 0.225898,
+      "repetitions": 5,
+      "result": "PASS",
+      "scenario_id": "EV-15"
+    },
+    {
+      "counts": {
+        "command_submissions": 5,
+        "events": 5,
+        "location_steps": 0,
+        "session_generation": 1,
+        "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+        "ticks": 5,
+        "wire_commands": 5,
+        "wire_writes": 6
+      },
+      "digest": "fd21d3e2f028a5bfe7264865da2631f1d262cdd0046769a7ee41ecf88765bfef",
+      "duration_s_total": 0.808697,
+      "repetitions": 10,
+      "result": "PASS",
+      "scenario_id": "EV-16"
+    },
+    {
+      "counts": {
+        "command_submissions": 5,
+        "events": 5,
+        "location_steps": 0,
+        "session_generation": 1,
+        "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+        "ticks": 5,
+        "wire_commands": 5,
+        "wire_writes": 6
+      },
+      "digest": "fd21d3e2f028a5bfe7264865da2631f1d262cdd0046769a7ee41ecf88765bfef",
+      "duration_s_total": 1.735476,
+      "repetitions": 10,
+      "result": "PASS",
+      "scenario_id": "EV-17"
+    },
+    {
+      "counts": {
+        "command_submissions": 5,
+        "events": 5,
+        "location_steps": 0,
+        "session_generation": 1,
+        "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+        "ticks": 5,
+        "wire_commands": 5,
+        "wire_writes": 6
+      },
+      "digest": "fd21d3e2f028a5bfe7264865da2631f1d262cdd0046769a7ee41ecf88765bfef",
+      "duration_s_total": 5.747036,
+      "repetitions": 10,
+      "result": "PASS",
+      "scenario_id": "EV-18"
+    },
+    {
+      "counts": {
+        "command_submissions": 4,
+        "events": 4,
+        "location_steps": 0,
+        "session_generation": 1,
+        "session_id": "33b1c537651a9c10933a0b358e9733540000000000000001",
+        "ticks": 4,
+        "wire_commands": 4,
+        "wire_writes": 5
+      },
+      "digest": "f979bfaa2583fa03e58ea64e6090d82beb67ab33b8c8195d706cfd89a32446ca",
+      "duration_s_total": 0.286823,
+      "repetitions": 5,
+      "result": "PASS",
+      "scenario_id": "EV-19"
+    },
+    {
+      "counts": {
+        "command_submissions": 6,
+        "events": 6,
+        "location_steps": 0,
+        "session_generation": 1,
+        "session_id": "1c5e9645d1d2a875bfe69a4c70a054560000000000000001",
+        "ticks": 6,
+        "wire_commands": 6,
+        "wire_writes": 8
+      },
+      "digest": "9cafce5cc0cd7a72d2788b8d3fb7a52281f6790c44a50e36e78c1bf41c79be20",
+      "duration_s_total": 0.72738,
+      "repetitions": 10,
+      "result": "PASS",
+      "scenario_id": "EV-20"
+    }
+  ],
+  "traction": "DISABLED_PHASE_1"
+}

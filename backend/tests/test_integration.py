@@ -3,12 +3,12 @@ from app.config import Settings
 from app.sensors.ld2450.parser import LD2450Parser
 from app.services.pipeline import Pipeline
 from app.replay.engine import replay, compare
-from app.communication.esp32.protocol import ESP32Client, decode_frame
+from app.communication.esp32.protocol import ESP32Client, ESP32ProtocolSimulator, decode_frame
 
 SETTINGS=Settings.from_file(Path(__file__).parents[2]/"config"/"phase1.json")
-class MemoryTransport:
-    def __init__(self): self.frames=[]
-    def write(self,frame): self.frames.append(frame)
+class MemoryTransport(ESP32ProtocolSimulator):
+    def __init__(self): super().__init__(SETTINGS.configuration_hash);self.frames=[]
+    def write(self,frame): self.frames.append(frame);super().write(frame)
 
 def test_simulated_radar_to_decision_command_and_replay():
     raw=b'SIM1 {"detections":[{"id":7,"x_m":3.0,"y_m":0.0,"velocity_mps":-1.0,"quality":0.9}]}\n'
@@ -16,7 +16,6 @@ def test_simulated_radar_to_decision_command_and_replay():
     decision=p.ingest(parser.parse(raw,ts),ts); command=p.command(decision,ts)
     transport=MemoryTransport(); result=ESP32Client(transport).submit(command,ts)
     assert result.accepted and command.left_command==command.right_command==0
-    assert decode_frame(transport.frames[0])[1]["payload"]["configuration_hash"]==SETTINGS.configuration_hash
-    recorded=replay([raw],Pipeline(SETTINGS),[ts]); assert recorded.result=="MATCH"
-    assert compare(recorded.decisions,recorded.decisions).result=="MATCH"
-
+    assert decode_frame(transport.frames[-1])[1]["payload"]["configuration_hash"]==SETTINGS.configuration_hash
+    recorded=replay([raw],Pipeline(SETTINGS),[ts]); assert recorded.result=="NOT_COMPARED"
+    assert compare([decision.model_dump(mode="json")],recorded.decisions).result=="MATCH"

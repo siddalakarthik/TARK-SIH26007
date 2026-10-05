@@ -1,0 +1,152 @@
+[
+  {
+    "figure": "sim01_safe_speed_vs_range",
+    "source_table": "tables/sim01_safe_speed_vs_range.csv",
+    "description": "FIG-01 | Maximum model-compatible speed",
+    "source_sha256": "8dabb3379529c3ba8ed0a6818176c1bde7fb3f02212d8f53208b9b7c8fa1230c"
+  },
+  {
+    "figure": "sim01_required_range_vs_speed",
+    "source_table": "tables/sim01_required_range_vs_speed.csv",
+    "description": "FIG-02 | Required perception distance",
+    "source_sha256": "73e003ea89f7e604049f636a76b641727d73f3c21f1bd1018394d80fb0d33ac0"
+  },
+  {
+    "figure": "sim01_visual_reference",
+    "source_table": "tables/sim01_safe_speed_vs_range.csv",
+    "description": "3, 4 and 5 metre visual-only references; not fog sensor performance",
+    "source_sha256": "8dabb3379529c3ba8ed0a6818176c1bde7fb3f02212d8f53208b9b7c8fa1230c"
+  },
+  {
+    "figure": "sim01_stopping_components",
+    "source_table": "tables/sim01_safe_speed_vs_range.csv",
+    "description": "Zero cap does not imply feasibility below combined reserves",
+    "source_sha256": "8dabb3379529c3ba8ed0a6818176c1bde7fb3f02212d8f53208b9b7c8fa1230c"
+  },
+  {
+    "figure": "sim02_safety_efficiency_map",
+    "source_table": "tables/sim02_operating_envelope.csv",
+    "description": "Black contour is zero model margin, not certified safety",
+    "source_sha256": "3ff1c61256610f4c5e62ed8a21f87792f7ceedef59d0bcf084f4382c3ae15deb"
+  },
+  {
+    "figure": "sim02_speed_cap_curves",
+    "source_table": "tables/sim01_safe_speed_vs_range.csv",
+    "description": "Model speed bounds from declared parameter sets",
+    "source_sha256": "8dabb3379529c3ba8ed0a6818176c1bde7fb3f02212d8f53208b9b7c8fa1230c"
+  },
+  {
+    "figure": "sim03_clearance_map",
+    "source_table": "tables/sim03_encounters.csv",
+    "description": "Initial separation 40 m; detect at 20 m; target never brakes; negative is model overlap",
+    "source_sha256": "3693f4865919467ef6d2dd60601cc17edc6fc0e5af79f8a44f9024a35461a792"
+  },
+  {
+    "figure": "sim03_closing_scenarios",
+    "source_table": "tables/sim03_encounters.csv",
+    "description": "Initial closing rate at 40 m separation",
+    "source_sha256": "3693f4865919467ef6d2dd60601cc17edc6fc0e5af79f8a44f9024a35461a792"
+  },
+  {
+    "figure": "sim03_required_detection_range",
+    "source_table": "tables/sim03_encounters.csv",
+    "description": "Required range for the finite encounter horizon",
+    "source_sha256": "3693f4865919467ef6d2dd60601cc17edc6fc0e5af79f8a44f9024a35461a792"
+  },
+  {
+    "figure": "sim04_fog_timeline",
+    "source_table": "tables/sim04_fog_transition.csv",
+    "description": "Piecewise condition assessments, not an instantaneous vehicle speed trajectory",
+    "source_sha256": "6379a7479abf57f44d9517596d49f2d382175feeeb835d649cca4913e7403d07"
+  },
+  {
+    "figure": "sim10_integrated",
+    "source_table": "tables/sim10_integrated.csv",
+    "description": "Piecewise condition assessments, not an instantaneous vehicle speed trajectory",
+    "source_sha256": "3f9bcab465caa2409c785142ea5e3028b7b35b223fe8713e2a44570f362d92b5"
+  },
+  {
+    "figure": "sim04_envelope_contraction",
+    "source_table": "tables/sim04_fog_transition.csv",
+    "description": "Condition caps, not instantaneous physical braking",
+    "source_sha256": "6379a7479abf57f44d9517596d49f2d382175feeeb835d649cca4913e7403d07"
+  },
+  {
+    "figure": "sim10_health_timeline",
+    "source_table": "tables/sim10_integrated.csv",
+    "description": "Synthetic condition flags, not a replacement protocol supervisor",
+    "source_sha256": "3f9bcab465caa2409c785142ea5e3028b7b35b223fe8713e2a44570f362d92b5"
+  },
+  {
+    "figure": "sim05_uncertainty_sensitivity",
+    "source_table": "tables/sim05_perception_degradation.csv",
+    "description": "FIG-07a | Uncertainty reduces modeled capability",
+    "source_sha256": "ca4f2e1e0a9fd97d0a6adf2e358359d6be040929654f2884ed2f36da614ed26f"
+  },
+  {
+    "figure": "sim05_range_degradation",
+    "source_table": "tables/sim05_perception_degradation.csv",
+    "description": "Range and age constraints",
+    "source_sha256": "ca4f2e1e0a9fd97d0a6adf2e358359d6be040929654f2884ed2f36da614ed26f"
+  },
+  {
+    "figure": "sim06_fault_timeline",
+    "source_table": "tables/sim06_fault_story.csv",
+    "description": "EV-20 projection; all nine selected fault traces are available in CSV",
+    "source_sha256": "b4a516eb89a0348814ac9c708452a8d981101d730f8996109eaf7e7c351e307e"
+  },
+  {
+    "figure": "sim07_margin_distribution",
+    "source_table": "tables/sim07_samples.csv",
+    "description": "Uniform engineering samples, not accident probability",
+    "source_sha256": "b1b7ca490eb2f3f351180b20133819e04236fb9b87b9776c7ad1c431c010d713"
+  },
+  {
+    "figure": "sim07_parameter_sensitivity",
+    "source_table": "tables/sim07_sensitivity.csv",
+    "description": "Rank depends on assumed ranges; not a universal sensitivity ranking",
+    "source_sha256": "5c22ce95a735932cbbc559d2cb21e661f77840e68e17c487a20a9d8090b7c5f3"
+  },
+  {
+    "figure": "sim07_convergence",
+    "source_table": "tables/sim07_uncertainty_samples_summary.csv",
+    "description": "Compare final two prefixes using predeclared tolerances",
+    "source_sha256": "7036d53cfeebd7f95b905efd1dc9ff8fd2c8d7651604678d63bc08ff610fdc47"
+  },
+  {
+    "figure": "sim08_cycle_time_comparison",
+    "source_table": "tables/sim08_operational_continuity.csv",
+    "description": "FIG-09 | Normalized cycle time",
+    "source_sha256": "152d08926601cce6c72ae967f262a90eb262b3ab49142d487c211c6c0f389b30"
+  },
+  {
+    "figure": "sim08_productivity_retention",
+    "source_table": "tables/sim08_operational_continuity.csv",
+    "description": "FIG-10 | Normalized throughput retention",
+    "source_sha256": "152d08926601cce6c72ae967f262a90eb262b3ab49142d487c211c6c0f389b30"
+  },
+  {
+    "figure": "sim08_halt_fraction",
+    "source_table": "tables/sim08_operational_continuity.csv",
+    "description": "Modeled halt fraction",
+    "source_sha256": "152d08926601cce6c72ae967f262a90eb262b3ab49142d487c211c6c0f389b30"
+  },
+  {
+    "figure": "sim09_required_perception_range",
+    "source_table": "tables/sim09_fullscale_requirements.csv",
+    "description": "Full-scale requirement, not a sensor capability",
+    "source_sha256": "ce36bbcfe75a75fe94f99bdcbc556cdaacd849b7d8ab35948d0c0b44c1866f14"
+  },
+  {
+    "figure": "sim09_requirement_feasibility_map",
+    "source_table": "tables/sim09_fullscale_requirements.csv",
+    "description": "No prototype detection-range performance claim",
+    "source_sha256": "ce36bbcfe75a75fe94f99bdcbc556cdaacd849b7d8ab35948d0c0b44c1866f14"
+  },
+  {
+    "figure": "safety_efficiency_trade_space",
+    "source_table": "tables/safety_efficiency_trade_space.csv",
+    "description": "Within each fixed resource case the feasible speed/margin curve is non-dominated",
+    "source_sha256": "f0348a3c774279ccdbd7161b5091b0f146f247b5587155579b8517115eee9ce5"
+  }
+]

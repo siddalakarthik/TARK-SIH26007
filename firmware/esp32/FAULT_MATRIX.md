@@ -10,6 +10,5 @@
 | configuration mismatch | reject | implemented |
 | heartbeat timeout | communication authority invalid | tested at supervisor level |
 | Phase 1 output request | output remains disabled | status/initialization implemented |
-| USB disconnect/reconnect | requires USB transport integration | not yet verified |
+| disconnect/reconnect | portable service/session reset and host transport flush tested; physical USB binding pending | software evidence in Protocol V2 tests; no board verification |
 | hardware watchdog / task stall | requires ESP-IDF task integration | not yet verified |
-

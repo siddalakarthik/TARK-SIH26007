@@ -1,45 +1,122 @@
-# TARK Phase 1 Backend
+# TARK — SIH26007
 
-This repository implements the Phase 1 Raspberry Pi software chain for the TARK SIH26007 research prototype. Phase 1 uses a real or simulated HLK-LD2450 source, deterministic decision processing, USB command framing, logging, replay and an observation-only FastAPI service. It deliberately does not energize traction or expose a motor-control API.
+Perception-aware safety-assistance research for mine vehicles in low visibility.
 
-The real LD2450 serial adapter retains bounded raw evidence, handles open/timeout/disconnect, and decodes only the manufacturer-published 30-byte target-report frame (`AA FF 03 00`, three target slots, `55 CC`). Normalized reports enter the existing perception pipeline only in explicitly configured `real_radar` mode. `SIM1` remains a deterministic test fixture; it is never used by the physical adapter. This is software-verified decoding, not proof of physical receiver communication or calibration.
+## Current: R3 SIH pre-selection software baseline
 
-Prompt 3.1 adds simulation-first interfaces for radar, ESP32, MDD10A, encoders, camera, thermal sensor and IMU, plus the React/TypeScript operations UI source. Every Phase 2 interface reports simulation or not-connected status until hardware verification. See `docs/HARDWARE_ARRIVAL_CHECKLIST.md` before connecting devices.
-
-## Quick start
-
-```powershell
-python -m pip install -e ".[dev]"
-$env:PYTHONPATH = "backend"
-python -m app.main
-pytest -q
-```
-
-## Operations UI
+Start with [the pre-selection freeze](docs/TARK_R3_PRESELECTION_FREEZE.md),
+[three flagship demonstrations](docs/SIH_FLAGSHIP_DEMOS.md), and the current
+[R3 reasoning report](docs/R3_REASONING_REPORT.md). R3 adds a separately labelled,
+evidence-qualified research advisory; the legacy decision/control path is retained.
+Conditional R3 TTC uses qualified successive positions under explicit research
+assumptions, not Doppler as a velocity vector. Neither advisory nor browser can
+command motion. Traction remains `DISABLED_PHASE_1`.
 
 ```powershell
-cd frontend
-pnpm install
-pnpm build
-pnpm test
-cd ..
-scripts\run.ps1
+# From the existing installed project environment; no hardware required
+.\.venv\Scripts\python.exe scripts/run_sih_demos.py --scenario all
+$env:TARK_HARDWARE_PROFILE='R3_PI5_ADVISORY'
+$env:TARK_R3_FIXTURE_PATH=(Resolve-Path 'data\fixtures\r3_sources_v1.json').Path
+.\scripts\run_demo.ps1
 ```
 
-Open `http://localhost:8000`. FastAPI serves the compiled frontend and API from one origin. The Map view defaults to the no-key OpenFreeMap Liberty style and starts at an India overview when no approved display location is configured. Set `VITE_MAP_STYLE_URL` for an approved alternate style (or legacy `VITE_MAPTILER_STYLE_URL`); map and route output are advisory and never motion authority. A radar target stays in its local X/Y metre scope and is never portrayed as a geographic location. Set `TARK_DEFAULT_MAP_CENTER=longitude,latitude` only after an approved display location exists.
+Open `http://localhost:8000/#/safety`; Driver is `/#/hmi`, Diagnostics
+`/#/diagnostics`, Replay `/#/replay`. The dashboard fixture is intentionally
+uncommissioned/UNKNOWN, not the positive-envelope CLI research demo. See
+[local setup and optional Windows dependency selection](docs/R2_WEBSITE_RUN.md).
 
-Browser location is requested only by the `Locate me` operator action and is labelled **DEVICE LOCATION — NOT TARK VEHICLE**. It is not uploaded or used by the decision engine. Vehicle GNSS is a separate, currently not-connected hardware contract. Optional reverse geocoding and routing are server-side provider boundaries: configure `TARK_REVERSE_GEOCODER_URL` and `TARK_ROUTE_PROVIDER_URL` only after approving provider/privacy terms. With either unset, the UI says unavailable and never fabricates an address or route. Vehicle camera data uses a metadata endpoint and a separate future stream endpoint; no frames are carried inside status JSON.
+Tests: `python -B -m pytest backend/tests -q -p no:cacheprovider`; from
+`frontend`: `pnpm test`, `pnpm run lint:types`, `pnpm run build`.
+Artifacts go outside the repository to `../work/sih_preselection`; existing
+outputs are never overwritten. Choose a fresh `--output` to repeat a run.
 
-## Portable deployment
+**Claim boundary:** R3 normalized-evidence reasoning/replay is software verified
+using deterministic synthetic fixtures. Hardware, Hailo inference, real fog,
+sensor synchronization, HEMM braking and mine certification remain unverified.
+See [R3 foundation/vendor boundaries](docs/R3_SOFTWARE_INTEGRATION.md) and
+[physical work](docs/PHYSICAL_VALIDATION_NEXT_PHASE.md). No public deployment is
+updated by the Git freeze alone.
 
-The frontend uses same-origin API and WebSocket URLs, so one unchanged build supports local development, an edge hostname, and an HTTPS public hostname. See [public deployment](docs/PUBLIC_DEPLOYMENT.md) for local/LAN use, Render container deployment, custom domains, authenticated monitoring, and the optional Cloudflare Tunnel edge pattern. Public deployment does not enable hardware or traction.
+## Historical R1 release (retained, not current R3 status)
 
-The service exposes `/health`, `/api/v1/status`, `/api/v1/tracks`, `/api/v1/events`, `/api/v1/runs`, and observation/replay endpoints. There is no command-to-motor endpoint.
+**TARK PHASE-1 SOFTWARE EVIDENCE RELEASE R1** is a controlled software-evidence
+baseline, not an as-built vehicle release. `DISABLED_PHASE_1`: permitted speed,
+left command and right command are always zero.
 
-The final pre-hardware audit is recorded in [docs/FINAL_MASTER_ENGINEERING_AUDIT_REPORT.md](docs/FINAL_MASTER_ENGINEERING_AUDIT_REPORT.md). Its release classification is **B — FINAL SOFTWARE RELEASE / DEPLOYMENT READY**: local evidence is complete, while a real Render hostname, external network, physical mobile devices and hardware remain explicitly unverified.
+Start with the [release index](docs/TARK_RELEASE_INDEX.md),
+[project status](docs/PROJECT_STATUS.md) and [manifest](docs/TARK_RELEASE_MANIFEST.md).
 
-The public-access handoff is recorded in [docs/FINAL_PUBLIC_ACCESS_RELEASE_REPORT.md](docs/FINAL_PUBLIC_ACCESS_RELEASE_REPORT.md). Render was reachable only at its sign-in page from this workspace, and this folder has no Git remote; consequently no public URL has been created or claimed.
+## Architecture and implemented scope
 
-The controlled pre-hardware completion report is [docs/FINAL_PRE_HARDWARE_SOFTWARE_COMPLETION_REPORT.md](docs/FINAL_PRE_HARDWARE_SOFTWARE_COMPLETION_REPORT.md).
+Radar reports → source-time health/freshness → slot-based tracks → provisional
+PV-SOE/stopping comparison → bounded zero command → Protocol V2 supervisor.
+Events and recordings support deterministic replay. FastAPI REST/WebSocket
+publish cached observations to the React/MapLibre HMI; consumers do not advance
+the decision loop. GNSS, RGB, thermal and IMU have separate observational
+interfaces, not production multisensor fusion.
 
-The R9 map, camera and truthful-status review is [docs/FINAL_R9_MAP_CAMERA_SOFTWARE_FIX_REPORT.md](docs/FINAL_R9_MAP_CAMERA_SOFTWARE_FIX_REPORT.md).
+The ESP32 C parser/service/supervisor is host-tested. Physical USB, fresh boot
+identity, scheduler and watchdog bindings remain outside this release.
+
+## Software evidence
+
+Prompt 1 corrected stale/future evidence, runtime ownership and HMI truthfulness.
+Prompt 2 established [Protocol V2](docs/ESP32_PROTOCOL_V2.md) and recording-format-2
+replay semantics. Prompt 3 exercised 20 production-path scenarios over 150
+independent repetitions. See the [current test record](docs/TEST_REPORT.md)
+and [claim/evidence matrix](docs/TARK_CLAIM_EVIDENCE_MATRIX.md).
+
+## Run the local software demo
+
+From this repository in PowerShell, with Python and the pinned frontend tools installed:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+.\scripts\build_frontend.ps1
+.\scripts\run.ps1
+```
+
+Open `http://localhost:8000`. The checked-in configuration is simulation;
+leave device paths/identity evidence unset. See [RUN](docs/RUN.md) and
+[deployment profiles](docs/PUBLIC_DEPLOYMENT.md) for the environment contract.
+Use a single application worker for one TARK instance.
+
+## Reproduce the evidence
+
+In the installed project Python environment, with no hardware configuration inherited:
+
+```text
+python scripts/run_evidence_harness.py --verify evidence/prompt3
+python -B -m pytest -q -p no:cacheprovider
+```
+
+From `frontend`: `pnpm test`, `pnpm run lint:types`, `pnpm run build`.
+Fresh strict GCC host tests run inside the Python protocol fixture. See
+[evidence authority](docs/EVIDENCE_AUTHORITY.md) for isolation, fingerprinting
+and reproducibility limits. Do not overwrite the supplied evidence bundle.
+
+## Public demo is not physical vehicle control
+
+[Recorded public software demonstration](https://tark-sih26007-demo.onrender.com)
+is simulation/monitoring only. Its availability and deployed commit were not
+rechecked during this local release pass. This local R1 has **not been pushed
+or deployed**. A browser cannot command traction.
+
+PV-SOE is currently a simplified provisional model. Vehicle speed is not
+measured; TTC is **NOT COMPUTED** in production decisions; WARN has no executable
+production policy. Research EKF/fusion studies are separate. No measured
+braking, fog, E-stop, physical watchdog or mine-certification claim is made.
+
+## Repository
+
+`backend/` contains the application and tests; `frontend/` the monitoring HMI;
+`firmware/esp32/` the board-neutral C stack; `config/` reviewed parameters;
+`simulation/` fixtures; `scripts/` operating tools; `docs/` controlled guidance;
+`evidence/prompt3/` immutable software evidence; `release/` release identity and
+read-only historical/design references.
+
+Physical work starts with the [next-phase gates](docs/PHYSICAL_VALIDATION_NEXT_PHASE.md)
+and [electrical HOLD register](release/references/electrical/HOLD_REGISTER.md),
+not a software test pass. Historical freezes remain in the
+[supersession register](docs/TARK_SUPERSESSION_REGISTER.md).

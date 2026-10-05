@@ -5,6 +5,7 @@ from pathlib import Path
 import re
 import pytest
 from starlette.websockets import WebSocketDisconnect
+from runtime_fixtures import ControlledRuntime
 
 def receive_error(socket,code):
     for _ in range(5):
@@ -76,11 +77,11 @@ def test_cors_rejects_wildcards_and_non_origin_values():
     assert response.headers["access-control-allow-origin"]=="https://console.example"
 
 def test_authenticated_mode_blocks_api_until_a_session_is_created():
-    client=TestClient(create_app(deployment=DeploymentConfig(environment="development",auth_mode="authenticated",access_token="test-token")))
-    assert client.get("/api/v1/status").status_code==401
-    assert client.post("/api/v1/auth/session",headers={"Authorization":"Bearer wrong"}).status_code==401
-    assert client.post("/api/v1/auth/session",headers={"Authorization":"Bearer test-token"}).status_code==204
-    assert client.get("/api/v1/status").status_code==200
+    with TestClient(create_app(deployment=DeploymentConfig(environment="development",auth_mode="authenticated",access_token="test-token"))) as client:
+        assert client.get("/api/v1/status").status_code==401
+        assert client.post("/api/v1/auth/session",headers={"Authorization":"Bearer wrong"}).status_code==401
+        assert client.post("/api/v1/auth/session",headers={"Authorization":"Bearer test-token"}).status_code==204
+        assert client.get("/api/v1/status").status_code==200
 
 def test_authenticated_public_hardware_session_uses_secure_cookie_attributes():
     client=TestClient(create_app(deployment=DeploymentConfig(environment="public_hardware",auth_mode="authenticated",access_token="test-token")))
@@ -114,7 +115,7 @@ def test_no_direct_motor_control_route_exists():
     assert not any("motor" in path or "traction" in path or "command" in path for path in paths)
 
 def test_websocket_publishes_observation_only_status():
-    with TestClient(create_app()).websocket_connect("/api/v1/ws") as socket:
+    with TestClient(create_app()) as client, client.websocket_connect("/api/v1/ws") as socket:
         status=socket.receive_json()
         assert status["type"]=="status" and status["payload"]["traction"]=="DISABLED_PHASE_1"
         assert status["payload"]["vehicle_location"]["location"]["source"]=="SIMULATION"
@@ -127,17 +128,19 @@ def test_websocket_publishes_observation_only_status():
 
 def test_events_and_recording_sessions_are_persisted_without_fabrication(tmp_path, monkeypatch):
     monkeypatch.setenv("TARK_DATABASE_PATH",str(tmp_path/"events.db"))
-    with TestClient(create_app()) as client:
+    controlled=ControlledRuntime()
+    with TestClient(create_app(runtime_factory=controlled)) as client:
         events=client.get("/api/v1/events").json()
         assert events and events[0]["event_type"]=="PVSOE_DECISION"
         assert client.get("/api/v1/runs").json()==[]
         session=client.post("/api/v1/recordings/start").json()
         assert session["status"]=="RECORDING"
         client.get("/api/v1/status")
+        client.portal.call(controlled.step)
         stopped=client.post("/api/v1/recordings/stop").json()
         assert stopped["status"]=="COMPLETE" and stopped["record_count"]==1
         assert client.get("/api/v1/replay/sessions").json()[0]["session_id"]==session["session_id"]
-        assert client.get(f"/api/v1/replay/sessions/{session['session_id']}/records").json()[0]["kind"]=="OBSERVATION_TICK_V1"
+        assert client.get(f"/api/v1/replay/sessions/{session['session_id']}/records").json()[0]["kind"]=="OBSERVATION_TICK_V2"
         timeline=client.get(f"/api/v1/replay/sessions/{session['session_id']}/timeline")
         assert timeline.status_code==200 and timeline.json()["source_mode"]=="REPLAY" and timeline.json()["state"]=="READY"
         assert client.post(f"/api/v1/replay/sessions/{session['session_id']}/verify").json()["result"]=="MATCH"
@@ -145,10 +148,12 @@ def test_events_and_recording_sessions_are_persisted_without_fabrication(tmp_pat
 
 def test_replay_timeline_and_verification_reject_incompatible_configuration(tmp_path, monkeypatch):
     monkeypatch.setenv("TARK_DATABASE_PATH",str(tmp_path/"events.db"))
-    app=create_app()
+    controlled=ControlledRuntime()
+    app=create_app(runtime_factory=controlled)
     with TestClient(app) as client:
         session=client.post("/api/v1/recordings/start").json()
         client.get("/api/v1/status")
+        client.portal.call(controlled.step)
         client.post("/api/v1/recordings/stop")
         app.state.system.recording_store.db.execute("UPDATE recording_sessions SET configuration_hash='different' WHERE id=?",(session["session_id"],))
         app.state.system.recording_store.db.commit()

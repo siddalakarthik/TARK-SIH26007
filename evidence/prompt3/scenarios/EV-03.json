@@ -1,0 +1,62 @@
+{
+  "configuration": "config/phase1.json",
+  "expected_final_state": "UNKNOWN",
+  "expected_invariants": "PHASE1_ZERO_NO_HARDWARE_NO_REPLAY_AUTHORITY",
+  "initial_receiver_time": 1000000000,
+  "initial_reports": [
+    {
+      "age_ns": 0,
+      "candidate_id": 1,
+      "distance_m": 3.0,
+      "empty": false
+    }
+  ],
+  "initial_runtime_time": 10000000000,
+  "observer_profile": "none",
+  "purpose": "Expired observation is not current NORMAL evidence",
+  "record_from_start": true,
+  "repeat_count": 10,
+  "response_policy": "deliver",
+  "scenario_id": "EV-03",
+  "steps": [
+    {
+      "action": "ADVANCE_TIME",
+      "args": {
+        "pi_ns": 1100000000,
+        "receiver_ns": 1100000000,
+        "tick": false
+      },
+      "expect": {
+        "publication_available": false
+      }
+    },
+    {
+      "action": "ADVANCE_TIME",
+      "args": {
+        "pi_ns": 0,
+        "receiver_ns": 0,
+        "tick": true
+      },
+      "expect": {
+        "freshness": "STALE",
+        "state": "UNKNOWN"
+      }
+    },
+    {
+      "action": "STOP_RECORDING",
+      "args": {},
+      "expect": {
+        "state": "UNKNOWN"
+      }
+    },
+    {
+      "action": "VERIFY_REPLAY",
+      "args": {},
+      "expect": {
+        "replay": "MATCH",
+        "state": "UNKNOWN"
+      }
+    }
+  ],
+  "title": "Expired observation is not current NORMAL evidence"
+}

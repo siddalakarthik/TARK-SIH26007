@@ -75,7 +75,7 @@ class IdentityGatedESP32UsbTransport:
                 except ImportError as error:
                     raise RuntimeError("pyserial is required for a verified ESP32 USB connection") from error
                 self._opener=serial.Serial
-            self._serial=self._opener(self.config.device_path, self.config.baudrate, timeout=self.config.timeout_s)
+            self._serial=self._opener(self.config.device_path, self.config.baudrate, timeout=self.config.timeout_s, write_timeout=self.config.timeout_s)
         return self
 
     def read(self, size: int) -> bytes:
@@ -84,10 +84,10 @@ class IdentityGatedESP32UsbTransport:
             if self._serial is None: raise RuntimeError("ESP32 USB transport is not open")
             return self._serial.read(size)
 
-    def write(self, frame: bytes) -> None:
+    def write(self, frame: bytes) -> int | None:
         with self._lock:
             if self._serial is None: raise RuntimeError("ESP32 USB transport is not open")
-            self._serial.write(frame)
+            return self._serial.write(frame)
 
     def close(self) -> None:
         with self._lock:

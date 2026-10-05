@@ -1,0 +1,360 @@
+{
+  "title": "TARK SIH26007 — Trust the Evidence",
+  "version": "Final director revision — 23 September 2026",
+  "target_duration_seconds": 280,
+  "major_scene_count": 10,
+  "narration_word_count": 529,
+  "narration_count_method": "Whitespace-delimited spoken-script tokens; acronyms may take longer than one word to speak.",
+  "delivery": "1920x1080, 16:9, 25 fps; 4:40 total including a two-second quiet title hold.",
+  "maturity": "Research prototype. Software baseline frozen/tested; physical commissioning and validation pending. Not mine certified. Human operator remains responsible.",
+  "frozen_software_rule": "Do not modify the tark application, its services, safety decisions, protocol, source labels, or public dashboard data.",
+  "global_visual_direction": "Dark calm engineering film; restrained blue/teal accents, amber only for caution; high contrast; generous spacing; no HUD clutter, fake technical measurements, random holograms, stock mine-test footage, or explosions. Conceptual assets must remain labelled. Use one original recurring blue adult human engineering guide sparingly.",
+  "voice_direction": {
+    "performance": "A warm, confident young engineer personally showing the team's work. Conversational first-person plural, not a compliance narration. Curiosity, reveal, reasoning, serious authority boundary, then a confident resolution.",
+    "pace": "New voice auditions and a new performance. Per-scene synthesis rates are selected against real word timestamps. No pitch shifting or post-production time compression. Leave the final two seconds without speech.",
+    "pronunciation": {
+      "TARK": "Tark; one syllable",
+      "PV-SOE": "P V S O E",
+      "TTC": "T T C",
+      "GNSS": "G N S S",
+      "ESP32-S3": "E S P thirty-two S three",
+      "MDD10A": "M D D ten A",
+      "LD2450": "L D two four five zero",
+      "LC29H(AA)": "L C twenty-nine H; double A variant when needed",
+      "BNO055": "B N O zero five five",
+      "MLX90640": "M L X nine zero six four zero",
+      "COBS": "cobs",
+      "CRC32C": "C R C thirty-two C",
+      "CBOR": "see-bor"
+    },
+    "disclosure": "Synthesized voice with a different profile from the rejected Prabhat performance. No human recording or guaranteed human indistinguishability is claimed. The clean dub script is provided for a human performance."
+  },
+  "music_direction": "Retain the original score, reshape the reveal and safety dynamics, and keep it at least 18 dB below speech during narrated spans. No fake breaths or purported recordings of working hardware.",
+  "dashboard_capture": {
+    "url": "https://tark-sih26007-demo.onrender.com",
+    "procedure": [
+      "Allow the actual public service to wake without altering its data.",
+      "Capture a desktop 16:9 viewport where possible and record capture date/source in the asset manifest.",
+      "Capture Dashboard, Map, Sensors, Safety, Replay; collect Logs, Diagnostics, Settings as supporting assets if present.",
+      "Keep simulation, source mode, traction-disabled, unavailable, and freshness labels visible.",
+      "Do not create faults, command hardware, modify settings, fabricate screenshots, or replace actual values.",
+      "If unavailable after bounded attempts, request the user's current screenshot/recording and mark video completion blocked rather than fabricate."
+    ],
+    "editorial_rule": "Any still capture is an actual-software snapshot, not a live telemetry recording. Pan/crop is allowed only while preserving necessary truth labels."
+  },
+  "controlled_interface_reference": {
+    "note": "For optional brief schematic insets only. Use the corrected five-sheet set; do not display every mapping simultaneously.",
+    "pwm_direction": [
+      "ESP32 J1-15 GPIO9 -> MDD10A P4 PWM1",
+      "ESP32 J1-16 GPIO10 -> MDD10A P5 DIR1",
+      "ESP32 J1-17 GPIO11 -> MDD10A P2 PWM2",
+      "ESP32 J1-18 GPIO12 -> MDD10A P3 DIR2"
+    ],
+    "encoders": [
+      "Left A -> J1-4 GPIO4",
+      "Left B -> J1-5 GPIO5",
+      "Right A -> J1-6 GPIO6",
+      "Right B -> J1-7 GPIO7",
+      "Encoder supply and exact physical interface remain TBD/VERIFY"
+    ],
+    "power_terminals": [
+      "T1 M1B -> left motor M1B",
+      "T2 M1A -> left motor M1A",
+      "T3 POWER+ -> switched N-TRACTION12+",
+      "T4 POWER- -> N-TRACTION-",
+      "T5 M2A -> right motor M2A",
+      "T6 M2B -> right motor M2B"
+    ],
+    "canonical_power": [
+      "F1 output/common protected distribution = N-PROTECTED12+",
+      "F2 output = N-LOGIC12+",
+      "K1 main-contact output only = N-TRACTION12+",
+      "K1 coil = K1-COIL+ / K1-COIL-",
+      "PS1 input return remains a separate design HOLD"
+    ],
+    "radar_uart": [
+      "Pi Pin 8 TX -> LD2450 RX",
+      "Pi Pin 10 RX <- LD2450 TX"
+    ],
+    "unresolved": "Do not invent purchased K1 terminal numbers, coil drive/return details, sensor breakout voltages, or physical verification. K1 mechanical linkage is black dashed and non-electrical."
+  },
+  "captions": "Provide optional sidecar SRT, not mandatory burned-in narration. Caption timing must follow the actual recorded/rendered voice, not merely proportional word allocation if exact audio timestamps are available.",
+  "qa": [
+    "Ten scenes, 280 seconds, 1080p H.264 and high-quality AAC.",
+    "New narration and voice profile; previous Prabhat voice not used.",
+    "Captions generated from new actual word timestamps, maximum two lines.",
+    "No unsupported physical-completion or validation claims.",
+    "No false fusion, current-runtime TTC or WARN-transition claim.",
+    "Genuine dashboard captures with simulation labels retained.",
+    "No fabricated measurements, mine certification or industrial approval.",
+    "Music below narration; no clipping; final quiet title hold.",
+    "Full media decode and caption fidelity checks.",
+    "Subjective voice naturalness is not certified by automated checks."
+  ],
+  "scenes": [
+    {
+      "id": 1,
+      "start": 0,
+      "duration": 26,
+      "title": "The problem",
+      "purpose": "Establish uncertainty as the problem, without blaming the operator or implying a physical TARK field trial.",
+      "narration": "Out here, fog does more than hide the road. It changes what a driver can trust. Is that shape a vehicle, a person, or the edge of the road? We started with that uncertainty. Our challenge wasn't simply to see farther. It was to know when the evidence was no longer good enough.",
+      "onscreen": [
+        "Fog changes trust",
+        "What can we rely on?"
+      ],
+      "visual": "Retain the mine concept and restrained push. Use a short question, not a definition. Keep the original blue guide brief.",
+      "camera": "Very slow forward push from a wide establishing frame; hold the silhouette's scale, with no dramatic chase.",
+      "animation": "A near object remains discernible while the distant outline softens. Animate a single visibility boundary without distance numbers. The guide looks to the question, then exits.",
+      "sound": "Original low atmospheric pad; soft synthesized wind and restrained distant industrial ambience. Pause after the first sentence.",
+      "transition": "Fog dissolves into the neutral studio background of the conceptual prototype.",
+      "accuracy": "Not mine footage, not a completed TARK vehicle, and not a fog-performance demonstration. Do not add a simulated pedestrian detection box or invented detection range.",
+      "narration_word_count": 53,
+      "visual_cues": {
+        "question": "what a driver can trust"
+      }
+    },
+    {
+      "id": 2,
+      "start": 26,
+      "duration": 27,
+      "title": "TARK reveal",
+      "purpose": "Introduce TARK and distinguish its conceptual physical build from the current software baseline.",
+      "narration": "So we built TARK around a question: when visibility drops, how do we make a more informed decision? Let us show you. This engineering demonstrator brings sensing interfaces, reasoning, bounded control, and monitoring together. You're seeing conceptual hardware alongside our integrated software demonstration, not a claim of completed mine testing.",
+      "onscreen": [
+        "Meet TARK",
+        "One integrated demonstrator",
+        "Sensing · reasoning · monitoring"
+      ],
+      "visual": "Retain the rover reveal. Replace the repeated pending badge with a clear SOFTWARE DEMONSTRATOR scope label and complementary integration callouts.",
+      "camera": "Slow lateral studio reveal; a modest parallax push rather than a false fully modelled orbit when using a still asset.",
+      "animation": "Sequential three-item callout groups. Preserve four wheels and two geared-motor assemblies; leave unverified mechanical transmission details abstract. No physical cable-routing detail or fabricated module pinout.",
+      "sound": "Add a quiet regular pulse under the atmosphere; warm, conversational narration.",
+      "transition": "A sensor callout grows into the three-column sensing view.",
+      "accuracy": "All physical imagery is conceptual. Protected regulated 5 V logic is a planned power rail, not an instruction to feed every breakout 5 V. Do not imply components are physically assembled.",
+      "narration_word_count": 50,
+      "visual_cues": {
+        "reveal": "Let us show you",
+        "integration": "brings sensing interfaces"
+      }
+    },
+    {
+      "id": 3,
+      "start": 53,
+      "duration": 28,
+      "title": "Complementary evidence",
+      "purpose": "Explain complementary sensor roles while making the actual runtime decision boundary explicit.",
+      "narration": "Different sensors answer different questions. Radar provides local targets. Cameras add visual context; thermal sensing adds temperature patterns. The inertial sensor describes orientation. Encoders report wheel response, not ground speed. Today, radar feeds our decision pipeline. Other sensors supply observations and health information.",
+      "onscreen": [
+        "Complementary sensing",
+        "Different questions. Different evidence.",
+        "Radar: decision input",
+        "Other sensors: observation"
+      ],
+      "visual": "Retain sensor-role graphics. Reveal each observation card when its role is spoken. Explicitly separate the radar decision input from the observation interfaces without a large negative fusion banner.",
+      "camera": "Controlled macro-style push toward each sensor tile; return to a stable three-lane layout.",
+      "animation": "Only the radar observation lane joins the current decision pipeline. Camera, thermal, and IMU lanes end at health/observation panels. Encoder arrows connect to wheel-response context, not a ground-speed label. No merged fusion blob.",
+      "sound": "One soft original electronic pulse as each distinct data role appears; no fabricated sensor recording.",
+      "transition": "Follow the radar lane into the Pi health and freshness blocks.",
+      "accuracy": "RGB/thermal/IMU are observation-only in the current runtime, not completed perception fusion. Do not show measured temperatures, imagery, pulse rates, or a physically connected sensor without actual evidence.",
+      "narration_word_count": 43,
+      "visual_cues": {
+        "camera": "Cameras",
+        "thermal": "thermal sensing",
+        "imu": "inertial sensor",
+        "boundary": "Today, radar"
+      }
+    },
+    {
+      "id": 4,
+      "start": 81,
+      "duration": 28,
+      "title": "Pi reasoning",
+      "purpose": "Show why freshness, health, tracking, and uncertainty precede an operational decision.",
+      "narration": "Inside the Raspberry Pi, we ask something before trusting a reading: is it healthy, fresh, and worth using? Then we follow radar targets over time, rather than treating every detection as a new object. Uncertainty travels with that track. If an observation gets old, the system shouldn't quietly present yesterday's confidence as today's evidence.",
+      "onscreen": [
+        "Verify the data",
+        "Freshness",
+        "Track the target",
+        "Carry uncertainty"
+      ],
+      "visual": "Retain the Pi evidence path. Highlight health, tracking and uncertainty to actual spoken timing; stale readings branch away from evidence.",
+      "camera": "Gentle dolly into the compute block, then a stable top-down technical view.",
+      "animation": "An explicitly ILLUSTRATIVE fresh token advances while a stale token diverts to an unavailable/uncertain side lane. Outline width represents uncertainty qualitatively, not a claimed probability. Use no invented target coordinates or timing thresholds.",
+      "sound": "Soft regular processing pulse; reduce the bed briefly at 'not automatically evidence'.",
+      "transition": "An uncertainty outline becomes the qualitative stopping-distance graphic.",
+      "accuracy": "Animation explains software responsibilities; it is not a recording of a packet-level execution. Do not imply every optional sensor contributes to the radar decision path. No universal claim that all stale values are physically rejected at hardware.",
+      "narration_word_count": 54,
+      "visual_cues": {
+        "health": "healthy",
+        "tracking": "follow radar targets",
+        "uncertainty": "Uncertainty",
+        "stale": "If an observation"
+      }
+    },
+    {
+      "id": 5,
+      "start": 109,
+      "duration": 29,
+      "title": "Time and stopping",
+      "purpose": "Explain TTC and stopping-distance concepts without claiming currently unimplemented runtime TTC use or measured braking.",
+      "narration": "Now, seeing something isn't the same as having enough room to respond. Time to collision asks how quickly a closing situation could develop. In this demo, you'll see that value marked unavailable. Stopping requirement brings together reaction distance, braking distance, and margin. Comparing that requirement with observable distance gives us the next question: what operation can the evidence justify?",
+      "onscreen": [
+        "Enough time? Enough distance?",
+        "Time to collision",
+        "Stopping requirement",
+        "Reaction + braking + margin"
+      ],
+      "visual": "Separate TTC concept from current runtime; retain N/A visibly. Build the stopping comparison as reaction, braking and margin are spoken. Keep parameterized, not measured, scope concise.",
+      "camera": "Slow top-down tracking of the qualitative distance bars, then a slight pullback revealing the separate TTC helper.",
+      "animation": "TTC helper remains visually disconnected from the current PV-SOE arrow. Build the stopping requirement as three labelled segments; a separate observable-distance bar is compared with it. Avoid any precise length ratio presented as data.",
+      "sound": "Music becomes simpler; one restrained accent when the two distance concepts separate.",
+      "transition": "The comparison frame contracts into an operating-envelope outline.",
+      "accuracy": "TTC helper exists but current snapshot TTC is unavailable and does not drive today's decision. Observable distance is compared with stopping requirement, not inserted as a braking-performance measurement. Reaction/deceleration/margin parameters are provisional and not physically validated.",
+      "narration_word_count": 59,
+      "visual_cues": {
+        "ttc": "Time to collision",
+        "stopping": "Stopping requirement",
+        "reaction": "reaction distance",
+        "braking": "braking distance",
+        "margin": "and margin",
+        "compare": "Comparing"
+      }
+    },
+    {
+      "id": 6,
+      "start": 138,
+      "duration": 29,
+      "title": "Operating envelope",
+      "purpose": "Explain PV-SOE and conservative state reporting while making permanent Phase 1 zero-output authority unmistakable.",
+      "narration": "We call that the Perception-Verified Safe Operating Envelope. The idea is simple: weaker evidence should mean less operating freedom, not more guesswork. NORMAL, RESTRICT, STOP, and UNKNOWN make that judgement visible. UNKNOWN is important. It says we don't have enough trustworthy information. A missing sensor or stale message must never quietly create permission to do more.",
+      "onscreen": [
+        "Evidence sets operating freedom",
+        "NORMAL",
+        "RESTRICT",
+        "STOP",
+        "UNKNOWN"
+      ],
+      "visual": "Retain the qualitative envelope and four implemented runtime states. Highlight each state with the spoken name. Keep simulation outputs zero in a compact factual strip rather than narrating a phase-status warning.",
+      "camera": "Stable medium technical composition with one restrained push into the zero-output strip.",
+      "animation": "Qualitative envelope shrinks as uncertainty rises. States highlight as conceptual alternatives, not a claimed live trace. No vehicle motion. Keep the phase strip fixed across every state.",
+      "sound": "Quiet pulse, with less music on the zero-output statement; no warning siren.",
+      "transition": "The fixed zero-command strip moves into the Pi-to-controller lane.",
+      "accuracy": "Do not animate NORMAL -> WARN -> RESTRICT -> STOP as implemented behavior. WARN exists in the wider vocabulary but is not emitted by the current decision path. A NORMAL software state does not authorize traction; DISABLED_PHASE_1 remains absolute.",
+      "narration_word_count": 56,
+      "visual_cues": {
+        "normal": "NORMAL",
+        "restrict": "RESTRICT",
+        "stop": "STOP",
+        "unknown": "UNKNOWN"
+      }
+    },
+    {
+      "id": 7,
+      "start": 167,
+      "duration": 30,
+      "title": "Separate authority",
+      "purpose": "Separate bounded software control, planned independent physical isolation, and browser observation.",
+      "narration": "The Pi handles reasoning. The ESP thirty-two software checks bounded commands before accepting them. Separately, our electrical design gives the emergency stop an independent path through the contactor system. Those responsibilities stay separate. And the dashboard never controls the vehicle. In this software demonstration, traction stays disabled; neither a browser click nor a healthy-looking screen grants motion authority.",
+      "onscreen": [
+        "Separate responsibilities",
+        "Bounded control",
+        "Independent E-stop design",
+        "Monitoring, not motion authority"
+      ],
+      "visual": "Retain three architecture lanes. Synchronize local control, physical isolation design and monitoring with narration. Black dashed mechanical relationship remains distinct. No demonstrated physical operation claim.",
+      "camera": "Stable schematic top-down view; gently emphasize one lane at a time. No orbit around terminal diagrams.",
+      "animation": "COBS, CRC32C, and CBOR appear as sequential software-envelope checks, followed by response arrows back to Pi. Main and auxiliary K1 meanings stay separate. Physical mechanism link is black dashed, never an electrical junction. Do not animate a physical motor turning or claim a contactor test.",
+      "sound": "Restrained electronic acknowledgement for software; a clearly illustrative soft contact click may mark the planned isolation concept, not a recorded successful test.",
+      "transition": "Observation lane carries the viewer toward the geographic map context.",
+      "accuracy": "Pi remains decision authority and ESP32 a bounded validation layer. Board-specific USB/watchdog binding and physical verification are pending. The physical NC E-stop path is designed independently but unresolved electrical HOLDs must be cleared before energization. Never connect browser directly to motors.",
+      "narration_word_count": 58,
+      "visual_cues": {
+        "control": "ESP thirty-two",
+        "isolation": "Separately",
+        "monitoring": "the dashboard never"
+      }
+    },
+    {
+      "id": 8,
+      "start": 197,
+      "duration": 27,
+      "title": "Location context",
+      "purpose": "Separate GNSS geographic observation from radar-local coordinates and show honest no-fix behavior.",
+      "narration": "Location answers another question: where are we on the map? That's the role of GNSS and the intended LC twenty-nine H receiver. But radar asks where a target is relative to our vehicle. We keep those coordinate systems separate. Without a vehicle fix, the map uses a clearly labelled India overview, not an invented location.",
+      "onscreen": [
+        "Position is context",
+        "Global position ≠ local target",
+        "GNSS",
+        "Radar X / Y"
+      ],
+      "visual": "Retain the actual simulated map and clearly separated radar-local coordinate inset. Geographic context never becomes motion authority.",
+      "camera": "Gentle crop into the real Map capture, then a small pullback to reveal the separate XY inset.",
+      "animation": "Highlight geographic coordinate labels and local XY axes sequentially. Never manufacture satellite acquisition, an actual fix, or location values. Do not replace the application's real source labels.",
+      "sound": "Light original transition sweep; calm narrator, no GPS-lock chime.",
+      "transition": "Match the real map application's navigation/header into the dashboard capture.",
+      "accuracy": "GNSS is observational and cannot command motors. Do not mix browser location with vehicle location. A displayed public map is not evidence of a physically connected LC29H(AA), positional accuracy, or mine navigation.",
+      "narration_word_count": 55,
+      "visual_cues": {
+        "gnss": "GNSS",
+        "radar": "But radar",
+        "no_fix": "Without a vehicle fix"
+      }
+    },
+    {
+      "id": 9,
+      "start": 224,
+      "duration": 30,
+      "title": "Real dashboard",
+      "purpose": "Show real current software evidence and the monitoring-only authority boundary.",
+      "narration": "And this is the actual TARK dashboard. You're looking at our public software demo. The simulation labels stay visible. You can inspect system state, sensor health, communication, maps, logs, and replay. When a sensor is missing, the interface says so. For us, the important part is being able to ask why a decision happened, and trace the evidence behind it.",
+      "onscreen": [
+        "Real TARK dashboard",
+        "Inspect the evidence",
+        "Understand the decision"
+      ],
+      "visual": "Use genuine public UI stills, never relabel data. Let narrative mentions guide Sensors, Safety, Map, Logs and Replay presentation. Keep simulation and unavailable states legible.",
+      "camera": "Small controlled crops within real screenshots or recordings; no crop may hide SIMULATION, NOT CONNECTED, stale, or traction-disabled context. Prefer legibility over cinematic zoom.",
+      "animation": "Overlay at most one short editorial label at a time outside critical UI values. Real UI states are unaltered. Captured values are snapshots, not a live video feed unless an actual recording is available.",
+      "sound": "A lighter modern pulse, with very soft original click accents on real navigation cuts. Do not imply telemetry sounds are hardware feedback.",
+      "transition": "The dashboard frame scales down beside the documented software-baseline evidence.",
+      "accuracy": "The public service is a software simulation/monitoring demonstration, not physical verification. Retain TTC N/A and actual unavailable sensor states. Only show pages that load in the actual deployment. If unavailable, request current captures instead of fabricating them.",
+      "narration_word_count": 60,
+      "visual_cues": {
+        "dashboard": "actual TARK dashboard",
+        "state": "system state",
+        "sensors": "sensor health",
+        "map": "maps",
+        "logs": "logs",
+        "replay": "replay",
+        "evidence": "why a decision happened"
+      }
+    },
+    {
+      "id": 10,
+      "start": 254,
+      "duration": 26,
+      "title": "Conclusion",
+      "purpose": "Close with defensible software maturity, a concrete validation path, and the project's human-centered principle.",
+      "narration": "We've brought sensing interfaces, reasoning, safety logic, and bounded control together with a real dashboard. One testable software system, not a collection of parts. The goal was never blind trust in a sensor. Trust the evidence you can verify. That's TARK.",
+      "onscreen": [
+        "One testable system",
+        "Trust evidence. Not assumptions.",
+        "TARK"
+      ],
+      "visual": "Replace the old unfinished-project comparison with a confident integration composition. Return to the existing conceptual rover and brief blue guide. End on TARK and the evidence principle, with a two-second locked title hold.",
+      "camera": "Slow pullback to the conceptual platform, then a locked final title composition with a quiet two-second hold.",
+      "animation": "Software and physical stages remain separate. No checkmark on physical verification, E-stop, mine field testing, or production readiness. Fade imagery down as the final principle resolves.",
+      "sound": "Warm original harmonic resolution; fade music and ambience gently through the last two seconds. Leave the last title hold without narration.",
+      "transition": "End on the held title, no outgoing fade, with the last two seconds clear of speech.",
+      "accuracy": "Software evidence is a frozen tested baseline, not a guarantee of no defects or completed physical safety validation. Electrical DESIGN HOLDs remain. Do not claim mine certification, collision reduction, braking distance, fog range, or field reliability.",
+      "narration_word_count": 41,
+      "visual_cues": {
+        "integration": "We've brought",
+        "principle": "The goal was never",
+        "title": "That's TARK"
+      }
+    }
+  ],
+  "positioning": "Integrated software engineering demonstrator. Conceptual hardware is not physical test evidence. No new physical completion/validation evidence was found; state scope once rather than repeatedly framing the entire project as unfinished."
+}

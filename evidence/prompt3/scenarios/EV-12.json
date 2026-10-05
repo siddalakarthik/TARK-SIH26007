@@ -1,0 +1,157 @@
+{
+  "configuration": "config/phase1.json",
+  "expected_final_state": "NORMAL",
+  "expected_invariants": "PHASE1_ZERO_NO_HARDWARE_NO_REPLAY_AUTHORITY",
+  "initial_receiver_time": 1000000000,
+  "initial_reports": [
+    {
+      "age_ns": 0,
+      "candidate_id": 1,
+      "distance_m": 3.0,
+      "empty": false
+    }
+  ],
+  "initial_runtime_time": 10000000000,
+  "observer_profile": "none",
+  "purpose": "Bad response schemas/identities do not validate exchange; NACK/STATUS semantics",
+  "record_from_start": true,
+  "repeat_count": 5,
+  "response_policy": "deliver",
+  "scenario_id": "EV-12",
+  "steps": [
+    {
+      "action": "DROP_COMMUNICATION",
+      "args": {},
+      "expect": {
+        "communication": "ONLINE"
+      }
+    },
+    {
+      "action": "ADVANCE_TIME",
+      "args": {
+        "pi_ns": 100000000,
+        "receiver_ns": 100000000,
+        "tick": true
+      },
+      "expect": {
+        "pending": 1
+      }
+    },
+    {
+      "action": "INJECT_RESPONSE",
+      "args": {
+        "kind": "empty"
+      },
+      "expect": {
+        "invalid_feedback": 1,
+        "pending": 1
+      }
+    },
+    {
+      "action": "INJECT_RESPONSE",
+      "args": {
+        "kind": "missing_sequence"
+      },
+      "expect": {
+        "invalid_feedback": 2,
+        "pending": 1
+      }
+    },
+    {
+      "action": "INJECT_RESPONSE",
+      "args": {
+        "kind": "wrong_sequence"
+      },
+      "expect": {
+        "invalid_feedback": 3,
+        "pending": 1
+      }
+    },
+    {
+      "action": "INJECT_RESPONSE",
+      "args": {
+        "kind": "wrong_session"
+      },
+      "expect": {
+        "invalid_feedback": 4,
+        "pending": 1
+      }
+    },
+    {
+      "action": "INJECT_RESPONSE",
+      "args": {
+        "kind": "wrong_config"
+      },
+      "expect": {
+        "invalid_feedback": 5,
+        "pending": 1
+      }
+    },
+    {
+      "action": "INJECT_RESPONSE",
+      "args": {
+        "kind": "wrong_source"
+      },
+      "expect": {
+        "invalid_feedback": 6,
+        "pending": 1
+      }
+    },
+    {
+      "action": "INJECT_RESPONSE",
+      "args": {
+        "kind": "malformed_cbor"
+      },
+      "expect": {
+        "invalid_feedback": 7,
+        "pending": 1
+      }
+    },
+    {
+      "action": "INJECT_RESPONSE",
+      "args": {
+        "kind": "nack"
+      },
+      "expect": {
+        "communication": "DEGRADED",
+        "pending": 0
+      }
+    },
+    {
+      "action": "INJECT_RESPONSE",
+      "args": {
+        "kind": "status"
+      },
+      "expect": {
+        "communication": "DEGRADED"
+      }
+    },
+    {
+      "action": "ADVANCE_TIME",
+      "args": {
+        "pi_ns": 600000000,
+        "receiver_ns": 600000000,
+        "tick": false
+      },
+      "expect": {
+        "communication": "STALE"
+      }
+    },
+    {
+      "action": "STOP_RECORDING",
+      "args": {},
+      "expect": {
+        "state": "NORMAL"
+      }
+    },
+    {
+      "action": "VERIFY_REPLAY",
+      "args": {},
+      "expect": {
+        "replay": "MATCH",
+        "state": "NORMAL"
+      }
+    }
+  ],
+  "title": "Bad response schemas/identities do not validate exchange; NACK/STATUS semantics"
+}

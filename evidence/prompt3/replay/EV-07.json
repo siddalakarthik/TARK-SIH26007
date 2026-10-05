@@ -1,0 +1,206 @@
+{
+  "records": [
+    {
+      "kind": "OBSERVATION_TICK_V2",
+      "payload": {
+        "command": {
+          "checksum": null,
+          "configuration_hash": "UNRELEASED-PHASE1",
+          "heartbeat": 1,
+          "left_command": 0.0,
+          "permitted_speed_mps": 0.0,
+          "protocol_version": 2,
+          "reason_code": "UNKNOWN_STALE",
+          "right_command": 0.0,
+          "sequence": 1,
+          "state": "UNKNOWN",
+          "timestamp_ns": 10000000000,
+          "valid_until_ns": 10500000000
+        },
+        "decision": {
+          "D_base_m": 0.0,
+          "D_effective_m": 0.0,
+          "D_env_m": 0.0,
+          "T_bound_s": 0.5,
+          "active_constraints": [
+            "sensor_not_fresh"
+          ],
+          "hard_cap_mps": 0.0,
+          "permitted_speed_mps": 0.0,
+          "reason_code": "UNKNOWN_STALE",
+          "state": "UNKNOWN",
+          "stopping_requirement_m": 0.5
+        },
+        "event": {
+          "event_id": "f59c1cd5-1f41-4e32-8fef-301b58c6598c",
+          "event_type": "PVSOE_DECISION",
+          "payload": {
+            "D_base_m": 0.0,
+            "D_effective_m": 0.0,
+            "D_env_m": 0.0,
+            "T_bound_s": 0.5,
+            "active_constraints": [
+              "sensor_not_fresh"
+            ],
+            "hard_cap_mps": 0.0,
+            "permitted_speed_mps": 0.0,
+            "reason_code": "UNKNOWN_STALE",
+            "state": "UNKNOWN",
+            "stopping_requirement_m": 0.5
+          },
+          "reason": "UNKNOWN_STALE",
+          "severity": "INFO",
+          "timestamp_ns": 10000000000
+        },
+        "observations": [],
+        "radar_health": {
+          "age_ms": null,
+          "freshness": "MISSING",
+          "last_seen_ns": null,
+          "quality": null,
+          "reason": "freshness_MISSING",
+          "sensor_id": "ld2450",
+          "state": "NOT_CONNECTED"
+        },
+        "schema_version": 2
+      },
+      "sequence": 1,
+      "source_mode": "REPLAY",
+      "timestamp_ns": 10000000000
+    },
+    {
+      "kind": "OBSERVATION_TICK_V2",
+      "payload": {
+        "command": {
+          "checksum": null,
+          "configuration_hash": "UNRELEASED-PHASE1",
+          "heartbeat": 2,
+          "left_command": 0.0,
+          "permitted_speed_mps": 0.0,
+          "protocol_version": 2,
+          "reason_code": "UNKNOWN_STALE",
+          "right_command": 0.0,
+          "sequence": 2,
+          "state": "UNKNOWN",
+          "timestamp_ns": 11100000000,
+          "valid_until_ns": 11600000000
+        },
+        "decision": {
+          "D_base_m": 0.0,
+          "D_effective_m": 0.0,
+          "D_env_m": 0.0,
+          "T_bound_s": 0.5,
+          "active_constraints": [
+            "sensor_not_fresh"
+          ],
+          "hard_cap_mps": 0.0,
+          "permitted_speed_mps": 0.0,
+          "reason_code": "UNKNOWN_STALE",
+          "state": "UNKNOWN",
+          "stopping_requirement_m": 0.5
+        },
+        "event": {
+          "event_id": "bc03bf3c-44a1-4771-b4c4-5ab18525ee49",
+          "event_type": "PVSOE_DECISION",
+          "payload": {
+            "D_base_m": 0.0,
+            "D_effective_m": 0.0,
+            "D_env_m": 0.0,
+            "T_bound_s": 0.5,
+            "active_constraints": [
+              "sensor_not_fresh"
+            ],
+            "hard_cap_mps": 0.0,
+            "permitted_speed_mps": 0.0,
+            "reason_code": "UNKNOWN_STALE",
+            "state": "UNKNOWN",
+            "stopping_requirement_m": 0.5
+          },
+          "reason": "UNKNOWN_STALE",
+          "severity": "INFO",
+          "timestamp_ns": 11100000000
+        },
+        "observations": [],
+        "radar_health": {
+          "age_ms": null,
+          "freshness": "MISSING",
+          "last_seen_ns": null,
+          "quality": null,
+          "reason": "freshness_MISSING",
+          "sensor_id": "ld2450",
+          "state": "NOT_CONNECTED"
+        },
+        "schema_version": 2
+      },
+      "sequence": 2,
+      "source_mode": "REPLAY",
+      "timestamp_ns": 11100000000
+    }
+  ],
+  "result": {
+    "decisions": [
+      {
+        "D_base_m": 0.0,
+        "D_effective_m": 0.0,
+        "D_env_m": 0.0,
+        "T_bound_s": 0.5,
+        "active_constraints": [
+          "sensor_not_fresh"
+        ],
+        "hard_cap_mps": 0.0,
+        "permitted_speed_mps": 0.0,
+        "reason_code": "UNKNOWN_STALE",
+        "state": "UNKNOWN",
+        "stopping_requirement_m": 0.5
+      },
+      {
+        "D_base_m": 0.0,
+        "D_effective_m": 0.0,
+        "D_env_m": 0.0,
+        "T_bound_s": 0.5,
+        "active_constraints": [
+          "sensor_not_fresh"
+        ],
+        "hard_cap_mps": 0.0,
+        "permitted_speed_mps": 0.0,
+        "reason_code": "UNKNOWN_STALE",
+        "state": "UNKNOWN",
+        "stopping_requirement_m": 0.5
+      }
+    ],
+    "first_divergence": null,
+    "first_sequence": 1,
+    "last_sequence": 2,
+    "result": "MATCH",
+    "verified_decisions": 2,
+    "verified_records": 2
+  },
+  "session": {
+    "configuration_hash": "UNRELEASED-PHASE1",
+    "format_status": "VERSIONED",
+    "max_records": 10000,
+    "metadata": {
+      "checkpoint": {
+        "last_seen_ns": null,
+        "sequence": 0,
+        "timestamp_fault": false,
+        "tracks": [],
+        "version": 1
+      },
+      "configuration_fingerprint": "f6e8471fae3618d38f7892e67f2d41eb37e155d5848bf51195e4dc06b373696e",
+      "configuration_identifier": "UNRELEASED-PHASE1",
+      "format_version": 2,
+      "input_schema": "ORDERED_RADAR_REPORTS_V2",
+      "software_fingerprint": "5efb1a29a118467e1ba8ca362457d677e01156969bf50e438910e4df8e844da5",
+      "software_id": "TARK_PROMPT2_REPLAY_V2",
+      "source_mode": "REPLAY"
+    },
+    "record_count": 2,
+    "session_id": "c563dcdc-86aa-43b7-9f30-5395a2b59367",
+    "source_mode": "REPLAY",
+    "started_ns": 10000000000,
+    "status": "COMPLETE",
+    "stopped_ns": 11100000000
+  },
+  "source": "TEST_FIXTURE"
+}

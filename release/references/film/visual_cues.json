@@ -1,0 +1,314 @@
+{
+  "strict_audio_alignment": true,
+  "scenes": [
+    {
+      "scene": 1,
+      "cues": [
+        {
+          "cue": "question",
+          "phrase": "what a driver can trust",
+          "scene_time": 5.0375,
+          "film_time": 5.0375,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        }
+      ]
+    },
+    {
+      "scene": 2,
+      "cues": [
+        {
+          "cue": "reveal",
+          "phrase": "Let us show you",
+          "scene_time": 7.525,
+          "film_time": 33.525,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "integration",
+          "phrase": "brings sensing interfaces",
+          "scene_time": 11.1625,
+          "film_time": 37.1625,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        }
+      ]
+    },
+    {
+      "scene": 3,
+      "cues": [
+        {
+          "cue": "camera",
+          "phrase": "Cameras",
+          "scene_time": 6.7818,
+          "film_time": 59.7818,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "thermal",
+          "phrase": "thermal sensing",
+          "scene_time": 8.5205,
+          "film_time": 61.5205,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "imu",
+          "phrase": "inertial sensor",
+          "scene_time": 11.9182,
+          "film_time": 64.9182,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "boundary",
+          "phrase": "Today, radar",
+          "scene_time": 19.0886,
+          "film_time": 72.0886,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        }
+      ]
+    },
+    {
+      "scene": 4,
+      "cues": [
+        {
+          "cue": "health",
+          "phrase": "healthy",
+          "scene_time": 5.4,
+          "film_time": 86.4,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "tracking",
+          "phrase": "follow radar targets",
+          "scene_time": 9.0125,
+          "film_time": 90.0125,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "uncertainty",
+          "phrase": "Uncertainty",
+          "scene_time": 15.2125,
+          "film_time": 96.2125,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "stale",
+          "phrase": "If an observation",
+          "scene_time": 18.275,
+          "film_time": 99.275,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        }
+      ]
+    },
+    {
+      "scene": 5,
+      "cues": [
+        {
+          "cue": "ttc",
+          "phrase": "Time to collision",
+          "scene_time": 5.719,
+          "film_time": 114.719,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "stopping",
+          "phrase": "Stopping requirement",
+          "scene_time": 14.5762,
+          "film_time": 123.5762,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "reaction",
+          "phrase": "reaction distance",
+          "scene_time": 16.4333,
+          "film_time": 125.4333,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "braking",
+          "phrase": "braking distance",
+          "scene_time": 17.7071,
+          "film_time": 126.7071,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "margin",
+          "phrase": "and margin",
+          "scene_time": 18.8857,
+          "film_time": 127.8857,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "compare",
+          "phrase": "Comparing",
+          "scene_time": 20.5405,
+          "film_time": 129.5405,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        }
+      ]
+    },
+    {
+      "scene": 6,
+      "cues": [
+        {
+          "cue": "normal",
+          "phrase": "NORMAL",
+          "scene_time": 11.4095,
+          "film_time": 149.4095,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "restrict",
+          "phrase": "RESTRICT",
+          "scene_time": 12.1357,
+          "film_time": 150.1357,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "stop",
+          "phrase": "STOP",
+          "scene_time": 12.8143,
+          "film_time": 150.8143,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "unknown",
+          "phrase": "UNKNOWN",
+          "scene_time": 13.731,
+          "film_time": 151.731,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        }
+      ]
+    },
+    {
+      "scene": 7,
+      "cues": [
+        {
+          "cue": "control",
+          "phrase": "ESP thirty-two",
+          "scene_time": 3.1341,
+          "film_time": 170.1341,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "isolation",
+          "phrase": "Separately",
+          "scene_time": 8.0545,
+          "film_time": 175.0545,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "monitoring",
+          "phrase": "the dashboard never",
+          "scene_time": 18.0091,
+          "film_time": 185.0091,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        }
+      ]
+    },
+    {
+      "scene": 8,
+      "cues": [
+        {
+          "cue": "gnss",
+          "phrase": "GNSS",
+          "scene_time": 6.2625,
+          "film_time": 203.2625,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "radar",
+          "phrase": "But radar",
+          "scene_time": 11.15,
+          "film_time": 208.15,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "no_fix",
+          "phrase": "Without a vehicle fix",
+          "scene_time": 18.7,
+          "film_time": 215.7,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        }
+      ]
+    },
+    {
+      "scene": 9,
+      "cues": [
+        {
+          "cue": "dashboard",
+          "phrase": "actual TARK dashboard",
+          "scene_time": 1.15,
+          "film_time": 225.15,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "state",
+          "phrase": "system state",
+          "scene_time": 10.7125,
+          "film_time": 234.7125,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "sensors",
+          "phrase": "sensor health",
+          "scene_time": 11.8875,
+          "film_time": 235.8875,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "map",
+          "phrase": "maps",
+          "scene_time": 14.1125,
+          "film_time": 238.1125,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "logs",
+          "phrase": "logs",
+          "scene_time": 14.7875,
+          "film_time": 238.7875,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "replay",
+          "phrase": "replay",
+          "scene_time": 15.7375,
+          "film_time": 239.7375,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "evidence",
+          "phrase": "why a decision happened",
+          "scene_time": 24.35,
+          "film_time": 248.35,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        }
+      ]
+    },
+    {
+      "scene": 10,
+      "cues": [
+        {
+          "cue": "integration",
+          "phrase": "We've brought",
+          "scene_time": 0.7,
+          "film_time": 254.7,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "principle",
+          "phrase": "The goal was never",
+          "scene_time": 13.6625,
+          "film_time": 267.6625,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        },
+        {
+          "cue": "title",
+          "phrase": "That's TARK",
+          "scene_time": 20.125,
+          "film_time": 274.125,
+          "source": "ACTUAL_SELECTED_VOICE_WORD_BOUNDARY"
+        }
+      ]
+    }
+  ]
+}

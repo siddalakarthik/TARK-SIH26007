@@ -1,0 +1,8 @@
+# Keep hash-inventoried evidence bytes unchanged across Git line-ending conversion.
+evidence/prompt3/** text eol=lf
+
+# Immutable published study evidence: retain original renderer/source bytes.
+# Do not lint Matplotlib path indentation or official HTML whitespace as code.
+studies/sih26007_simulation/figures/*.svg whitespace=-blank-at-eol
+studies/sih26007_simulation/sources/*.html whitespace=-blank-at-eol
+studies/sih26007_simulation/sources/*.pdf -diff

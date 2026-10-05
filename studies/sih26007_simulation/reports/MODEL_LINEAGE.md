@@ -1,0 +1,5 @@
+# Model lineage
+
+The production R1 pipeline uses stopping-distance algebra, tracked envelope/uncertainty and explicit maturity gates, with hard_cap_mps = 0. This independent study reuses the dimensional stopping principle but inverts it for research and adds encounter/normalized-cycle calculations. Study reference parameters are NOT production configuration. SIM-06 copies existing verified R1 traces; all other nonzero speed values are analytical, never commands. Archived simulations 1/2/3 were examined for lineage only; their outputs are not reused as verified numbers. No archived EKF result is credited to production.
+
+D_stop = v·t + v²/(2a) + m; R_required = D_stop + u; margin = R_trustworthy − R_required. Units: metres, seconds, m/s, m/s²; multiply m/s by 3.6 for km/h. Positive-root inverse gives maximum speed; if R ≤ m+u there is no positive admissible speed. Zero cap below reserves is NOT proof of feasibility. Age is added to response time in this research overlay; stale/missing/out-of-order evidence grants no positive capability. This overlay does not replace R1 production freshness, state transitions or hard cap.
