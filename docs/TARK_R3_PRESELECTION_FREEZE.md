@@ -116,7 +116,11 @@ Local evidence (not committed): `../work/sih_preselection_final/`,
 ## G. Git release identity
 
 Existing remote: `https://github.com/siddalakarthik/TARK-SIH26007.git`.
-Expected annotated tag: `tark-r3-sih-preselection-v1` (not previously present).
+Verified source checkpoint: `7a57c3c81efeac1f76f629fab501a1cd578dcf54`,
+`feat: checkpoint R3 integration and SIH flagship demonstrations`.
+This contains the previously accumulated R2/R3 work and final demo additions.
+The subsequent documentation-only commit is `chore: prepare R3 preselection freeze`.
+Annotated release tag: `tark-r3-sih-preselection-v1` (not previously present).
 Resolve the exact tagged commit with:
 
 ```text
@@ -124,9 +128,10 @@ git rev-parse tark-r3-sih-preselection-v1^{commit}
 git show --no-patch tark-r3-sih-preselection-v1
 ```
 
-Source checkpoint and final push outcome are recorded after the verified staging
-gate. The final tag identifies the complete tree including this handoff, without
+The checkpoint was committed after the verified staging gate. The final tag
+identifies the complete tree including this handoff, without
 a circular claim that a document can contain its own final commit hash.
+GitHub fetch/push remains blocked as described below; the release is local.
 
 The default Windows Schannel fetch returned SEC_E_NO_CREDENTIALS. Per-command
 OpenSSL requests retained certificate verification but Git Credential Manager
@@ -163,7 +168,7 @@ figures/results/source archive/manifest/hashes form one intentional evidence
 package, not temporary browser QA clutter. Do not confuse its independent model
 with the three production-path demos. Entry-point supersession notices and the
 release index clarify which material is current; no historical results are rewritten.
-All 93 entries in the retained study's existing hash inventory matched local
+All 103 entries in the retained study's existing hash inventory matched local
 files after cleanup; archived evidence bytes were not altered.
 
 IGNORE, retained locally: `.env`, virtual environments, node_modules, build
